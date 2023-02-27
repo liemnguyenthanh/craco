@@ -1,0 +1,19 @@
+export const EVENTS_SOCKET = {
+  //connect
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+
+
+  //room
+  JOIN_DASHBOARD: 'JOIN_DASHBOARD',
+  JOIN_ROOM: 'JOIN_ROOM',
+  OUT_ROOM: 'OUT_ROOM',
+  //message
+  SEND_MESSAGE: 'SEND_MESSAGE',
+  GET_MESSAGE: 'GET_MESSAGE',
+
+  //notification
+  NOTIFICATION_USER_ONLINE: 'NOTIFICATION_USER_ONLINE',
+  USERS_ONLINE: 'USERS_ONLINE',
+};
+

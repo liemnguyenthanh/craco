@@ -1,0 +1,1 @@
+export const URL_SOCKET = 'ws://localhost:8080/'
