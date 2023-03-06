@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
+import { URL } from '../constants/api'
 
 export type Method = 'get' | 'post'
 
@@ -10,9 +11,10 @@ export interface BodyRequest {
 }
 
 export const axiosRequest = (urlPath?: string, data?: any) => {
+
   const body: BodyRequest = {
     method: 'get',
-    url: '/api'
+    url: URL + '/api'
   }
 
   if (urlPath) body.url += urlPath

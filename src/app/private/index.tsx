@@ -1,11 +1,20 @@
-import { Fragment } from "react";
+import { FC } from "react";
 import { Navigate } from "react-router-dom";
-import { PrivateRouteProps } from "../../utils/types/routes";
+import MainLayout from "../../layout";
 
-export default function PrivateRoute({ element, isAuthenticated, ...rest }: PrivateRouteProps) {
-  return isAuthenticated ? (
-    <Fragment>{element}</Fragment>
-  ) : (
-    <Navigate to="/login" />
-  );
+interface Props {
+  element: JSX.Element;
+  isAuthenticated: boolean
 }
+
+const PrivateRoute: FC<Props> = ({ element, isAuthenticated }) => {
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  return <MainLayout>
+    {element}
+  </MainLayout>;
+};
+
+export default PrivateRoute

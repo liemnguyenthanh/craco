@@ -4,5 +4,11 @@ export interface LoginRequest {
 }
 
 export interface AccountSlice {
-  user: LoginRequest | null
+  user: UserAccount | null
+}
+
+export interface UserAccount {
+  username: string;
+  secret?: string;
+  _id: string;
 }

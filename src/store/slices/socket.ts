@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { showNotification } from '../../utils/notification';
 import { SocketInitial } from '../../utils/types/socket';
 
 const initialState: SocketInitial = {
   isConnected: false,
   usersOnline: null,
-  notification: null,
 }
 
 const socketSlice = createSlice({
@@ -17,6 +17,7 @@ const socketSlice = createSlice({
     disconnect(state) {
       state.isConnected = false;
     },
+    //users
     setUsersOnline(state, action) {
       state.usersOnline = action.payload;
     },
@@ -24,12 +25,17 @@ const socketSlice = createSlice({
       if (state.usersOnline?.some(user => user.username === action.payload.username)) return;
       state.usersOnline?.push(action.payload);
     },
-    setNotification(state, action) {
-      state.notification = action.payload;
+    removeUsersOnline(state, action: PayloadAction<{ socketId: string }>) {
+      if (!state.usersOnline) return;
+      const index = state.usersOnline.findIndex((user) => user.socketId === action.payload.socketId);
+      if (index > -1) {
+        showNotification('Khứa này mới offline ' +state.usersOnline[index].username)
+        state.usersOnline.splice(index, 1);
+      }
     },
   },
 });
 
-export const { setUsersOnline, setNotification, addUsersOnline } = socketSlice.actions
+export const { setUsersOnline, addUsersOnline, removeUsersOnline } = socketSlice.actions
 
 export default socketSlice.reducer;

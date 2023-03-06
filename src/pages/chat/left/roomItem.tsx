@@ -1,40 +1,53 @@
 import React from 'react'
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import { IChatRoom } from '../../../utils/types/rooms';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
-  username: string
+  room: IChatRoom
 }
 
-const RoomItem = ({ username }: Props) => {
+const RoomItem = ({ room }: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const handleChangeRoom = () => {
+    if (!room._id) return;
+    setSearchParams({ room_id: room._id })
+  }
+
+  const isActiveRoom: boolean = searchParams.get('room_id') === room._id
   return (
-    <React.Fragment>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt={username} src="/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary={username}
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-              </Typography>
-              {"I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </React.Fragment>
+    <ListItem
+      sx={{
+        backgroundColor: isActiveRoom ? "active.main" : "primary.main",
+        cursor: 'pointer',
+        borderBottom: 1,
+        borderBottomColor: 'border.primary'
+      }}
+      alignItems="flex-start" onClick={handleChangeRoom}>
+      <ListItemAvatar>
+        <Avatar alt={room.chatroom_name} src="/static/images/avatar/1.jpg" />
+      </ListItemAvatar>
+      <ListItemText
+        primary={room.chatroom_name}
+        secondary={
+          <React.Fragment>
+            <Typography
+              sx={{ display: 'inline' }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+            >
+            </Typography>
+            {room.last_message?.message_id?.message_text}
+          </React.Fragment>
+        }
+      />
+    </ListItem>
   )
 }
 

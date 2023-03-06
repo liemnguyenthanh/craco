@@ -35,9 +35,10 @@ export default function LoginPage() {
 
   React.useEffect(() => {
     if (user) {
-      navigate('/'); // redirect to dashboard if user is found in local storage
+      navigate('/chat');
     }
   }, [navigate, user]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget

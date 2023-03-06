@@ -1,29 +1,30 @@
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import useLocalStorage from '../../hooks/useLocalStorage';
+import { useRoutes } from 'react-router-dom';
+import ErrorPage from '../../pages/404';
 import ChatPage from '../../pages/chat';
 import LoginPage from '../../pages/login';
-import { LoginRequest } from '../../utils/types/accounts';
+import { getItemLocalStorage } from '../../utils/helpers';
 import PrivateRoute from '../private';
 
+export interface Route {
+  path: string;
+  element: JSX.Element;
+}
+
+const isAuthenticated = (): boolean => {
+  const user = getItemLocalStorage("user")
+  return !!user;
+};
+
+const routes: Route[] = [
+  { path: '/chat', element: <PrivateRoute element={<ChatPage />} isAuthenticated={isAuthenticated()} /> },
+  { path: '/*', element: <PrivateRoute element={<ErrorPage />} isAuthenticated={isAuthenticated()} /> },
+  { path: '/login', element: <LoginPage /> },
+];
+
 const RouterApp = () => {
-  const [user] = useLocalStorage<LoginRequest | null>('user', null)
-  
-  return (
-    <Router>
-      <Routes>
-        <Route path='/'
-          element={
-            <PrivateRoute element={<ChatPage />} isAuthenticated={!!user} />
-          } />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/*" element={
-          !!user ?
-            <Navigate to="/" /> :
-            <Navigate to="/login" />
-        } />
-      </Routes>
-    </Router>
-  )
+
+  const routing = useRoutes(routes);
+  return routing
 }
 
 export default RouterApp

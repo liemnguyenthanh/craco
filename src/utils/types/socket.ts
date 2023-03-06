@@ -1,7 +1,6 @@
 export interface SocketInitial {
   isConnected: boolean,
   usersOnline: UserOnline[] | null,
-  notification: Notification | null
 }
 
 export interface UserOnline {

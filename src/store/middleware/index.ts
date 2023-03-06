@@ -1,11 +1,14 @@
 import { AnyAction, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
+import { URL_SOCKET } from "../../constants/api";
 import { getItemLocalStorage } from "../../utils/helpers";
+import { showNotification } from "../../utils/notification";
+import { IMessage } from "../../utils/types/messages";
 import { UserOnline } from "../../utils/types/socket";
 import { RootState } from "../rootReducers";
-import { addUsersOnline, setNotification, setUsersOnline } from "../slices/socket";
+import { receiveNewMessage } from "../slices/chat";
+import { addUsersOnline, removeUsersOnline, setUsersOnline } from "../slices/socket";
 import { EVENTS_SOCKET } from "./events";
-const URL_SOCKET = 'ws://localhost:8080'
 
 export const socketMiddleware: Middleware<{}, RootState> = (store) => {
   let socket: Socket;
@@ -17,7 +20,7 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
       const user = getItemLocalStorage('user')
 
       socket.on(EVENTS_SOCKET.CONNECT, () => {
-        socket.emit(EVENTS_SOCKET.JOIN_DASHBOARD, user.username)
+        socket.emit(EVENTS_SOCKET.JOIN_DASHBOARD, { id: user._id, username: user.username })
         store.dispatch({ type: 'socket/connected' });
       });
 
@@ -26,10 +29,7 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
       });
 
       socket.on(EVENTS_SOCKET.NOTIFICATION_USER_ONLINE, ({ username, socketId }) => {
-        store.dispatch(setNotification({
-          title: "Khứa này mới Online",
-          description: username
-        }));
+        showNotification("Khứa này mới Online " + username)
         store.dispatch(addUsersOnline({ username, socketId }));
       });
 
@@ -40,6 +40,16 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
         }
         store.dispatch(setUsersOnline(clientList));
       });
+
+      socket.on(EVENTS_SOCKET.NOTIFICATION_USER_OFFLINE, (socketId: string) => {
+        store.dispatch(removeUsersOnline({ socketId }));
+      });
+
+      socket.on(EVENTS_SOCKET.RECEIVE_MESSAGE, (new_message: IMessage) => {
+        console.log("RECEIVE_MESSAGE", new_message);
+        
+        store.dispatch(receiveNewMessage(new_message));
+      });
     }
 
     if (type === "disconnect") {
@@ -48,6 +58,9 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
       }
     }
 
+    if (type === EVENTS_SOCKET.SEND_MESSAGE) {
+      socket.emit(EVENTS_SOCKET.SEND_MESSAGE, payload)
+    }
     return next({ type, payload });
   };
 };

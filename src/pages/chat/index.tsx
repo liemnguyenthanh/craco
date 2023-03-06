@@ -1,12 +1,19 @@
 import { Grid } from "@mui/material"
 import { Fragment, useEffect } from "react"
+import { ToastContainer } from "react-toastify"
 import { useAppDispatch } from "../../store"
-import RoomList from "./left/roomList"
-import Notification from "./notification"
-import RoomMain from "./right/roomMain"
+import LeftChat from "./left"
+import RightChat from "./right"
 
 const ChatPage = () => {
   const dispatch = useAppDispatch()
+
+  // FIX ME: how to get height after header render
+  const heightHeaderLayout = (): string => {
+    const headerLayout = document.querySelector('.js-header-layout')
+    if (!headerLayout) return 'calc(100vh - 59px)'
+    return `calc(100vh - ${headerLayout.clientHeight}px)`
+  }
 
   useEffect(() => {
     dispatch({ type: 'connect' })
@@ -16,15 +23,27 @@ const ChatPage = () => {
 
   return (
     <Fragment>
-      <Grid container sx={{ p: 2 }} spacing={{ xs: 2, md: 3 }}>
+      <Grid container sx={{ height: heightHeaderLayout() }}>
         <Grid item xs={12} sm={12} md={3}>
-          <RoomList />
+          <LeftChat />
         </Grid>
         <Grid item sm={12} md={9}>
-          <RoomMain />
+          <RightChat />
         </Grid>
       </Grid>
-      <Notification />
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
     </Fragment>
   )
 }
