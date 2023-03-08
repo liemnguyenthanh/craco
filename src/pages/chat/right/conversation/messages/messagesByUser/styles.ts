@@ -1,13 +1,11 @@
 
 
 export const styles = {
-  main: (isMySelf: boolean) => (
-    {
-      display: "flex",
-      gap: "10px",
-      justifyContent: isMySelf ? "end" : "left",
-    }
-  ),
+  main: (isMySelf: boolean) => ({
+    display: "flex",
+    gap: "10px",
+    justifyContent: isMySelf ? "end" : "left",
+  }),
   listMessage: (isMySelf: boolean) => ({
     display: "flex",
     gap: "4px",
@@ -18,14 +16,13 @@ export const styles = {
   message: (isMySelf: boolean) => ({
     whiteSpace: 'pre-line',
     wordBreak: "break-all",
-    p: 1,
-    mb: 0.5,
-    border: 1,
-    borderColor: "border.primary",
-    borderRadius: "8px",
+    p: "8px 12px",
+    border: 0.5,
+    borderColor: "border.main",
+    borderRadius: isMySelf ? "15px 5px 5px 15px" : "5px 15px 15px 5px",
     width: "fit-content",
     fontSize: "14px",
-    backgroundColor: isMySelf ? "myBackground.main" : "active.main",
+    backgroundColor: isMySelf ? "background.active" : "background.secondary",
     "&:first-of-type": {
       [isMySelf ? "borderTopRightRadius" : "borderTopLeftRadius"]: "0",
     }

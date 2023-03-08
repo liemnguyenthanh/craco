@@ -1,53 +1,54 @@
 import { PaletteMode } from "@mui/material";
+const colors = {
+  white: "#ffffff",
+  purple: "#9068ff",
+  black: "#171821",
+  blackPurple: "#272835",
+  blackLight: "#1c1d26",
+  whiteDark: "#828282",
+
+}
+const common = {
+  typography: {
+    fontFamily: 'Roboto, sans-serif',
+  },
+};
 
 const modeTemplate = {
   //mode light 
   light: {
     primary: {
-      main: "#000000",
+      main: colors.black
     },
-    secondary: {
-      main: "#00000050",
-    },
-    text: {
-      primary: "#000000",
+    background: {
+      default: colors.white,
+      secondary: colors.whiteDark,
     },
     border: {
-      primary: "#3e4b5a"
-    },
-    shadow: "#ffffff",
+      main: colors.whiteDark
+    }
   },
 
   //mode light 
   dark: {
     primary: {
-      main: "#171821", 
-    },
-    secondary: {
-      main: "#1c1d26",
-    },
-    active: {
-      main: "#272835"
-    },
-    myBackground: {
-      main: "#9068ff"
+      main: colors.white
     },
     background: {
-      default: "#171821",
-    },
-    text: {
-      primary: '#ffffff',
+      default: colors.black,
+      secondary: colors.blackPurple,
+      active: colors.purple,
     },
     border: {
-      primary: "#6d6e76"
-    },
-    shadow: "#171821",
+      main: colors.whiteDark
+    }
   }
 }
 
 export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
     mode,
+    ...common,
     ...modeTemplate[mode]
   },
   components: {
@@ -55,9 +56,8 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       styleOverrides: {
         input: {
           ':-webkit-autofill': {
-            WebkitBoxShadow: `0 0 0 100px ${modeTemplate[mode].shadow} inset`,
           }
-        }
+        },
       }
     }
   }

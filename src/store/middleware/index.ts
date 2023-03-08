@@ -46,8 +46,6 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
       });
 
       socket.on(EVENTS_SOCKET.RECEIVE_MESSAGE, (new_message: IMessage) => {
-        console.log("RECEIVE_MESSAGE", new_message);
-        
         store.dispatch(receiveNewMessage(new_message));
       });
     }

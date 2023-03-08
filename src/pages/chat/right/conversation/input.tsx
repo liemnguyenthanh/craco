@@ -1,4 +1,4 @@
-import { Button, Input } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { useRef } from 'react';
@@ -22,6 +22,7 @@ const InputConversation = () => {
       sender_id: user._id,
       room_id: roomInfo._id,
       message_text: value,
+      timestamp: new Date().getTime()
     }
     dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
     if (inputRef.current) inputRef.current.value = ''
@@ -35,12 +36,12 @@ const InputConversation = () => {
       sx={{
         display: 'grid',
         gridTemplateColumns: '1fr 60px',
-        borderTop: 1,
-        borderTopColor: 'border.primary'
+        borderTop: 0.5,
+        borderTopColor: 'border.main'
 
       }}
     >
-      <Input
+      <TextField
         inputRef={inputRef}
         sx={{ p: 1, width: '100%', '&:before': { border: 'none' } }}
         placeholder='Write a message ...'

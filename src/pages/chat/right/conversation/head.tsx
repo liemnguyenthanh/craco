@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../../store'
 
@@ -7,14 +7,27 @@ const HeadConversation = () => {
 
   return (
     <Box sx={{
-      height: '50px',
-      borderBottom: 1,
-      borderBottomColor: 'border.primary',
+      height: '100px',
+      borderBottom: 0.5,
+      borderBottomColor: 'border.main',
       display: 'flex',
       alignItems: "center", 
-      p: '0 12px'
+      p: '0 16px'
     }}>
-      <Typography variant='h5' sx={{ color: 'text.primary' }}>{roomInfo?.chatroom_name}</Typography>
+      <Box sx={{
+        display: "flex",
+        gap: "8px"
+      }}>
+        <Avatar 
+          sx={{ width: 56, height: 56 }}
+          alt={roomInfo?.chatroom_name} src="/static/images/avatar/1.jpg" />
+        <Box>
+          <Typography variant='h5'>{roomInfo?.chatroom_name}</Typography>
+          <Typography variant='inherit' sx={{ fontSize: '12px', color: "#76ff03"}}>online</Typography>
+        </Box>
+      </Box>
+      <Box>
+      </Box>
     </Box>
   )
 }

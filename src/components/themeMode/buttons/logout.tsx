@@ -7,7 +7,12 @@ const LogoutButton = () => {
     window.location.reload()
   }
   return (
-    <Button variant="outlined" sx={{ p: 2, width: "100%", color: "text.primary", borderTop: 1 }} onClick={handleLogout}>Logout</Button>
+    <Button
+      sx={{
+        p: 2, width: "100%",
+        color: "text.primary",
+        borderTop: 0.5, borderColor: "border.main"
+      }} onClick={handleLogout}>Logout</Button>
   )
 }
 

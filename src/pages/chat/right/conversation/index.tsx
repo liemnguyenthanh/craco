@@ -1,6 +1,7 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../../../store';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../../../store';
 import { fetchMessageList, fetchRoomInfo } from '../../../../store/slices/chat';
 import BodyConversation from './body';
 import HeadConversation from './head';
@@ -11,6 +12,7 @@ interface Props {
 
 const Conversation = ({ roomId }: Props) => {
   const dispatch = useAppDispatch()
+  const roomInfo = useSelector((state: RootState) => state.chat.roomInfo)
 
   useEffect(() => {
     dispatch(fetchRoomInfo(roomId))
@@ -19,9 +21,21 @@ const Conversation = ({ roomId }: Props) => {
 
   return (
     <Box sx={{ height: '100%' }}>
-      <HeadConversation />
-      <BodyConversation />
-      <InputConversation />
+      {
+        roomInfo ? <>
+          <HeadConversation />
+          <BodyConversation />
+          <InputConversation />
+        </> :
+        <Typography
+          sx={{
+            textAlign: "center",
+            paddingTop: 10,
+            fontSize: 30
+          }}
+        >Not found Room</Typography>
+      }
+
     </Box>
   )
 }

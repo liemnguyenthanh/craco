@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import ErrorPage from '../../pages/404';
 import ChatPage from '../../pages/chat';
 import LoginPage from '../../pages/login';
@@ -18,6 +18,7 @@ const isAuthenticated = (): boolean => {
 const routes: Route[] = [
   { path: '/chat', element: <PrivateRoute element={<ChatPage />} isAuthenticated={isAuthenticated()} /> },
   { path: '/*', element: <PrivateRoute element={<ErrorPage />} isAuthenticated={isAuthenticated()} /> },
+  { path: '/', element: <Navigate to="/chat" /> },
   { path: '/login', element: <LoginPage /> },
 ];
 

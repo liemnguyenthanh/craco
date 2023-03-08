@@ -37,7 +37,7 @@ const MessagesByUser = ({ messagesByUser }: Props) => {
             <Box
               sx={styles.message(isMySelf)}
               key={message._id}>{message.message_text}</Box>)}
-        <Box sx={styles.time}>{getTimeMessage(messagesByUser.messages[messagesByUser.messages.length - 1].timestamp)}</Box>
+        <Box sx={styles.time}>{getTimeMessage(messagesByUser.messages[messagesByUser.messages.length - 1]?.timestamp)}</Box>
       </Box>
     </Box>
   )

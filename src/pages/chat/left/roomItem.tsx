@@ -23,10 +23,10 @@ const RoomItem = ({ room }: Props) => {
   return (
     <ListItem
       sx={{
-        backgroundColor: isActiveRoom ? "active.main" : "primary.main",
+        backgroundColor: isActiveRoom ? "background.secondary" : "background.default",
         cursor: 'pointer',
-        borderBottom: 1,
-        borderBottomColor: 'border.primary'
+        borderBottom: 0.5,
+        borderBottomColor: 'background.secondary',
       }}
       alignItems="flex-start" onClick={handleChangeRoom}>
       <ListItemAvatar>

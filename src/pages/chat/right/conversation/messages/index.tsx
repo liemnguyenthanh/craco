@@ -1,19 +1,18 @@
 import { Box } from '@mui/system'
-import React, { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../../../store'
-import { groupMessagesByTypeAndUser } from '../../../../../utils/helpers'
 import MessageByAdmin from './messageByAdmin'
 import MessagesByUser from './messagesByUser'
 
 const MessagesList = () => {
-  const messagesList = useSelector((state: RootState) => state.chat.messagesList)
+  const { messagesInRooms, roomInfo } = useSelector((state: RootState) => state.chat)
   const wrapListRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const messageGroup = useMemo(() => {
-    if (messagesList.length > 0) return groupMessagesByTypeAndUser(messagesList)
+    if (roomInfo && messagesInRooms && roomInfo._id in messagesInRooms) return messagesInRooms[roomInfo._id]
     return []
-  }, [messagesList])
+  }, [messagesInRooms, roomInfo])
 
 
   useEffect(() => {
@@ -25,8 +24,7 @@ const MessagesList = () => {
     } else {
       // listRef.current?.scrollBy(0, 46 * 20)
     }
-  }, [messagesList])
-
+  }, [messagesInRooms])
 
   return (
     <Box ref={listRef}>

@@ -15,10 +15,10 @@ const MessageByAdmin = ({ message }: Props) => {
       <Box
         sx={{
           textAlign: "center", p: 0.6, mb: 1,
-          border: 1,
-          borderColor: "border.primary",
+          border: 0.5,
+          borderColor: "border.main",
           fontSize: "12px",
-          backgroundColor: "active.main", borderRadius: 1, width: "fit-content",
+          backgroundColor: "background.secondary", borderRadius: 1, width: "fit-content",
           display: "flex",
           alignItems: "center",
           gap: "4px"

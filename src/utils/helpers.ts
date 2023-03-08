@@ -9,6 +9,10 @@ export function getItemLocalStorage(key: string) {
   return JSON.parse(value);
 }
 
+export const getMyAccount = () => {
+  return getItemLocalStorage('user')
+}
+
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => {
   return currentItem.message_type === 2 ||
     !nextItem ||
@@ -47,6 +51,38 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
   return groupList
 }
 
+export const last = (list: any[]) => {
+  if (list.length === 0) return
+  return list[list.length - 1]
+}
+
+export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
+  const lastItem: IGroupMessageByType = last(list)
+
+  if (lastItem.messages_user?.sender?._id === message.sender_id) {
+    lastItem.messages_user.messages.push(message)
+  } else {
+    const groupByType: IGroupMessageByType = { key: generalId(), type: message.message_type }
+    if (groupByType.type === 1) {
+      const groupByUser: IGroupMessageByUser = {
+        key: generalId(),
+        sender: {
+          _id: message.sender_id,
+          username: "User" + message.sender_id
+        },
+        messages: [message]
+      }
+      groupByType.messages_user = groupByUser
+    }
+    if (groupByType.type === 2) {
+      groupByType.action = message
+    }
+    list.push(groupByType)
+  }
+
+  return list
+}
+
 export const convertTimeToDate = (timestamp: number) => {
   const date = new Date(timestamp);
 
@@ -74,3 +110,32 @@ export const convertTime = (timestamp: number | undefined) => {
     }
   }
 }
+export const moveItemToFront = <T>(arr: T[], item: T) => {
+  const index = arr.indexOf(item);
+  if (index === 0) return;
+  if (index !== -1) {
+    arr.splice(index, 1);
+    arr.unshift(item);
+  }
+  return arr;
+}
+
+// export const mergeMessagesByUser = (newList: IMessage[], list: IGroupMessageByType[], isLoadMore = false) => {
+//   if (isLoadMore) newList = newList.reverse()
+//   const element = isLoadMore ? list[0] : last(list)
+//   const newListCopy = [...newList]
+
+//   for (let index = 0; index < newList.length; index++) {
+//     if (newList[index].sender_id === element.user?.username && element.message_group) {
+//       newListCopy.splice(0, 1)
+//       element.message_group = isLoadMore ? [newList[index], ...element.message_group] : [...element.message_group, newList[index]]
+//     } else break;
+//   }
+
+//   if (newListCopy.length > 0)
+//     list = isLoadMore ? 
+//       convertMessagesByUser(newListCopy).concat(list) : 
+//       list.concat(convertMessagesByUser(newListCopy))
+
+//   return list
+// }

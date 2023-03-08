@@ -9,8 +9,8 @@ const RightChat = () => {
   return (
     <Box
       sx={{
-        borderLeft: 1,
-        borderLeftColor: 'border.primary',
+        borderLeft: 0.5,
+        borderLeftColor: 'border.main',
         height: '100%',
         display: 'flex',
         justifyContent: 'space-between',
