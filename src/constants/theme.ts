@@ -1,13 +1,15 @@
 import { PaletteMode } from "@mui/material";
-const colors = {
+
+export const colors = {
   white: "#ffffff",
   purple: "#9068ff",
   black: "#171821",
   blackPurple: "#272835",
   blackLight: "#1c1d26",
   whiteDark: "#828282",
-
+  green: '#35cb73',
 }
+
 const common = {
   typography: {
     fontFamily: 'Roboto, sans-serif',
@@ -18,7 +20,8 @@ const modeTemplate = {
   //mode light 
   light: {
     primary: {
-      main: colors.black
+      main: colors.black,
+      green: colors.green,
     },
     background: {
       default: colors.white,
@@ -32,7 +35,8 @@ const modeTemplate = {
   //mode light 
   dark: {
     primary: {
-      main: colors.white
+      main: colors.white,
+      green: colors.green,
     },
     background: {
       default: colors.black,

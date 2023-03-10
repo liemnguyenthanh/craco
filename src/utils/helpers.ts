@@ -139,3 +139,8 @@ export const moveItemToFront = <T>(arr: T[], item: T) => {
 
 //   return list
 // }
+export const getTimeMessage = (timestamp: number | undefined): string => {
+  const date = convertTime(timestamp)
+  if (!date) return ''
+  return date?.getTimeMessage()
+}

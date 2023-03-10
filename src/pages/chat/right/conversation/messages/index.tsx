@@ -29,15 +29,13 @@ const MessagesList = () => {
   return (
     <Box ref={listRef}>
       <Box ref={wrapListRef}>
-        {
-          messageGroup.length > 0 &&
+        {messageGroup.length > 0 &&
           messageGroup.map(item => (
             <Fragment key={item.key}>
               {item.type === 1 && <MessagesByUser messagesByUser={item.messages_user} />}
               {item.type === 2 && item.action && <MessageByAdmin message={item.action} />}
             </Fragment>
-          ))
-        }
+          ))}
       </Box>
     </Box>
   )

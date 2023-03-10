@@ -7,6 +7,7 @@ import { RootState, useAppDispatch } from '../../../../store';
 import { EVENTS_SOCKET } from '../../../../store/middleware/events';
 import { useSelector } from 'react-redux';
 import { getItemLocalStorage } from '../../../../utils/helpers';
+
 const InputConversation = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const user = getItemLocalStorage("user")
@@ -16,11 +17,11 @@ const InputConversation = () => {
   const handleSendMessage = () => {
     const value = inputRef?.current?.value.trim();
     if (!value) showNotification("Please input!!");
-    if (!user && !roomInfo._id) return;
+    if (!user && !roomInfo) return;
 
     const requestMessage = {
       sender_id: user._id,
-      room_id: roomInfo._id,
+      room_id: roomInfo?._id,
       message_text: value,
       timestamp: new Date().getTime()
     }

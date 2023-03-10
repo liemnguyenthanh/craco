@@ -1,18 +1,12 @@
 import { Avatar } from "@mui/material";
 import { Box } from "@mui/system"
 import { useMemo } from "react";
-import { convertTime, getItemLocalStorage } from "../../../../../../utils/helpers";
+import { getItemLocalStorage, getTimeMessage } from "../../../../../../utils/helpers";
 import { IGroupMessageByUser } from "../../../../../../utils/types/messages"
 import { styles } from "./styles";
 
 interface Props {
   messagesByUser: IGroupMessageByUser | undefined
-}
-
-const getTimeMessage = (timestamp: number | undefined): string => {
-  const date = convertTime(timestamp)
-  if (!date) return ''
-  return date?.getTimeMessage()
 }
 
 const MessagesByUser = ({ messagesByUser }: Props) => {

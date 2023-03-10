@@ -20,12 +20,4 @@ export const appSlice = createSlice({
 
 export const { increment, decrement, incrementByAmount } = appSlice.actions
 
-//call api here?
-// export const incrementAsync = (amount) => (dispatch) => {
-//   setTimeout(() => {
-//     dispatch(incrementByAmount(amount))
-//   }, 1000)
-// }
-
-
 export default appSlice.reducer

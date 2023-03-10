@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Box } from '@mui/system';
 import { useEffect } from 'react';
 import LogoutButton from '../../../components/themeMode/buttons/logout';
@@ -13,22 +14,26 @@ const LeftChat = () => {
   useEffect(() => {
     dispatch(fetchRoomList(user._id))
   }, [dispatch, user])
-  
+
   return (
-    <Box
-      sx={{
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-      }}
-    >
+    <Wrap>
       <RoomList />
-      <Box>
+      <Logout>
         <LogoutButton />
-      </Box>
-    </Box>
+      </Logout>
+    </Wrap>
   );
 };
 
 export default LeftChat;
+
+const Wrap = styled(Box)({
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+  flexDirection: 'column',
+})
+
+const Logout = styled(Box)({
+  height: '72px'
+})

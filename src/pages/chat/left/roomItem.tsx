@@ -4,11 +4,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import { IChatRoom } from '../../../utils/types/rooms';
+import { IRoom } from '../../../utils/types/rooms';
 import { useSearchParams } from 'react-router-dom';
-
+import { Box } from '@mui/system';
+import { getTimeMessage } from '../../../utils/helpers';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import styled from '@emotion/styled';
+import { colors } from '../../../constants/theme';
 interface Props {
-  room: IChatRoom
+  room: IRoom
 }
 
 const RoomItem = ({ room }: Props) => {
@@ -21,34 +25,65 @@ const RoomItem = ({ room }: Props) => {
 
   const isActiveRoom: boolean = searchParams.get('room_id') === room._id
   return (
-    <ListItem
-      sx={{
-        backgroundColor: isActiveRoom ? "background.secondary" : "background.default",
-        cursor: 'pointer',
-        borderBottom: 0.5,
-        borderBottomColor: 'background.secondary',
-      }}
-      alignItems="flex-start" onClick={handleChangeRoom}>
+    <Wrap
+      sx={{ backgroundColor: isActiveRoom ? "background.secondary" : "background.default" }}
+      alignItems="flex-start"
+      onClick={handleChangeRoom}>
       <ListItemAvatar>
         <Avatar alt={room.chatroom_name} src="/static/images/avatar/1.jpg" />
       </ListItemAvatar>
-      <ListItemText
-        primary={room.chatroom_name}
-        secondary={
-          <React.Fragment>
-            <Typography
-              sx={{ display: 'inline' }}
-              component="span"
-              variant="body2"
-              color="text.primary"
-            >
-            </Typography>
-            {room.last_message?.message_id?.message_text}
-          </React.Fragment>
-        }
-      />
-    </ListItem>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+        <ListItemText
+          primary={room.chatroom_name}
+          secondary={
+            <Message variant="body2" color="text.primary">
+              {room.last_message?.message_id?.message_text}
+            </Message>
+          }
+        />
+        <Right>
+          <Typography sx={{ fontSize: '10px' }}>{getTimeMessage(room.last_message.timestamp)}</Typography>
+          {room.unread_count === 0 ?
+            <UnReadMessage /> :
+            <ReadMessage>{room.unread_count}</ReadMessage>}
+        </Right>
+      </Box>
+    </Wrap>
   )
 }
 
 export default RoomItem
+
+const Wrap = styled(ListItem)({
+  cursor: 'pointer',
+  borderBottom: `1px solid ${colors.whiteDark}`
+})
+
+const ReadMessage = styled(Box)({
+  fontSize: '12px',
+  borderRadius: "50%",
+  marginTop: 5,
+  width: '18px',
+  height: '18px',
+  lineHeight: '18px',
+  textAlign: 'center',
+  backgroundColor: colors.purple,
+});
+
+const UnReadMessage = styled(DoneAllIcon)({
+  fontSize: '14px',
+  color: colors.green
+})
+
+const Message = styled(Typography)({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  display: "-webkit-box",
+  WebkitLineClamp: "1",
+  WebkitBoxOrient: "vertical",
+})
+
+const Right = styled(Box)({
+  width: '50px',
+  textAlign: 'end'
+})
