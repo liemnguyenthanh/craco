@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Collapse } from '@mui/material';
 import List from '@mui/material/List';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
@@ -16,7 +17,10 @@ const RoomList = () => {
       <WrapList>
         <TransitionGroup>
           {roomList?.length > 0 &&
-           roomList.map((room: IRoom) => <RoomItem room={room} key={room._id} />)}
+            roomList.map((room: IRoom) =>
+              <Collapse key={room._id}>
+                <RoomItem room={room} />
+              </Collapse>)}
         </TransitionGroup>
       </WrapList>
     </Wrap>
@@ -32,7 +36,7 @@ const Wrap = styled(Box)({
 })
 
 const WrapList = styled(List)({
-  width: '100%', 
-  height: '100%', 
+  width: '100%',
+  height: '100%',
   padding: 0
 })

@@ -1,6 +1,10 @@
 import { v4 as generalId } from 'uuid';
 import { IGroupMessageByType, IGroupMessageByUser, IMessage } from './types/messages';
 
+export const getMyAccount = () => {
+  return getItemLocalStorage('user')
+}
+
 export function getItemLocalStorage(key: string) {
   const value = localStorage.getItem(key);
 
@@ -9,9 +13,6 @@ export function getItemLocalStorage(key: string) {
   return JSON.parse(value);
 }
 
-export const getMyAccount = () => {
-  return getItemLocalStorage('user')
-}
 
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => {
   return currentItem.message_type === 2 ||
@@ -25,7 +26,8 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
   list.reverse()
   const groupList: IGroupMessageByType[] = []
   let groupByType: IGroupMessageByType = { key: null, type: 1 }
-  let groupByUser: IGroupMessageByUser = { key: null, sender: null, messages: [] }
+  let groupByUser: IGroupMessageByUser = { key: null, sender: null, isMe: false, messages: [] }
+  const infoUser = getMyAccount()
 
   for (let index = 0; index < list.length; index++) {
     const item = list[index];
@@ -41,10 +43,14 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
     if (item.message_type === 2) groupByType.action = item
 
     if (isPushItemToGroupList(item, list[index + 1])) {
-      if (groupByUser.key) groupByType.messages_user = groupByUser
+      if (groupByUser.key) {
+        if (infoUser && infoUser._id === groupByUser.sender?._id)
+          groupByUser.isMe = true
+        groupByType.messages_user = groupByUser
+      }
       groupList.push(groupByType)
       groupByType = { key: null, type: 1 }
-      groupByUser = { key: null, sender: null, messages: [] }
+      groupByUser = { key: null, sender: null, isMe: false, messages: [] }
     }
   }
 
@@ -58,6 +64,7 @@ export const last = (list: any[]) => {
 
 export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
   const lastItem: IGroupMessageByType = last(list)
+  const infoUser = getMyAccount()
 
   if (lastItem.messages_user?.sender?._id === message.sender_id) {
     lastItem.messages_user.messages.push(message)
@@ -66,6 +73,7 @@ export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]):
     if (groupByType.type === 1) {
       const groupByUser: IGroupMessageByUser = {
         key: generalId(),
+        isMe: !!(infoUser && infoUser._id === message.sender_id),
         sender: {
           _id: message.sender_id,
           username: "User" + message.sender_id
@@ -120,7 +128,7 @@ export const moveItemToFront = <T>(arr: T[], item: T) => {
   return arr;
 }
 
-// export const mergeMessagesByUser = (newList: IMessage[], list: IGroupMessageByType[], isLoadMore = false) => {
+// export const mergeUsersMessages = (newList: IMessage[], list: IGroupMessageByType[], isLoadMore = false) => {
 //   if (isLoadMore) newList = newList.reverse()
 //   const element = isLoadMore ? list[0] : last(list)
 //   const newListCopy = [...newList]
@@ -134,8 +142,8 @@ export const moveItemToFront = <T>(arr: T[], item: T) => {
 
 //   if (newListCopy.length > 0)
 //     list = isLoadMore ? 
-//       convertMessagesByUser(newListCopy).concat(list) : 
-//       list.concat(convertMessagesByUser(newListCopy))
+//       convertUsersMessages(newListCopy).concat(list) : 
+//       list.concat(convertUsersMessages(newListCopy))
 
 //   return list
 // }

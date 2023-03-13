@@ -15,6 +15,6 @@ export default BodyConversation
 
 const Wrap = styled(Box)({
   height: 'calc(100vh - 230px)',
-  p: "16px 16px 0 16px",
+  padding: "16px 16px 0 16px",
   overflowY: "scroll"
 })

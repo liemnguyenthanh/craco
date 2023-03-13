@@ -52,6 +52,7 @@ export const chatSlice = createSlice({
     })
     builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
       if (action.payload) {
+        action.payload.unread_count = 1
         state.roomList = [action.payload].concat(state.roomList)
       }
     })

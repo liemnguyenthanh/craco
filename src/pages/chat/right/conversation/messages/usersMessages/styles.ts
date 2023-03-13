@@ -7,11 +7,13 @@ export const styles = {
     justifyContent: isMySelf ? "end" : "left",
   }),
   listMessage: (isMySelf: boolean) => ({
-    display: "flex",
-    gap: "4px",
-    flexDirection: "column",
-    maxWidth: 'calc(100% - 100px)',
-    alignItems: isMySelf ? "end" : "left",
+    ">div": {
+      display: "flex",
+      gap: "4px",
+      flexDirection: "column",
+      maxWidth: 'calc(100% - 100px)',
+      alignItems: isMySelf ? "end" : "left",
+    }
   }),
   message: (isMySelf: boolean) => ({
     whiteSpace: 'pre-line',

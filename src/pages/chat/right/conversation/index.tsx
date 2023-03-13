@@ -7,7 +7,7 @@ import { fetchMessageList, fetchRoomInfo, updateReadMessageInRoom } from '../../
 import { getMyAccount } from '../../../../utils/helpers';
 import BodyConversation from './body';
 import HeadConversation from './head';
-import InputConversation from './input';
+import InputConversation from './inputConversation';
 interface Props {
   roomId: string
 }

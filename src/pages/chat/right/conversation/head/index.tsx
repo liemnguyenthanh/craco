@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { Avatar, Box, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { colors } from '../../../../../constants/theme'
-import { RootState } from '../../../../../store'
+import { colors } from '@/constants/theme'
+import { RootState } from '@/store'
 import ActionRoom from '../actions'
 import { RoomName } from './roomName'
 

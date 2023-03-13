@@ -14,6 +14,7 @@ export interface IMessage {
 export interface IGroupMessageByUser {
   key: string | null,
   sender: UserAccount | null,
+  isMe: boolean,
   messages: IMessage[]
 }
 

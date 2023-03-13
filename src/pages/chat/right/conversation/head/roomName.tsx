@@ -3,8 +3,8 @@ import { Button, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { useRef, useState } from 'react';
-import { useAppDispatch } from '../../../../../store';
-import { EVENTS_SOCKET } from '../../../../../store/middleware/events';
+import { useAppDispatch } from '@/store';
+import { EVENTS_SOCKET } from '@/store/middleware/events';
 import { toast } from 'react-toastify';
 
 interface Props {

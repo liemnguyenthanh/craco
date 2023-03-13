@@ -2,11 +2,11 @@ import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { useRef } from 'react';
-import { showNotification } from '../../../../utils/notification';
-import { RootState, useAppDispatch } from '../../../../store';
-import { EVENTS_SOCKET } from '../../../../store/middleware/events';
+import { showNotification } from '@/utils/notification';
+import { RootState, useAppDispatch } from '@/store';
+import { EVENTS_SOCKET } from '@/store/middleware/events';
 import { useSelector } from 'react-redux';
-import { getItemLocalStorage } from '../../../../utils/helpers';
+import { getItemLocalStorage } from '@/utils/helpers';
 
 const InputConversation = () => {
   const inputRef = useRef<HTMLInputElement>(null);

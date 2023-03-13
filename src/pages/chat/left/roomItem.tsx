@@ -25,9 +25,14 @@ const RoomItem = ({ room }: Props) => {
 
   const isActiveRoom: boolean = searchParams.get('room_id') === room._id
   return (
-    <Wrap
-      sx={{ backgroundColor: isActiveRoom ? "background.secondary" : "background.default" }}
+    <ListItem
+      sx={{
+        backgroundColor: isActiveRoom ? "background.secondary" : "background.default",
+        cursor: 'pointer',
+        borderBottom: `1px solid ${colors.whiteDark}`
+      }}
       alignItems="flex-start"
+      button={true}
       onClick={handleChangeRoom}>
       <ListItemAvatar>
         <Avatar alt={room.chatroom_name} src="/static/images/avatar/1.jpg" />
@@ -36,7 +41,7 @@ const RoomItem = ({ room }: Props) => {
         <ListItemText
           primary={room.chatroom_name}
           secondary={
-            <Message variant="body2" color="text.primary">
+            <Message color="text.primary">
               {room.last_message?.message_id?.message_text}
             </Message>
           }
@@ -48,16 +53,11 @@ const RoomItem = ({ room }: Props) => {
             <ReadMessage>{room.unread_count}</ReadMessage>}
         </Right>
       </Box>
-    </Wrap>
+    </ListItem>
   )
 }
 
 export default RoomItem
-
-const Wrap = styled(ListItem)({
-  cursor: 'pointer',
-  borderBottom: `1px solid ${colors.whiteDark}`
-})
 
 const ReadMessage = styled(Box)({
   fontSize: '12px',
@@ -75,7 +75,7 @@ const UnReadMessage = styled(DoneAllIcon)({
   color: colors.green
 })
 
-const Message = styled(Typography)({
+const Message = styled('span')({
   overflow: "hidden",
   textOverflow: "ellipsis",
   display: "-webkit-box",
@@ -85,5 +85,7 @@ const Message = styled(Typography)({
 
 const Right = styled(Box)({
   width: '50px',
-  textAlign: 'end'
+  display: 'flex',
+  flexDirection: "column",
+  alignItems: 'end',
 })
