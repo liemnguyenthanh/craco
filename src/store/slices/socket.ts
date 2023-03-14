@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { showNotification } from '../../utils/notification';
-import { SocketInitial } from '../../utils/types/socket';
+import { showNotification } from '@/utils/notification';
+import { SocketInitial } from '@/utils/types/socket';
 
 const initialState: SocketInitial = {
   isConnected: false,

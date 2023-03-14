@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { axiosRequest } from '../../services';
-import { AccountSlice, LoginRequest, UserAccount } from '../../utils/types/accounts';
+import { axiosRequest } from '@/services';
+import { AccountSlice, LoginRequest, UserAccount } from '@/utils/types/accounts';
 
 const initialState: AccountSlice = {
   user: null,

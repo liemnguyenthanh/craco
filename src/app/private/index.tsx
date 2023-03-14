@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Navigate } from "react-router-dom";
-import MainLayout from "../../layout";
+import MainLayout from "@/layout";
 
 interface Props {
   element: JSX.Element;

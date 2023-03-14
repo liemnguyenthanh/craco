@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { Fragment, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../../../store';
-import { fetchMessageList, fetchRoomInfo, updateReadMessageInRoom } from '../../../../store/slices/chat';
-import { getMyAccount } from '../../../../utils/helpers';
-import BodyConversation from './body';
-import HeadConversation from './head';
+import { RootState, useAppDispatch } from '@/store';
+import { fetchMessageList, fetchRoomInfo, updateReadMessageInRoom } from '@/store/slices/chat';
+import { getMyAccount } from '@/utils/helpers';
+import BodyConversation from './bodyConversation';
+import HeadConversation from './headConversation';
 import InputConversation from './inputConversation';
+import { StyledNotFound } from './styles';
 interface Props {
   roomId: string
 }
@@ -37,15 +37,10 @@ const Conversation = ({ roomId }: Props) => {
         <BodyConversation />
         <InputConversation />
       </Fragment> :
-      <NotFound>Not found Room</NotFound>}
+      <StyledNotFound>Not found Room</StyledNotFound>}
     </Box>
   )
 }
 
 export default Conversation
 
-const NotFound = styled(Typography)({
-  textAlign: "center",
-  paddingTop: 10,
-  fontSize: 30
-})

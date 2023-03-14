@@ -1,7 +1,7 @@
 import { Popover, TextField } from '@mui/material';
 import React, { useRef, useState } from 'react';
-import { useAppDispatch } from '../../../store';
-import { fetchUsersByName } from '../../../store/slices/users';
+import { useAppDispatch } from '@/store';
+import { fetchUsersByName } from '@/store/slices/user';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { UsersListFilter } from './usersListFilter';
 const SearchUsers: React.FC = () => {

@@ -4,7 +4,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import React from 'react'
 import { IconButton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { ColorModeContext } from '../../app/provider/theme';
+import { ColorModeContext } from '@/app/provider/theme';
 
 const ThemeMode = () => {
   const theme = useTheme()

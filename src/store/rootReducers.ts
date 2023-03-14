@@ -3,7 +3,7 @@ import appReducer from "./slices/app";
 import socketReducer from "./slices/socket";
 import accountReducer from "./slices/account";
 import chatReducer from "./slices/chat";
-import userReducer from "./slices/users";
+import userReducer from "./slices/user";
 
 export const rootReducer = combineReducers({
   app: appReducer,

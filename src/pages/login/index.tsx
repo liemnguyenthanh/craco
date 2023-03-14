@@ -9,11 +9,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ThemeMode from '../../components/themeMode';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { useAppDispatch } from '../../store';
-import { loginUser } from '../../store/slices/account';
-import { LoginRequest } from '../../utils/types/accounts';
+import ThemeMode from '@/components/themeMode';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { useAppDispatch } from '@/store';
+import { loginUser } from '@/store/slices/account';
+import { LoginRequest } from '@/utils/types/accounts';
 
 function Copyright(props: any) {
   return (

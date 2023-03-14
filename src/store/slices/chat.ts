@@ -1,9 +1,10 @@
+import { moveItemToFront } from '@/utils/helpers'
+import { groupMessagesByTypeAndUser, mergeNewMessage } from '@/utils/logics/messages'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { axiosRequest } from '../../services'
-import { groupMessagesByTypeAndUser, mergeNewMessage, moveItemToFront } from '../../utils/helpers'
-import { IChatInitial } from '../../utils/types/chats'
-import { IMessage } from '../../utils/types/messages'
-import { ICreateRoom, IRoom, IRoomMessageStatus } from '../../utils/types/rooms'
+import { axiosRequest } from '@/services'
+import { IChatInitial } from '@/utils/types/chats'
+import { IMessage } from '@/utils/types/messages'
+import { ICreateRoom, IRoom, IRoomMessageStatus } from '@/utils/types/rooms'
 import { getSpecialMessage, SPECIAL_MESSAGE } from '../middleware/events'
 
 const initialState: IChatInitial = {

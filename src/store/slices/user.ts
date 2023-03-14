@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { axiosRequest } from '../../services'
-import { UserAccount } from '../../utils/types/accounts'
-import { UserSlice } from '../../utils/types/users'
+import { axiosRequest } from '@/services'
+import { UserAccount } from '@/utils/types/accounts'
+import { UserSlice } from '@/utils/types/users'
 
 const initialState: UserSlice = {
   usersByName: [],

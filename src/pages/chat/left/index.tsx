@@ -1,11 +1,10 @@
-import styled from '@emotion/styled';
-import { Box } from '@mui/system';
+import LogoutButton from '@/components/themeMode/buttons/logout';
+import { useAppDispatch } from '@/store';
+import { fetchRoomList } from '@/store/slices/chat';
+import { getItemLocalStorage } from '@/utils/helpers';
 import { useEffect } from 'react';
-import LogoutButton from '../../../components/themeMode/buttons/logout';
-import { useAppDispatch } from '../../../store';
-import { fetchRoomList } from '../../../store/slices/chat';
-import { getItemLocalStorage } from '../../../utils/helpers';
 import RoomList from './roomList';
+import { StyledLogout, StyledWrap } from './styles';
 
 const LeftChat = () => {
   const user = getItemLocalStorage("user")
@@ -16,24 +15,13 @@ const LeftChat = () => {
   }, [dispatch, user])
 
   return (
-    <Wrap>
+    <StyledWrap>
       <RoomList />
-      <Logout>
+      <StyledLogout>
         <LogoutButton />
-      </Logout>
-    </Wrap>
+      </StyledLogout>
+    </StyledWrap>
   );
 };
 
 export default LeftChat;
-
-const Wrap = styled(Box)({
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'space-between',
-  flexDirection: 'column',
-})
-
-const Logout = styled(Box)({
-  height: '72px'
-})

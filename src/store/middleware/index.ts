@@ -1,10 +1,10 @@
 import { AnyAction, Middleware } from "@reduxjs/toolkit";
 import { io, Socket } from "socket.io-client";
-import { URL_SOCKET } from "../../constants/api";
-import { getItemLocalStorage, getMyAccount } from "../../utils/helpers";
-import { showNotification } from "../../utils/notification";
-import { IMessage } from "../../utils/types/messages";
-import { UserOnline } from "../../utils/types/socket";
+import { URL_SOCKET } from "@/constants/api";
+import { getItemLocalStorage, getMyAccount } from "@/utils/helpers";
+import { showNotification } from "@/utils/notification";
+import { IMessage } from "@/utils/types/messages";
+import { UserOnline } from "@/utils/types/socket";
 import { RootState } from "../rootReducers";
 import { receiveNewMessage } from "../slices/chat";
 import { addUsersOnline, removeUsersOnline, setUsersOnline } from "../slices/socket";

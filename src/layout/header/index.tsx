@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
-import { colors } from "../../constants/theme"
-import { getMyAccount } from "../../utils/helpers"
+import { colors } from "@/constants/theme"
+import { getMyAccount } from "@/utils/helpers"
 import SearchUsers from "./searchUsers"
 
 const HeaderLayout = () => {

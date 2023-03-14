@@ -1,15 +1,15 @@
 import { Box } from "@mui/system"
 import { useSelector } from "react-redux"
-import { RootState } from "../../../store/rootReducers"
+import { RootState } from "@/store/rootReducers"
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Typography } from "@mui/material";
-import { UserAccount } from "../../../utils/types/accounts";
-import { useAppDispatch } from "../../../store";
-import { ICreateRoom } from "../../../utils/types/rooms";
-import { getMyAccount } from "../../../utils/helpers";
-import { createRoom } from "../../../store/slices/chat";
+import { UserAccount } from "@/utils/types/accounts";
+import { useAppDispatch } from "@/store";
+import { ICreateRoom } from "@/utils/types/rooms";
+import { getMyAccount } from "@/utils/helpers";
+import { createRoom } from "@/store/slices/chat";
 import styled from "@emotion/styled";
-import { colors } from "../../../constants/theme";
+import { colors } from "@/constants/theme";
 
 export const UsersListFilter = () => {
   const usersByName = useSelector((state: RootState) => state.user.usersByName)

@@ -1,16 +1,10 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { StyledWrap } from './styles';
 
 export default function ErrorPage() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh'
-      }}
-    >
+    <StyledWrap>
       <Container maxWidth="md">
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -30,6 +24,6 @@ export default function ErrorPage() {
           </Grid>
         </Grid>
       </Container>
-    </Box>
+    </StyledWrap>
   );
 }

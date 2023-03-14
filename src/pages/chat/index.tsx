@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material"
 import { Fragment, useEffect } from "react"
 import { ToastContainer } from "react-toastify"
-import { useAppDispatch } from "../../store"
+import { useAppDispatch } from "@/store"
 import LeftChat from "./left"
 import RightChat from "./right"
 

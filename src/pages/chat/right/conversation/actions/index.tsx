@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button } from '@mui/material';
-import Toggles from '../../../../components/themeMode/toggles';
+import Toggles from '@/components/themeMode/toggles';
 const ActionRoom = () => {
 
 

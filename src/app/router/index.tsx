@@ -1,8 +1,8 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-import ErrorPage from '../../pages/404';
-import ChatPage from '../../pages/chat';
-import LoginPage from '../../pages/login';
-import { getItemLocalStorage } from '../../utils/helpers';
+import ErrorPage from '@/pages/404';
+import ChatPage from '@/pages/chat';
+import LoginPage from '@/pages/login';
+import { getItemLocalStorage } from '@/utils/helpers';
 import PrivateRoute from '../private';
 
 export interface Route {

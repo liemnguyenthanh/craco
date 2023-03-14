@@ -1,16 +1,15 @@
-import React from 'react'
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { colors } from '@/constants/theme';
+import { getTimeMessage } from '@/utils/helpers';
+import { IRoom } from '@/utils/types/rooms';
 import Avatar from '@mui/material/Avatar';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { IRoom } from '../../../utils/types/rooms';
-import { useSearchParams } from 'react-router-dom';
 import { Box } from '@mui/system';
-import { getTimeMessage } from '../../../utils/helpers';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import styled from '@emotion/styled';
-import { colors } from '../../../constants/theme';
+import { useSearchParams } from 'react-router-dom';
+import { StyledMessage, StyledReadMessage, StyledRight, StyledUnReadMessage } from './styles';
+
 interface Props {
   room: IRoom
 }
@@ -41,51 +40,20 @@ const RoomItem = ({ room }: Props) => {
         <ListItemText
           primary={room.chatroom_name}
           secondary={
-            <Message color="text.primary">
+            <StyledMessage color="text.primary">
               {room.last_message?.message_id?.message_text}
-            </Message>
+            </StyledMessage>
           }
         />
-        <Right>
+        <StyledRight>
           <Typography sx={{ fontSize: '10px' }}>{getTimeMessage(room.last_message.timestamp)}</Typography>
           {room.unread_count === 0 ?
-            <UnReadMessage /> :
-            <ReadMessage>{room.unread_count}</ReadMessage>}
-        </Right>
+            <StyledUnReadMessage /> :
+            <StyledReadMessage>{room.unread_count}</StyledReadMessage>}
+        </StyledRight>
       </Box>
     </ListItem>
   )
 }
 
 export default RoomItem
-
-const ReadMessage = styled(Box)({
-  fontSize: '12px',
-  borderRadius: "50%",
-  marginTop: 5,
-  width: '18px',
-  height: '18px',
-  lineHeight: '18px',
-  textAlign: 'center',
-  backgroundColor: colors.purple,
-});
-
-const UnReadMessage = styled(DoneAllIcon)({
-  fontSize: '14px',
-  color: colors.green
-})
-
-const Message = styled('span')({
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  display: "-webkit-box",
-  WebkitLineClamp: "1",
-  WebkitBoxOrient: "vertical",
-})
-
-const Right = styled(Box)({
-  width: '50px',
-  display: 'flex',
-  flexDirection: "column",
-  alignItems: 'end',
-})

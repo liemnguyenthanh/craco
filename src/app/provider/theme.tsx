@@ -2,8 +2,8 @@ import React, { createContext } from 'react'
 import { ThemeProvider as ThemeMui, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { PaletteMode } from '@mui/material';
-import { getDesignTokens } from '../../constants/theme';
-import useLocalStorage from '../../hooks/useLocalStorage';
+import { getDesignTokens } from '@/constants/theme';
+import useLocalStorage from '@/hooks/useLocalStorage';
 export const ColorModeContext = createContext({ toggleColorMode: () => { } })
 
 function ThemeProvider({ children }: React.PropsWithChildren) {
