@@ -11,7 +11,7 @@ const ChatPage = () => {
   // FIX ME: how to get height after header render
   const heightHeaderLayout = (): string => {
     const headerLayout = document.querySelector('.js-header-layout')
-    if (!headerLayout) return 'calc(100vh - 59px)'
+    if (!headerLayout) return 'calc(100vh - 60px)'
     return `calc(100vh - ${headerLayout.clientHeight}px)`
   }
 
@@ -23,7 +23,7 @@ const ChatPage = () => {
 
   return (
     <Fragment>
-      <Grid container sx={{ height: heightHeaderLayout() }}>
+      <Grid container sx={{ height: heightHeaderLayout(), overflow: 'hidden' }}>
         <Grid item xs={12} sm={12} md={3}>
           <LeftChat />
         </Grid>

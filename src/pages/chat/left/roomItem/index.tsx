@@ -18,7 +18,7 @@ const RoomItem = ({ room }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const handleChangeRoom = () => {
-    if (!room._id) return;
+    if (!room._id || room._id === searchParams.get('room_id')) return;
     setSearchParams({ room_id: room._id })
   }
 

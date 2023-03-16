@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Typography } from "@mui/material";
-
-export const StyledNotFound = styled(Typography)({
-  textAlign: "center",
-  paddingTop: 10,
-  fontSize: 30
-})
+import { Box } from "@mui/material";
 
 export const StyledLoading = styled(Box)({
    height: 'calc(100vh - 230px)',

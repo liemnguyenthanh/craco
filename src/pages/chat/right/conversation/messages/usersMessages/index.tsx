@@ -1,52 +1,35 @@
-import { Avatar, List } from '@mui/material';
-import { Box } from '@mui/system';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { getTimeMessage } from '@/utils/helpers';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { getTimeMessage, last } from '@/utils/helpers';
 import { IGroupMessageByUser } from '@/utils/types/messages';
-import ItemMessageUser from './item';
-import { styles } from './styles';
+import { Avatar } from '@mui/material';
+import { Box } from '@mui/system';
+import { useMemo } from 'react';
+import ItemMessageUser from './itemMessageUser';
+import { StyledList, StyledWrap, styles } from './styles';
 interface Props {
-   UsersMessages: IGroupMessageByUser | undefined;
+   usersMessages: IGroupMessageByUser;
    messageListRef: React.MutableRefObject<Array<React.RefObject<HTMLLIElement>>>;
 }
 
-const UsersMessages = ({ UsersMessages, messageListRef }: Props) => {
-   if (!UsersMessages) return <></>;
+const UsersMessages = ({ usersMessages, messageListRef }: Props) => {
+
+   const isMe = useMemo(() => !!usersMessages.isMe, [])
 
    return (
-      <Box sx={styles.main(UsersMessages.isMe)}>
-         {!UsersMessages.isMe && (
-            <Avatar
-               alt={UsersMessages.sender?._id}
-               src='/static/images/avatar/1.jpg'
-            />
-         )}
-         <List sx={styles.listMessage(UsersMessages.isMe)}>
-            <TransitionGroup>
-               {UsersMessages.messages.length > 0 &&
-                  UsersMessages.messages.map((message, index) => (
-                     <CSSTransition
-                        nodeRef={messageListRef.current[index]}
-                        timeout={500}
-                        key={message._id}
-                        classNames='fade'
-                     >
-                        <ItemMessageUser
-                           messageListRef={messageListRef}
-                           isMe={UsersMessages.isMe}
-                           message={message}
-                        />
-                     </CSSTransition>
-                  ))}
-            </TransitionGroup>
+      <StyledWrap justifyContent={isMe ? 'flex-end': 'flex-start'}>
+         {!isMe && <Avatar alt={usersMessages.sender?._id} src='/static/images/avatar/1.jpg' />}
+         <StyledList alignItems={isMe ? 'end' : 'start'}>
+            {usersMessages.messages.map(item => <ItemMessageUser
+               key={item._id}
+               messageListRef={messageListRef}
+               isMe={isMe}
+               message={item}
+            />)}
             <Box sx={styles.time}>
-               {getTimeMessage(
-                  UsersMessages.messages[UsersMessages.messages.length - 1]
-                     ?.timestamp
-               )}
+               {getTimeMessage(last(usersMessages.messages)?.timestamp)}
             </Box>
-         </List>
-      </Box>
+         </StyledList>
+      </StyledWrap>
    );
 };
 
