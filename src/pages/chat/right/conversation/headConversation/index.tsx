@@ -7,7 +7,8 @@ import ActionRoom from '../actions'
 import { RoomName } from './roomName'
 
 const HeadConversation = () => {
-  const roomInfo = useSelector((state: RootState) => state.chat.roomInfo)
+  const { roomInfoList, roomIdActive} = useSelector((state: RootState) => state.chat)
+  const roomInfo = roomInfoList[roomIdActive] 
 
   return (
     <Wrap>

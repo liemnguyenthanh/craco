@@ -81,7 +81,6 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
 
    room.firstMessage = last(messages)
    const newGroupByTypeAndUser: IGroupMessageByType[] = groupMessagesByTypeAndUser(messages)
-   messages.reverse()
    const lastNewItem = last(newGroupByTypeAndUser)
    const firstOldItem = room.list[0]
 
@@ -91,18 +90,19 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
    ) {
       room.list = newGroupByTypeAndUser.concat(room.list)
    } else {
-      const copyMessage = [...messages]
-
+      const copyMessage = [...messages.reverse()]
       for (let index = copyMessage.length - 1; 0 <= index; index--) {
          const element = copyMessage[index];
+         
          if (element.message_type === TYPE_MESSAGE.CLIENT && element.sender_id === firstOldItem.messages_user?.sender?._id) {
-            firstOldItem.messages_user.messages.splice(1, 0, element)
+            firstOldItem.messages_user.messages.splice(0, 0, element)
             copyMessage.pop()
          } else break
       }
+      copyMessage.reverse()
       room.list = groupMessagesByTypeAndUser(copyMessage).concat(room.list)
    }
-
+   
    return room
 }
 

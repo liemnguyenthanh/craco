@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import LoadingComponent from '@/components/loading';
 import { RootState, useAppDispatch } from '@/store';
-import { fetchMessageList, fetchRoomInfo, updateReadMessageInRoom } from '@/store/slices/chat';
+import { fetchMessageList, fetchRoomInfo, setRoomIdActive } from '@/store/slices/chat';
 import { getMyAccount } from '@/utils/helpers';
 import { Box } from '@mui/material';
 import { Fragment, useEffect, useMemo } from 'react';
@@ -31,34 +31,30 @@ const Conversation = ({ roomId }: Props) => {
       if (!isExistRoom) {
          dispatch(fetchRoomInfo(roomId))
       }
+      dispatch(setRoomIdActive(roomId))
    }, [roomId])
 
    useEffect(() => {
       if (roomInfo && user._id && !isExistRoom) {
          dispatch(fetchMessageList({ room_id: roomId }))
-         dispatch(updateReadMessageInRoom({ room_id: roomId, user_id: user._id, count: 0 }))
       }
    }, [roomInfo])
 
-
    return (
-      <Box sx={{ height: '100%' }}>
-         {
-            isLoadingRoom ?
-               <LoadingComponent /> :
-               <>
-                  {roomInfo && !notFoundRoom &&
-                     <Fragment>
-                        <HeadConversation />
-                        {isLoadingMessageRoom ?
-                           <LoadingComponent /> :
-                           <MessagesAllRooms roomId={roomId} room={roomInfoList[roomId]} />}
-                        <InputConversation />
-                     </Fragment>}
-                  {notFoundRoom && <StyledNotFound>Not found Room</StyledNotFound>}
-               </>
-         }
-
+      <Box sx={{ height: '100%', position: 'relative' }}>
+         {isLoadingRoom ?
+            <LoadingComponent /> :
+            <Fragment>
+               {roomInfoList[roomId] && !notFoundRoom &&
+                  <Fragment>
+                     <HeadConversation />
+                     {isLoadingMessageRoom ?
+                        <LoadingComponent /> :
+                        <MessagesAllRooms roomId={roomId} room={roomInfoList[roomId]} />}
+                     <InputConversation />
+                  </Fragment>}
+               {notFoundRoom && <StyledNotFound>Not found Room</StyledNotFound>}
+            </Fragment>}
       </Box>
    )
 }

@@ -62,11 +62,11 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
     }
 
     if (type === EVENTS_SOCKET.CHANGE_ROOM_NAME) {
-      const room = store.getState().chat.roomInfo;
+      const roomId = store.getState().chat.roomIdActive;
 
-      if (room && user) {
+      if (roomId && user) {
         const request = {
-          room_id: room._id,
+          room_id: roomId,
           sender_id: user._id,
           chatroom_name: payload
         }

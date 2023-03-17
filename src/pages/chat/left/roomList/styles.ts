@@ -5,7 +5,8 @@ import { Box } from "@mui/system";
 
 export const StyledWrap = styled(Box)({
    height: 'calc(100% - 72px)',
-   overflow: 'scroll',
+   overflowY: 'scroll',
+   overflowX: 'hidden',
    borderBottom: `1px solid ${colors.whiteDark}`,
  })
  

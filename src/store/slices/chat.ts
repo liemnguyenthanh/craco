@@ -1,12 +1,13 @@
 import { TYPE_MESSAGE } from '@/constants/chats'
 import { axiosRequest } from '@/services'
-import { moveItemToFront } from '@/utils/helpers'
+import { getMyAccount, moveItemToFront } from '@/utils/helpers'
 import { mergeNewMessage, createMessageInRoom, mergeLoadMoreMessage } from '@/utils/logics/messages'
 import { IChatInitial } from '@/utils/types/chats'
 import { IMessage } from '@/utils/types/messages'
 import { ICreateRoom, IRoom, IRoomMessageStatus } from '@/utils/types/rooms'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getSpecialMessage, SPECIAL_MESSAGE } from '../middleware/events'
+import { RootState } from '../rootReducers'
 
 const initialState: IChatInitial = {
    roomList: [],
@@ -14,11 +15,14 @@ const initialState: IChatInitial = {
    roomInfoList: {},
    notFoundRoom: false,
    isLoadingRoom: false,
+   roomIdActive: '',
    messagesList: [],
    isLoadingMessageRoom: false,
    isLoadMoreMessageRoom: false,
    messagesInRooms: {}
 }
+
+const userInfo = getMyAccount()
 
 export const chatSlice = createSlice({
    name: 'chat',
@@ -36,7 +40,7 @@ export const chatSlice = createSlice({
          //add last message in room list
          if (room) {
             room.last_message.message_id = message
-            if (room._id !== state.roomInfo?._id) {
+            if (room._id !== state.roomIdActive) {
                room.unread_count++
             }
             moveItemToFront(state.roomList, room)
@@ -46,12 +50,15 @@ export const chatSlice = createSlice({
             const { event, content } = getSpecialMessage(message.message_text)
             if (event in SPECIAL_MESSAGE) {
                if (event === SPECIAL_MESSAGE.CHANGED_NAME_ROOM) {
-                  if (state.roomInfo) state.roomInfo.chatroom_name = content
+                  if (state.roomInfoList[message.room_id]) state.roomInfoList[message.room_id].chatroom_name = content
                   if (room) room.chatroom_name = content
                }
             }
          }
       },
+      setRoomIdActive(state, action: PayloadAction<string>) {
+         state.roomIdActive = action.payload
+      }
    },
    extraReducers: (builder) => {
       builder.addCase(fetchRoomList.fulfilled, (state, action: PayloadAction<IRoom[]>) => {
@@ -69,13 +76,13 @@ export const chatSlice = createSlice({
       builder.addCase(fetchRoomInfo.fulfilled, (state, action: PayloadAction<IRoom>) => {
          state.roomInfo = action.payload
          state.isLoadingRoom = false
-         const newRoomId = action.payload._id
          state.notFoundRoom = false
+         const newRoomId = action.payload._id
          if (!(newRoomId in state.roomInfoList)) {
             state.roomInfoList[newRoomId] = action.payload
          }
       })
-      builder.addCase(fetchRoomInfo.rejected, (state, action: PayloadAction<any>) => {
+      builder.addCase(fetchRoomInfo.rejected, (state) => {
          state.isLoadingRoom = false
          state.notFoundRoom = true
       })
@@ -91,10 +98,9 @@ export const chatSlice = createSlice({
       })
       builder.addCase(fetchMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadingMessageRoom = false
-         if (!action.payload || !state.roomInfo) return;
-         const roomId: string = state.roomInfo._id
+         if (!action.payload || !state.roomIdActive) return;
          const newRoom = createMessageInRoom(action.payload)
-         state.messagesInRooms[roomId] = newRoom
+         state.messagesInRooms[state.roomIdActive] = newRoom
       })
 
       builder.addCase(fetchLoadMoreMessageList.pending, (state) => {
@@ -102,8 +108,8 @@ export const chatSlice = createSlice({
       })
       builder.addCase(fetchLoadMoreMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadMoreMessageRoom = false
-         if (!action.payload || !state.roomInfo) return;
-         const roomId: string = state.roomInfo._id
+         if (!action.payload || !state.roomIdActive) return;
+         const roomId: string = state.roomIdActive
          if (roomId in state.messagesInRooms) {
             // merge message zo room list
             mergeLoadMoreMessage(action.payload, state.messagesInRooms[roomId])
@@ -112,7 +118,13 @@ export const chatSlice = createSlice({
    },
 })
 
-export const { receiveNewMessage } = chatSlice.actions
+export const { receiveNewMessage, setRoomIdActive } = chatSlice.actions
+
+export const shouldReadMessageInRoom = (roomId: string) => (state: RootState) => {
+   const room = state.chat.roomList.find(room => room._id === roomId)
+   if (!room) return false
+   return room.unread_count > 0
+}
 
 export const fetchMessageList = createAsyncThunk(
    'messages/list',
@@ -183,10 +195,9 @@ export const createRoom = createAsyncThunk(
 
 export const updateReadMessageInRoom = createAsyncThunk(
    'rooms/readMessage',
-   async (req: { room_id: string, user_id: string, count: number }, { rejectWithValue }) => {
+   async (req: { room_id: string, count: number }, { rejectWithValue }) => {
       try {
-
-         const response = await axiosRequest("/rooms/read-message", req)
+         const response = await axiosRequest("/rooms/read-message", { ...req, user_id: userInfo._id })
          return response
       } catch (error) {
          console.log({ error });

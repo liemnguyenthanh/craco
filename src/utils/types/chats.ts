@@ -5,6 +5,7 @@ import { IRoom } from "./rooms";
 export interface IChatInitial {
   roomList: IRoom[],
   roomInfo: IRoom | null,
+  roomIdActive: string,
   notFoundRoom: boolean,
   isLoadingRoom: boolean,
   roomInfoList: IKeyObject<IRoom>,
