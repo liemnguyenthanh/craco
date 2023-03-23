@@ -1,3 +1,4 @@
+import multiavatar from "@multiavatar/multiavatar";
 
 export const getMyAccount = () => {
    return getItemLocalStorage('user')
@@ -77,4 +78,8 @@ export const getTimeMessage = (timestamp: number | undefined): string => {
    const date = convertTime(timestamp)
    if (!date) return ''
    return date?.getTimeMessage()
+}
+
+export const generalAvatar = (name: string) => {
+   return `https://api.multiavatar.com/${name}.png`
 }

@@ -7,7 +7,6 @@ import { IMessage } from '@/utils/types/messages'
 import { ICreateRoom, IRoom, IRoomMessageStatus } from '@/utils/types/rooms'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getSpecialMessage, SPECIAL_MESSAGE } from '../middleware/events'
-import { RootState } from '../rootReducers'
 
 const initialState: IChatInitial = {
    roomList: [],
@@ -15,11 +14,12 @@ const initialState: IChatInitial = {
    roomInfoList: {},
    notFoundRoom: false,
    isLoadingRoom: false,
+   
    roomIdActive: '',
    messagesList: [],
+   messagesInRooms: {},
    isLoadingMessageRoom: false,
    isLoadMoreMessageRoom: false,
-   messagesInRooms: {}
 }
 
 const userInfo = getMyAccount()
@@ -42,9 +42,14 @@ export const chatSlice = createSlice({
             room.last_message.message_id = message
             if (room._id !== state.roomIdActive) {
                room.unread_count++
+               //update room in roomInfoList
+               if (roomId in state.roomInfoList) {
+                  state.roomInfoList[roomId].unread_count++
+               }
             }
             moveItemToFront(state.roomList, room)
          }
+        
          //check type = 2 and exist in special action 
          if (message.message_type === TYPE_MESSAGE.ADMIN) {
             const { event, content } = getSpecialMessage(message.message_text)
@@ -87,10 +92,14 @@ export const chatSlice = createSlice({
          state.notFoundRoom = true
       })
       builder.addCase(updateReadMessageInRoom.fulfilled, (state, action: PayloadAction<IRoomMessageStatus>) => {
-         const roomIndex = state.roomList.findIndex(room => room._id === action.payload.room_id)
+         const room_id = action.payload.room_id
+         const roomIndex = state.roomList.findIndex(room => room._id === room_id)
 
          if (roomIndex > -1) {
             state.roomList[roomIndex].unread_count = 0
+         }
+         if (room_id in state.roomInfoList) {
+            state.roomInfoList[room_id].unread_count = 0
          }
       })
       builder.addCase(fetchMessageList.pending, (state) => {
@@ -119,12 +128,6 @@ export const chatSlice = createSlice({
 })
 
 export const { receiveNewMessage, setRoomIdActive } = chatSlice.actions
-
-export const shouldReadMessageInRoom = (roomId: string) => (state: RootState) => {
-   const room = state.chat.roomList.find(room => room._id === roomId)
-   if (!room) return false
-   return room.unread_count > 0
-}
 
 export const fetchMessageList = createAsyncThunk(
    'messages/list',
@@ -169,9 +172,9 @@ export const fetchRoomList = createAsyncThunk(
 
 export const fetchRoomInfo = createAsyncThunk(
    'rooms/info',
-   async (room_id: string, { rejectWithValue }) => {
+   async (request: { room_id: string, user_id: string }, { rejectWithValue }) => {
       try {
-         const response = await axiosRequest("/rooms/" + room_id,)
+         const response = await axiosRequest(`/rooms/info?room_id=${request.room_id}&user_id=${request.user_id}`)
          return response
       } catch (error) {
          console.log({ error });

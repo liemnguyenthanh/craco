@@ -22,16 +22,16 @@ interface Props {
 
 */
 const Conversation = ({ roomId }: Props) => {
-   const { roomInfo, roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom } = useSelector((state: RootState) => state.chat)
+   const { roomInfo, roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
    const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId])
    const user = getMyAccount()
    const dispatch = useAppDispatch()
 
    useEffect(() => {
       if (!isExistRoom) {
-         dispatch(fetchRoomInfo(roomId))
+         dispatch(fetchRoomInfo({ room_id: roomId, user_id: user._id }))
       }
-      dispatch(setRoomIdActive(roomId))
+      if (roomIdActive !== roomId)dispatch(setRoomIdActive(roomId))
    }, [roomId])
 
    useEffect(() => {
@@ -41,7 +41,10 @@ const Conversation = ({ roomId }: Props) => {
    }, [roomInfo])
 
    return (
-      <Box sx={{ height: '100%', position: 'relative' }}>
+      <Box sx={{
+         height: '100%',
+         position: 'relative'
+      }}>
          {isLoadingRoom ?
             <LoadingComponent /> :
             <Fragment>

@@ -3,4 +3,4 @@ export enum TYPE_MESSAGE {
    ADMIN = 2,
 }
 
-export const LIMIT_MESSAGE = 20
+export const LIMIT_MESSAGE = 30

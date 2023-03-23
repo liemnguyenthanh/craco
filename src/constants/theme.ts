@@ -2,17 +2,28 @@ import { PaletteMode } from "@mui/material";
 
 export const colors = {
    white: "#ffffff",
+   whiteGrey: '#cccccc',
    purple: "#9068ff",
    black: "#171821",
-   blackPurple: "#272835",
-   blackLight: "#1c1d26",
-   whiteDark: "#828282",
+   blackPurple: "#1c1d26",
+   blackLight: "#372f31",
+   whiteDark: "#82828250",
    green: '#35cb73',
 }
 
 const common = {
    typography: {
-      fontFamily: 'Roboto, sans-serif',
+      fontFamily: [
+         'BlinkMacSystemFont',
+         '"Segoe UI"',
+         'Roboto',
+         '"Helvetica Neue"',
+         'Arial',
+         'sans-serif',
+         '"Apple Color Emoji"',
+         '"Segoe UI Emoji"',
+         '"Segoe UI Symbol"',
+       ].join(','),
    },
 };
 
@@ -40,7 +51,7 @@ const modeTemplate = {
       },
       background: {
          default: colors.black,
-         secondary: colors.blackPurple,
+         secondary: colors.blackLight,
          active: colors.purple,
       },
       border: {
@@ -50,9 +61,9 @@ const modeTemplate = {
 }
 
 export const getDesignTokens = (mode: PaletteMode) => ({
+   ...common,
    palette: {
       mode,
-      ...common,
       ...modeTemplate[mode]
    },
    components: {

@@ -5,6 +5,7 @@ import { colors } from '@/constants/theme'
 import { RootState } from '@/store'
 import ActionRoom from '../actions'
 import { RoomName } from './roomName'
+import { generalAvatar } from '@/utils/helpers'
 
 const HeadConversation = () => {
   const { roomInfoList, roomIdActive} = useSelector((state: RootState) => state.chat)
@@ -15,7 +16,7 @@ const HeadConversation = () => {
       <InfoRoom>
         <Avatar
           sx={{ width: 56, height: 56 }}
-          alt={roomInfo?.chatroom_name} src="/static/images/avatar/1.jpg" />
+          alt={roomInfo?.chatroom_name} src={generalAvatar(roomInfo._id)} />
         <Box>
           {roomInfo?.chatroom_name && <RoomName roomName={roomInfo.chatroom_name} />}
           <Typography variant='inherit' sx={{ fontSize: '12px', color: "#76ff03" }}>online</Typography>

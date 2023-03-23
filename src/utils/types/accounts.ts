@@ -9,6 +9,7 @@ export interface AccountSlice {
 
 export interface UserAccount {
   username: string;
+  avatar?: string;
   secret?: string;
   _id: string;
 }

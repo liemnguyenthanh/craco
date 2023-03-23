@@ -1,8 +1,9 @@
 import { LIMIT_MESSAGE, TYPE_MESSAGE } from '@/constants/chats';
 import { v4 as generalId } from 'uuid';
-import { getMyAccount, last } from '../helpers';
+import { generalAvatar, getMyAccount, last } from '../helpers';
 import { IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
 import { IMessagesInRoom } from '@/utils/types/chats'
+import { UserAccount } from '../types/accounts';
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => (
    currentItem.message_type === TYPE_MESSAGE.ADMIN ||
    !nextItem ||
@@ -25,7 +26,7 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
 
       if (item.message_type === TYPE_MESSAGE.CLIENT) {
          if (!groupByUser.key) groupByUser.key = generalId();
-         groupByUser.sender = { _id: item.sender_id, username: "User" + item.sender_id }
+         groupByUser.sender = createSender(item.sender_id, '', generalAvatar(item.sender_id))
          groupByUser.messages.push(item)
       }
 
@@ -46,6 +47,8 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
    return groupList
 }
 
+const createSender = (_id: string, username: string, avatar?: string): UserAccount => ({ _id, username, avatar })
+
 export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
    const lastItem: IGroupMessageByType = last(list)
    const infoUser = getMyAccount()
@@ -60,10 +63,7 @@ export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]):
       const groupByUser: IGroupMessageByUser = {
          key: generalId(),
          isMe: !!(infoUser && infoUser._id === message.sender_id),
-         sender: {
-            _id: message.sender_id,
-            username: "User" + message.sender_id
-         },
+         sender: createSender(message.sender_id, '', generalAvatar(message.sender_id)),
          messages: [message]
       }
       groupByType.messages_user = groupByUser
@@ -93,7 +93,7 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
       const copyMessage = [...messages.reverse()]
       for (let index = copyMessage.length - 1; 0 <= index; index--) {
          const element = copyMessage[index];
-         
+
          if (element.message_type === TYPE_MESSAGE.CLIENT && element.sender_id === firstOldItem.messages_user?.sender?._id) {
             firstOldItem.messages_user.messages.splice(0, 0, element)
             copyMessage.pop()
@@ -102,7 +102,7 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
       copyMessage.reverse()
       room.list = groupMessagesByTypeAndUser(copyMessage).concat(room.list)
    }
-   
+
    return room
 }
 

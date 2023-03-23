@@ -12,12 +12,11 @@ interface Props {
 }
 
 const UsersMessages = ({ usersMessages, messageListRef }: Props) => {
-
    const isMe = useMemo(() => !!usersMessages.isMe, [])
 
    return (
       <StyledWrap justifyContent={isMe ? 'flex-end': 'flex-start'}>
-         {!isMe && <Avatar alt={usersMessages.sender?._id} src='/static/images/avatar/1.jpg' />}
+         {!isMe && <Avatar alt={usersMessages.sender?._id} src={usersMessages.sender?.avatar} />}
          <StyledList alignItems={isMe ? 'end' : 'start'}>
             {usersMessages.messages.map(item => <ItemMessageUser
                key={item._id}

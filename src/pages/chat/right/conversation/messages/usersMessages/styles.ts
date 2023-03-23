@@ -1,3 +1,4 @@
+import { colors } from "@/constants/theme"
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
 
@@ -23,7 +24,8 @@ export const styles = {
       borderRadius: isMySelf ? "15px 5px 5px 15px" : "5px 15px 15px 5px",
       width: "fit-content",
       fontSize: "14px",
-      backgroundColor: isMySelf ? "background.active" : "background.secondary",
+      backgroundColor: isMySelf ? colors.purple : colors.blackLight,
+      color: isMySelf ? colors.white : colors.whiteGrey,
       "&:first-of-type": {
          [isMySelf ? "borderTopRightRadius" : "borderTopLeftRadius"]: "0",
       }

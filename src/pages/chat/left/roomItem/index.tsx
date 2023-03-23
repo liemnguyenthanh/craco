@@ -1,5 +1,5 @@
 import { colors } from '@/constants/theme';
-import { getTimeMessage } from '@/utils/helpers';
+import { generalAvatar, getTimeMessage } from '@/utils/helpers';
 import { IRoom } from '@/utils/types/rooms';
 import Avatar from '@mui/material/Avatar';
 import ListItem from '@mui/material/ListItem';
@@ -8,7 +8,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import { StyledMessage, StyledReadMessage, StyledRight, StyledUnReadMessage } from './styles';
-
 interface Props {
    room: IRoom,
    roomActive?: string,
@@ -16,7 +15,7 @@ interface Props {
 }
 
 const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
-
+   
    return (
       <ListItem
          sx={{
@@ -28,7 +27,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
          button={true}
          onClick={() => handleChangeRoom(room)}>
          <ListItemAvatar>
-            <Avatar alt={room.chatroom_name} src="/static/images/avatar/1.jpg" />
+            <Avatar alt={room.chatroom_name} src={generalAvatar(room._id)} />
          </ListItemAvatar>
          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
             <ListItemText

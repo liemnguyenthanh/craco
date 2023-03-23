@@ -1885,6 +1885,11 @@
     "prop-types" "^15.8.1"
     "react-is" "^18.2.0"
 
+"@multiavatar/multiavatar@^1.0.7":
+  "integrity" "sha512-Yg9Uw57bmlErsWL0CSv4d6D4ZqVBE00OZmYr9MRgygoXZdboNtsEI6FbBRw1AY8l88Sm1ARcyojtlm2uwUn0Zg=="
+  "resolved" "https://registry.npmjs.org/@multiavatar/multiavatar/-/multiavatar-1.0.7.tgz"
+  "version" "1.0.7"
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   "integrity" "sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg=="
   "resolved" "https://registry.npmjs.org/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz"
