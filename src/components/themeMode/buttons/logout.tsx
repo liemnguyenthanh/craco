@@ -1,11 +1,7 @@
+import { handleLogout } from '@/utils/helpers'
 import { Button } from '@mui/material'
 
 const LogoutButton = () => {
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("user");
-    window.location.reload()
-  }
   return (
     <Button
       sx={{

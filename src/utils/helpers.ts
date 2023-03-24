@@ -1,5 +1,3 @@
-import multiavatar from "@multiavatar/multiavatar";
-
 export const getMyAccount = () => {
    return getItemLocalStorage('user')
 }
@@ -11,7 +9,6 @@ export function getItemLocalStorage(key: string) {
 
    return JSON.parse(value);
 }
-
 
 export const last = (list: any[]) => {
    if (list.length === 0) return
@@ -45,6 +42,7 @@ export const convertTime = (timestamp: number | undefined) => {
       }
    }
 }
+
 export const moveItemToFront = <T>(arr: T[], item: T) => {
    const index = arr.indexOf(item);
    if (index === 0) return;
@@ -55,25 +53,6 @@ export const moveItemToFront = <T>(arr: T[], item: T) => {
    return arr;
 }
 
-// export const mergeUsersMessages = (newList: IMessage[], list: IGroupMessageByType[], isLoadMore = false) => {
-//   if (isLoadMore) newList = newList.reverse()
-//   const element = isLoadMore ? list[0] : last(list)
-//   const newListCopy = [...newList]
-
-//   for (let index = 0; index < newList.length; index++) {
-//     if (newList[index].sender_id === element.user?.username && element.message_group) {
-//       newListCopy.splice(0, 1)
-//       element.message_group = isLoadMore ? [newList[index], ...element.message_group] : [...element.message_group, newList[index]]
-//     } else break;
-//   }
-
-//   if (newListCopy.length > 0)
-//     list = isLoadMore ? 
-//       convertUsersMessages(newListCopy).concat(list) : 
-//       list.concat(convertUsersMessages(newListCopy))
-
-//   return list
-// }
 export const getTimeMessage = (timestamp: number | undefined): string => {
    const date = convertTime(timestamp)
    if (!date) return ''
@@ -82,4 +61,9 @@ export const getTimeMessage = (timestamp: number | undefined): string => {
 
 export const generalAvatar = (name: string) => {
    return `https://api.multiavatar.com/${name}.png`
+}
+
+export const handleLogout = () => {
+   window.localStorage.removeItem("user");
+   window.location.reload()
 }

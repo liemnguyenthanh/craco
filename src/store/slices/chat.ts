@@ -14,12 +14,14 @@ const initialState: IChatInitial = {
    roomInfoList: {},
    notFoundRoom: false,
    isLoadingRoom: false,
-   
+
    roomIdActive: '',
    messagesList: [],
    messagesInRooms: {},
    isLoadingMessageRoom: false,
    isLoadMoreMessageRoom: false,
+
+   newMessageNoRoom: null,
 }
 
 const userInfo = getMyAccount()
@@ -37,6 +39,7 @@ export const chatSlice = createSlice({
          if (roomId in state.messagesInRooms) {
             mergeNewMessage(message, state.messagesInRooms[roomId].list)
          }
+
          //add last message in room list
          if (room) {
             room.last_message.message_id = message
@@ -48,9 +51,13 @@ export const chatSlice = createSlice({
                }
             }
             moveItemToFront(state.roomList, room)
+         } else {
+            // please handle add room when new message from user does not inside room list
+            // join vào room list
+            state.newMessageNoRoom = message
          }
-        
-         //check type = 2 and exist in special action 
+
+         //check type = admin and exist in special action 
          if (message.message_type === TYPE_MESSAGE.ADMIN) {
             const { event, content } = getSpecialMessage(message.message_text)
             if (event in SPECIAL_MESSAGE) {
@@ -63,6 +70,9 @@ export const chatSlice = createSlice({
       },
       setRoomIdActive(state, action: PayloadAction<string>) {
          state.roomIdActive = action.payload
+      },
+      clearNewMessageNoRoom(state) {
+         state.newMessageNoRoom = null
       }
    },
    extraReducers: (builder) => {

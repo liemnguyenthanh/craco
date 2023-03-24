@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getMyAccount } from '@/utils/helpers'
+import { getMyAccount, handleLogout } from '@/utils/helpers'
 import axios from 'axios'
 import { URL } from '../constants/api'
 
@@ -40,10 +40,9 @@ export const axiosRequest = (urlPath?: string, data?: any) => {
       })
       .catch((err) => {
          if (err.response) {
-            /* 
-              The request was made and the server responded with a status code
-              that falls out of the range of 2xx
-            */
+            if (err.response.data.statusCode === 401) {
+               handleLogout()
+            }
             throw err.response.data
          } else if (err.request) {
             // Client never received a response, or request never left

@@ -23,7 +23,7 @@ const ChatPage = () => {
 
   return (
     <Fragment>
-      <Grid container sx={{ height: heightHeaderLayout(), overflow: 'hidden' }}>
+      <Grid container sx={{ height: heightHeaderLayout(), }}>
         <Grid item xs={12} sm={12} md={3}>
           <LeftChat />
         </Grid>

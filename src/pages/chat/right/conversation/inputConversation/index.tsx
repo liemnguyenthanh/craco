@@ -7,6 +7,7 @@ import { RootState, useAppDispatch } from '@/store';
 import { EVENTS_SOCKET } from '@/store/middleware/events';
 import { useSelector } from 'react-redux';
 import { getItemLocalStorage } from '@/utils/helpers';
+import { StyledInput, StyledWrap } from './styles';
 
 const InputConversation = () => {
    const inputRef = useRef<HTMLInputElement>(null);
@@ -33,25 +34,16 @@ const InputConversation = () => {
       if (event.key === 'Enter') handleSendMessage()
    }
    return (
-      <Box
-         sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 60px',
-            borderTop: 0.5,
-            borderTopColor: 'border.main'
-
-         }}
-      >
-         <TextField
+      <StyledWrap>
+         <StyledInput
             inputRef={inputRef}
-            sx={{ p: 1, width: '100%', '&:before': { border: 'none' } }}
             placeholder='Write a message ...'
             onKeyDown={onPressEnter}
          />
          <Button onClick={handleSendMessage}>
             <TelegramIcon sx={{ color: "text.primary" }} />
          </Button>
-      </Box>
+      </StyledWrap>
    );
 };
 
