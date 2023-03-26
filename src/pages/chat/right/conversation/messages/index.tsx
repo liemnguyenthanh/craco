@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import LoadMoreComponent from '@/components/loadmore'
 import { TYPE_MESSAGE } from '@/constants/chats'
 import { RootState, useAppDispatch } from '@/store'
@@ -41,6 +41,14 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
 
    const handlePositionScroll = () => {
       if (wrapSecondRef.current && wrapFirstRef.current) {
+         const hasScroll = wrapFirstRef.current.clientHeight - wrapSecondRef.current.clientHeight < 0
+
+         if (!hasScroll) {
+            if (roomInfo.unread_count > 0) handleReadMessage()
+
+            return
+         }
+
          //smooth scroll tới tin nhắn chưa đọc
          if (isFirstRender.current) {
             if (roomInfo.unread_count > 0) {
@@ -85,7 +93,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
    const handleReadMessage = () => dispatch(updateReadMessageInRoom({ room_id: roomInfo._id, count: 0 }))
 
    return (
-      <Fragment>
+      <Box className="message-list__wrap" sx={{ position: 'relative' }}>
          <LoadMoreComponent isLoading={isLoadMoreMessageRoom} />
          {roomInfo.unread_count > 0 && <StyledScrollToBottom onClick={handleScrollBottom}>{roomInfo.unread_count}</StyledScrollToBottom>}
          <StyledWrap ref={wrapFirstRef}
@@ -104,7 +112,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
                   </Fragment>))}
             </Box>
          </StyledWrap>
-      </Fragment>
+      </Box>
    )
 }
 

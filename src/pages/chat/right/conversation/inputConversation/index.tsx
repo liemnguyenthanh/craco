@@ -1,31 +1,25 @@
-import { Button, TextField } from '@mui/material';
-import { Box } from '@mui/system';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import { useRef } from 'react';
-import { showNotification } from '@/utils/notification';
+import { TYPE_MESSAGE } from '@/constants/chats';
 import { RootState, useAppDispatch } from '@/store';
 import { EVENTS_SOCKET } from '@/store/middleware/events';
+import { createRequestMessage } from '@/utils/logics/messages';
+import { showNotification } from '@/utils/notification';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import { Button } from '@mui/material';
+import { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { getItemLocalStorage } from '@/utils/helpers';
 import { StyledInput, StyledWrap } from './styles';
 
 const InputConversation = () => {
    const inputRef = useRef<HTMLInputElement>(null);
-   const user = getItemLocalStorage("user")
    const roomIdActive = useSelector((state: RootState) => state.chat.roomIdActive)
    const dispatch = useAppDispatch()
 
    const handleSendMessage = () => {
       const value = inputRef?.current?.value.trim();
-      if (!value) showNotification("Please input!!");
-      if (!user && !roomIdActive) return;
+      if (!value) return showNotification("Please input!!");
+      if (!roomIdActive) return;
 
-      const requestMessage = {
-         sender_id: user._id,
-         room_id: roomIdActive,
-         message_text: value,
-         timestamp: new Date().getTime()
-      }
+      const requestMessage = createRequestMessage(roomIdActive, value, TYPE_MESSAGE.CLIENT)
       dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
       if (inputRef.current) inputRef.current.value = ''
    }
@@ -33,6 +27,7 @@ const InputConversation = () => {
    const onPressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') handleSendMessage()
    }
+
    return (
       <StyledWrap>
          <StyledInput

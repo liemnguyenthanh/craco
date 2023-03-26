@@ -39,7 +39,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
                }
             />
             <StyledRight>
-               <Typography sx={{ fontSize: '10px' }}>{getTimeMessage(room.last_message.timestamp)}</Typography>
+               <Typography sx={{ fontSize: '10px' }}>{getTimeMessage(room.last_message?.timestamp)}</Typography>
                {room.unread_count === 0 ?
                   <StyledUnReadMessage /> :
                   <StyledReadMessage>{room.unread_count}</StyledReadMessage>}

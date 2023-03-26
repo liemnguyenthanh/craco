@@ -2,7 +2,7 @@ import IconSearch from '@/assets/styles/icons/search';
 import { useAppDispatch } from '@/store';
 import { fetchUsersByName } from '@/store/slices/user';
 import { Popover } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { StyledSearch } from './styles';
 import { UsersListFilter } from './usersListFilter';
 
@@ -25,7 +25,7 @@ const SearchUsers: React.FC = () => {
    }
 
    return (
-      <>
+      <Fragment>
          <StyledSearch
             size="small"
             inputRef={inputRef}
@@ -47,7 +47,7 @@ const SearchUsers: React.FC = () => {
          >
             <UsersListFilter />
          </Popover>
-      </>
+      </Fragment>
    );
 };
 

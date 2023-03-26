@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { RootState } from '@/store'
 import { IRoom } from '@/utils/types/rooms'
 import { Fragment } from 'react'

@@ -5,6 +5,7 @@ import { Box } from '@mui/system'
 
 export const StyledRoomWrap = styled(Box)({
    position: 'relative',
+   height: '100%'
 })
 
 export const StyledRoom = styled(Box)({
@@ -34,7 +35,15 @@ export const StyledBtnExpand = styled(Button)({
    cursor: 'pointer',
    zIndex: 3,
    transition: `all 0.3s`,
-
+   '&:after': {
+      position: 'absolute',
+      content: "''",
+      minWidth: '39px',
+      minHeight: '39px',
+      backgroundColor:  colors.blackPurple,
+      borderRadius: '50%',
+      zIndex: -1
+   },
    '&:hover': {
       transform: 'scale(1.4)'
    }

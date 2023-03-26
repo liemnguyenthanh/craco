@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { getTimeMessage, last } from '@/utils/helpers';
 import { IGroupMessageByUser } from '@/utils/types/messages';
 import { Avatar } from '@mui/material';

@@ -1,9 +1,25 @@
 import { LIMIT_MESSAGE, TYPE_MESSAGE } from '@/constants/chats';
 import { v4 as generalId } from 'uuid';
 import { generalAvatar, getMyAccount, last } from '../helpers';
-import { IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
+import { IGroupMessageByType, IGroupMessageByUser, IMessage, TMessageType } from '../types/messages';
 import { IMessagesInRoom } from '@/utils/types/chats'
 import { UserAccount } from '../types/accounts';
+
+const userInfo = getMyAccount()
+
+export const createRequestMessage = (room_id: string, message_text: string, message_type: TMessageType): IMessage => {
+   
+   return {
+      sender_id: userInfo._id,
+      room_id,
+      message_text,
+      message_type,
+      timestamp: new Date().getTime()
+   }
+}
+
+const createSender = (_id: string, username: string, avatar?: string): UserAccount => ({ _id, username, avatar })
+
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => (
    currentItem.message_type === TYPE_MESSAGE.ADMIN ||
    !nextItem ||
@@ -46,8 +62,6 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
 
    return groupList
 }
-
-const createSender = (_id: string, username: string, avatar?: string): UserAccount => ({ _id, username, avatar })
 
 export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
    const lastItem: IGroupMessageByType = last(list)

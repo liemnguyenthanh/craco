@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { IMessage } from "@/utils/types/messages";
 import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";

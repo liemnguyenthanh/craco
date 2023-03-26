@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import LoadingComponent from '@/components/loading';
 import { RootState, useAppDispatch } from '@/store';
 import { fetchMessageList, fetchRoomInfo, setRoomIdActive } from '@/store/slices/chat';
@@ -15,14 +14,7 @@ import { StyledNotFound } from './styles';
 interface Props {
    roomId: string
 }
-/*
- -> check isExistRoom
 
- -> chưa có room thì load
-
- -> có rồi thì lấy room xong load
-
-*/
 const Conversation = ({ roomId }: Props) => {
    const { roomInfo, roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
    const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId])
@@ -68,7 +60,8 @@ const Conversation = ({ roomId }: Props) => {
 export default Conversation
 
 const StyledMessageAndRoom = styled(Box)({
-   display: 'flex' 
+   display: 'flex',
+   height: '100%'
 })
 
 const StyledMessages = styled(Box)({
