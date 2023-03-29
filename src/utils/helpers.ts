@@ -67,3 +67,43 @@ export const handleLogout = () => {
    window.localStorage.removeItem("user");
    window.location.reload()
 }
+
+export const debounce = <F extends (...args: any[]) => void>(
+   func: F,
+   timeout = 300
+) => {
+   let timer: ReturnType<typeof setTimeout>;
+   console.log(timeout);
+   return (...args: Parameters<F>): void => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+         func.apply(this, args);
+      }, timeout);
+   };
+};
+
+export const throttle = <F extends (...args: any[]) => void>(
+   func: F,
+   delay = 300
+ ) => {
+   let timeout: ReturnType<typeof setTimeout> | undefined;
+   let previousTime = 0;
+ 
+   
+   return (...args: Parameters<F>): void => {
+     const currentTime = new Date().getTime();
+     const elapsedTime = currentTime - previousTime;
+ 
+     if (!timeout || elapsedTime > delay) {
+       func.apply(this, args);
+       previousTime = currentTime;
+     } else {
+       clearTimeout(timeout);
+       timeout = setTimeout(() => {
+         func.apply(this, args);
+         previousTime = new Date().getTime();
+       }, delay - elapsedTime);
+     }
+   };
+ };
+ 

@@ -2,6 +2,7 @@ import { TYPE_MESSAGE } from '@/constants/chats';
 import { axiosRequest } from '@/services';
 import { getMyAccount, moveItemToFront } from '@/utils/helpers';
 import { createMessageInRoom, createRequestMessage, mergeLoadMoreMessage, mergeNewMessage } from '@/utils/logics/messages';
+import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
 import { IMessage } from '@/utils/types/messages';
 import { ICreateRoom, IRoom, IRoomMessageStatus } from '@/utils/types/rooms';
@@ -84,7 +85,6 @@ export const chatSlice = createSlice({
       //createRoom
       builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
          if (action.payload) {
-
             // action.payload.unread_count = 1;
             // state.roomList = [action.payload].concat(state.roomList);
          }
@@ -224,7 +224,7 @@ export const createRoom = createAsyncThunk(
    async (room: ICreateRoom, { rejectWithValue, dispatch }) => {
       try {
          const response = await axiosRequest('/rooms', room);
-         
+         showNotification('Tạo phòng rồi ra nhắn tin đê!!')
          const requestMessage = createRequestMessage(response._id, 'CREATE_ROOM',  TYPE_MESSAGE.ADMIN)
          dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
          return response;

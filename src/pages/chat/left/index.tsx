@@ -2,26 +2,46 @@ import LogoutButton from '@/components/themeMode/buttons/logout';
 import { useAppDispatch } from '@/store';
 import { fetchRoomList } from '@/store/slices/chat';
 import { getItemLocalStorage } from '@/utils/helpers';
-import { useEffect } from 'react';
+import { Box } from '@mui/system';
+import { useEffect, useRef } from 'react';
+import HeadLeft from './headLeft';
+import FormCreateRoom from './headLeft/createRoom';
 import RoomList from './roomList';
-import { StyledLogout, StyledWrap } from './styles';
+import { StyledCreateRoom, StyledLogout, StyledMain, StyledSecondWrap, StyledWrap } from './styles';
 
 const LeftChat = () => {
-  const user = getItemLocalStorage("user")
-  const dispatch = useAppDispatch()
+   const user = getItemLocalStorage("user")
+   const dispatch = useAppDispatch()
+   const divRoomRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    dispatch(fetchRoomList(user._id))
-  }, [dispatch, user])
+   useEffect(() => {
+      dispatch(fetchRoomList(user._id))
+   }, [dispatch, user])
 
-  return (
-    <StyledWrap>
-      <RoomList />
-      <StyledLogout>
-        <LogoutButton />
-      </StyledLogout>
-    </StyledWrap>
-  );
+   const handleToggleCreateRoom = () => {
+      if (divRoomRef.current) {
+         const isOpen = divRoomRef.current.classList.contains('open')
+         divRoomRef.current.classList.toggle('open')
+         divRoomRef.current.style.transform = isOpen ? 'translateX(0)' : `translateX(-50%)`
+      }
+   }
+
+   return (
+      <StyledWrap>
+         <StyledSecondWrap ref={divRoomRef} sx={{ width: '200%'}}>
+            <StyledMain>
+               <HeadLeft handleToggleCreateRoom={handleToggleCreateRoom} />
+               <RoomList />
+               <StyledLogout>
+                  <LogoutButton />
+               </StyledLogout>
+            </StyledMain>
+            <StyledCreateRoom>
+               <FormCreateRoom handleToggleCreateRoom={handleToggleCreateRoom}/>
+            </StyledCreateRoom>
+         </StyledSecondWrap>
+      </StyledWrap>
+   );
 };
 
 export default LeftChat;

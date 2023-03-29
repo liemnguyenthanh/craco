@@ -1,9 +1,13 @@
+import { getMyAccount } from "../helpers"
 import { ICreateRoom } from "../types/rooms"
 
-export const createNewRoom = (chatroom_name: string, chatroom_participants: string[], created_by_user_id: string): ICreateRoom | null => {
-   if (!chatroom_participants.includes(created_by_user_id)) return null
+const userInfo = getMyAccount()
 
+export const createNewRoom = (chatroom_name: string, chatroom_participants: string[]): ICreateRoom | null => {
+   //FIXME: check duplicate in backend
+   if (chatroom_participants.length === 0) return null
+   chatroom_participants.push(userInfo._id)
    return {
-      chatroom_name, chatroom_participants, created_by_user_id
+      chatroom_name, chatroom_participants, created_by_user_id: userInfo._id
    }
 }

@@ -5,11 +5,12 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 export const StyledReadMessage = styled(Box)({
    fontSize: '12px',
-   borderRadius: "50%",
+   borderRadius: "20px",
+   padding: '0 4px',
    marginTop: 5,
-   width: '18px',
-   height: '18px',
-   lineHeight: '18px',
+   minWidth: '22px',
+   height: '22px',
+   lineHeight: '22px',
    textAlign: 'center',
    backgroundColor: colors.purple,
 });

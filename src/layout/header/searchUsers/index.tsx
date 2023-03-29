@@ -6,7 +6,11 @@ import React, { Fragment, useRef, useState } from 'react';
 import { StyledSearch } from './styles';
 import { UsersListFilter } from './usersListFilter';
 
-const SearchUsers: React.FC = () => {
+interface Props {
+   hasPopover?: boolean
+}
+
+const SearchUsers: React.FC<Props> = ({ hasPopover }) => {
    const [popoverAnchorEl, setPopoverAnchorEl] = useState<HTMLDivElement | null>(null);
    const inputRef = useRef<HTMLInputElement | null>(null);
    const dispatch = useAppDispatch()
@@ -34,19 +38,21 @@ const SearchUsers: React.FC = () => {
             InputProps={{ startAdornment: <IconSearch /> }}
             placeholder="Find people..." />
 
-         <Popover
-            open={!!popoverAnchorEl}
-            anchorEl={popoverAnchorEl}
-            onClose={handleClosePopover}
-            disableAutoFocus={true}
-            disableEnforceFocus={true}
-            anchorOrigin={{
-               vertical: 'bottom',
-               horizontal: 'left',
-            }}
-         >
-            <UsersListFilter />
-         </Popover>
+         {hasPopover &&
+            <Popover
+               open={!!popoverAnchorEl}
+               anchorEl={popoverAnchorEl}
+               onClose={handleClosePopover}
+               disableAutoFocus={true}
+               disableEnforceFocus={true}
+               anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+               }}
+            >
+               <UsersListFilter />
+            </Popover>}
+
       </Fragment>
    );
 };

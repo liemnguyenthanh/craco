@@ -1,20 +1,22 @@
 import { Grid } from "@mui/material"
-import { Fragment, useEffect } from "react"
+import React, { Fragment, Suspense, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { ToastContainer } from "react-toastify"
 import { useAppDispatch } from "@/store"
 import LeftChat from "./left"
 import RightChat from "./right"
 import HelperChat from "./HelperChat"
+import LoadingComponent from "@/components/loading"
+import { SELECTOR } from "@/constants/selectors"
+const Events = React.lazy(() => import('./left'));
 
 const ChatPage = () => {
    const dispatch = useAppDispatch()
 
-   // FIX ME: how to get height after header render
-   const heightHeaderLayout = (): string => {
-      const headerLayout = document.querySelector('.js-header-layout')
+   const heightHeaderLayout = useMemo((): string => {
+      const headerLayout = document.querySelector(SELECTOR.HEADER)
       if (!headerLayout) return 'calc(100vh - 60px)'
       return `calc(100vh - ${headerLayout.clientHeight}px)`
-   }
+   }, [])
 
    useEffect(() => {
       dispatch({ type: 'connect' })
@@ -24,9 +26,11 @@ const ChatPage = () => {
 
    return (
       <Fragment>
-         <Grid container sx={{ height: heightHeaderLayout(), }}>
+         <Grid container sx={{ height: heightHeaderLayout, }}>
             <Grid item xs={12} sm={12} md={3}>
-               <LeftChat />
+               <Suspense fallback={<LoadingComponent />}>
+                  <Events />
+               </Suspense>
             </Grid>
             <Grid item sm={12} md={9}>
                <RightChat />

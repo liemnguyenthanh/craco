@@ -16,23 +16,19 @@ interface Props {
 }
 
 const Conversation = ({ roomId }: Props) => {
-   const { roomInfo, roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
-   const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId])
+   const { roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
+   const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId, roomInfoList])
    const user = getMyAccount()
    const dispatch = useAppDispatch()
 
    useEffect(() => {
       if (!isExistRoom) {
          dispatch(fetchRoomInfo({ room_id: roomId, user_id: user._id }))
+            .then(() => dispatch(fetchMessageList({ room_id: roomId })))
       }
       if (roomIdActive !== roomId) dispatch(setRoomIdActive(roomId))
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [roomId])
-
-   useEffect(() => {
-      if (roomInfo && user._id && !isExistRoom) {
-         dispatch(fetchMessageList({ room_id: roomId }))
-      }
-   }, [roomInfo])
 
    return (
       <Box sx={{ height: '100%', position: 'relative' }}>

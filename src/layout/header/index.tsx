@@ -9,7 +9,7 @@ const HeaderLayout = () => {
    const user = getMyAccount()
    return (
       <StyledWrap className="js-header-layout">
-         <SearchUsers />
+         <SearchUsers hasPopover={true}/>
          {
             user &&
             <StyledInfo>
@@ -31,6 +31,7 @@ const StyledWrap = styled(Box)({
    width: '100%',
    display: 'flex',
    justifyContent: 'space-between',
+   alignItems: 'center',
 })
 
 const StyledInfo = styled(Box)({
