@@ -7,7 +7,7 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import { Button } from '@mui/material';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { StyledInput, StyledWrap } from './styles';
+import { StyledInput, StyledSecondWrap, StyledWrap } from './styles';
 
 const InputConversation = () => {
    const inputRef = useRef<HTMLInputElement>(null);
@@ -30,14 +30,16 @@ const InputConversation = () => {
 
    return (
       <StyledWrap>
-         <StyledInput
-            inputRef={inputRef}
-            placeholder='Write a message ...'
-            onKeyDown={onPressEnter}
-         />
-         <Button onClick={handleSendMessage}>
-            <TelegramIcon sx={{ color: "text.primary" }} />
-         </Button>
+         <StyledSecondWrap>
+            <StyledInput
+               inputRef={inputRef}
+               placeholder='Write a message ...'
+               onKeyDown={onPressEnter}
+            />
+            <Button onClick={handleSendMessage}>
+               <TelegramIcon sx={{ color: "text.primary" }} />
+            </Button>
+         </StyledSecondWrap>
       </StyledWrap>
    );
 };

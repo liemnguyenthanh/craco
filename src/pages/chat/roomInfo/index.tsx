@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import ImagesList from './imagesList'
 import { StyledBtnExpand, StyledContainerRoom, StyledRoom, StyledRoomWrap } from './styles'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CustomRoom from './customRoom';
 
 const RoomInfo = () => {
    const roomRef = useRef<HTMLDivElement>(null)
@@ -21,6 +22,7 @@ const RoomInfo = () => {
          <StyledRoom ref={roomRef}>
             <StyledContainerRoom>
                <ImagesList />
+               <CustomRoom/>
             </StyledContainerRoom>
          </StyledRoom>
          <StyledBtnExpand ref={btnRef} onClick={handleToggleRoom}>

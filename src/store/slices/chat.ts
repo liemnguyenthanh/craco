@@ -2,16 +2,18 @@ import { TYPE_MESSAGE } from '@/constants/chats';
 import { axiosRequest } from '@/services';
 import { getMyAccount, moveItemToFront } from '@/utils/helpers';
 import { createMessageInRoom, createRequestMessage, mergeLoadMoreMessage, mergeNewMessage } from '@/utils/logics/messages';
+import { convertCommonRoom } from '@/utils/logics/rooms';
 import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
 import { IMessage } from '@/utils/types/messages';
-import { ICreateRoom, IRoom, IRoomMessageStatus } from '@/utils/types/rooms';
+import { ICreateRoom, IRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 import { EVENTS_SOCKET, getSpecialMessage, SPECIAL_MESSAGE } from '../middleware/events';
 
 const initialState: IChatInitial = {
-   roomList: [],
    roomInfo: null,
+   roomList: [],
    roomInfoList: {},
    notFoundRoom: false,
    isLoadingRoom: false,
@@ -35,8 +37,7 @@ export const chatSlice = createSlice({
          const roomId: string = action.payload.room_id;
          const room = state.roomList.find(item => item._id === roomId);
          const message = action.payload;
-         console.log(message);
-         
+
          // merge message in room list
          if (roomId in state.messagesInRooms) {
             mergeNewMessage(message, state.messagesInRooms[roomId].list);
@@ -80,7 +81,7 @@ export const chatSlice = createSlice({
    extraReducers: (builder) => {
       //fetchRoomList
       builder.addCase(fetchRoomList.fulfilled, (state, action: PayloadAction<IRoom[]>) => {
-         state.roomList = action.payload;
+         state.roomList = action.payload.map(room => convertCommonRoom(room));
       });
       //createRoom
       builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
@@ -143,8 +144,8 @@ export const chatSlice = createSlice({
       });
       //fetchRoomNotExist
       builder.addCase(fetchRoomNotExist.fulfilled, (state, action: PayloadAction<IRoom>) => {
-         const room = action.payload;
-         
+         const room = convertCommonRoom(action.payload);
+
          if (room) state.roomList.splice(0, 0, room)
       });
    },
@@ -206,6 +207,39 @@ export const fetchRoomInfo = createAsyncThunk(
    },
 );
 
+export const updateRoomInfo = createAsyncThunk(
+   'rooms/info/update',
+   async (update: IUpdateRoom, { rejectWithValue, getState, dispatch }) => {
+      try {
+         const state = getState() as RootState
+         const { roomIdActive } = state.chat
+         const response = await axiosRequest(`/rooms/update/${roomIdActive}`, update);
+         if (response) {
+            console.log(response);
+            // username + set username nickname to response 
+            let message = `${userInfo.username} set nickname: `
+
+            if (update.nickname) {
+               //    const room = roomInfoList[roomIdActive]
+               //    const userNickname = room.chatroom_participants.find(item => item._id === response.nickname)
+               Object.keys(update.nickname).forEach((key) => {
+                  if (update.nickname && key in update.nickname) {
+                     message += update.nickname[key]
+                  }
+               })
+            }
+            const requestMessage = createRequestMessage(response.room_id, message, TYPE_MESSAGE.ADMIN)
+            dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
+         }
+
+         return response;
+      } catch (error) {
+         console.log({ error });
+         return rejectWithValue(error);
+      }
+   },
+);
+
 export const fetchRoomNotExist = createAsyncThunk(
    'rooms/newMessage',
    async (request: { room_id: string, user_id: string }, { rejectWithValue }) => {
@@ -224,9 +258,11 @@ export const createRoom = createAsyncThunk(
    async (room: ICreateRoom, { rejectWithValue, dispatch }) => {
       try {
          const response = await axiosRequest('/rooms', room);
-         showNotification('Tạo phòng rồi ra nhắn tin đê!!')
-         const requestMessage = createRequestMessage(response._id, 'CREATE_ROOM',  TYPE_MESSAGE.ADMIN)
-         dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
+         if (!response.is_room_exist) {
+            showNotification('Tạo phòng rồi ra nhắn tin đê!!')
+            const requestMessage = createRequestMessage(response.room._id, 'CREATE_ROOM', TYPE_MESSAGE.ADMIN)
+            dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
+         }
          return response;
       } catch (error) {
          console.log({ error });

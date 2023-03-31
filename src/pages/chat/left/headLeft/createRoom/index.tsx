@@ -44,10 +44,10 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
    const handleCreateRoom = () => {
       if (usersSelected.length < 2) return
       const room_name = usersSelected.map(item => item.username).join(', ')
-      const room = createNewRoom(room_name, usersSelected.map(item => item._id))
+      const room = createNewRoom(room_name, usersSelected.map(item => item._id), true)
       if (room) {
          dispatch(createRoom(room))
-            .then((response: any) => handleCreatedRoomSuccess(response.payload?._id))
+            .then((response: any) => handleCreatedRoomSuccess(response.payload?.room._id))
       }
          
    }

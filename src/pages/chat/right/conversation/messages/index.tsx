@@ -8,8 +8,8 @@ import { IRoom } from '@/utils/types/rooms'
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { StyledScrollToBottom, StyledWrap } from './styles'
 import AdminMessages from './adminMessages'
+import { StyledScrollToBottom, StyledWrap } from './styles'
 import UsersMessages from './usersMessages'
 
 interface Props {
@@ -29,6 +29,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
 
    useEffect(() => {
       handlePositionScroll()
+      // eslint-disable-next-line
    }, [messagesInRoom])
 
    const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
@@ -52,8 +53,9 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
          //smooth scroll tới tin nhắn chưa đọc
          if (isFirstRender.current) {
             if (roomInfo.unread_count > 0) {
+               //  FIXME: handle if un read messages bigger than 30
                const index = messageListRef.current.length - roomInfo.unread_count
-               const element = messageListRef.current[index].current
+               const element = messageListRef?.current[index]?.current
 
                if (element) {
                   wrapFirstRef.current.scrollTop = element.offsetTop - wrapFirstRef.current.clientHeight + element.clientHeight

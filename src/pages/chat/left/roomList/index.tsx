@@ -20,7 +20,7 @@ const RoomList = () => {
    return (
       <StyledWrap>
          <StyledWrapList>
-            <TransitionGroup>
+            <TransitionGroup style={{ padding: '0 10px'}}>
                {roomList.length > 0 &&
                   roomList.map((room: IRoom) =>
                      <Collapse key={room._id}>

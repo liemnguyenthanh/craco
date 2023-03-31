@@ -18,9 +18,7 @@ export const UsersListFilter = () => {
    const handleCreateRoom = (user: UserAccount) => {
       const myAccount = getMyAccount()
       if (!myAccount) return;
-      const room = createNewRoom(
-         user.username,
-         [user._id, myAccount._id])
+      const room = createNewRoom('__', [user._id], false)
       if (room) dispatch(createRoom(room))
    }
 

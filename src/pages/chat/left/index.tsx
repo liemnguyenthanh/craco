@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 import HeadLeft from './headLeft';
 import FormCreateRoom from './headLeft/createRoom';
 import RoomList from './roomList';
-import { StyledCreateRoom, StyledLogout, StyledMain, StyledSecondWrap, StyledWrap } from './styles';
+import { StyledCreateRoom, StyledMain, StyledSecondWrap, StyledWrap } from './styles';
 
 const LeftChat = () => {
    const user = getItemLocalStorage("user")
@@ -32,9 +32,6 @@ const LeftChat = () => {
             <StyledMain>
                <HeadLeft handleToggleCreateRoom={handleToggleCreateRoom} />
                <RoomList />
-               <StyledLogout>
-                  <LogoutButton />
-               </StyledLogout>
             </StyledMain>
             <StyledCreateRoom>
                <FormCreateRoom handleToggleCreateRoom={handleToggleCreateRoom}/>

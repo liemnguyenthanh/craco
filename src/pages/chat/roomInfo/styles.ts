@@ -17,7 +17,9 @@ export const StyledRoom = styled(Box)({
 })
 
 export const StyledContainerRoom = styled(Box)({
-   padding: '15px 20px'
+   padding: '15px 20px',
+   display: 'flex',
+   flexDirection: 'column',
 })
 
 export const StyledBtnExpand = styled(Button)({

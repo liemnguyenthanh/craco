@@ -22,11 +22,6 @@ export const StyledSecondWrap = styled(Box)({
    }
 })
 
-export const StyledLogout = styled(Box)({
-   height: '72px',
-   width: '100%'
-})
-
 export const StyledMain = styled(Box)({
    height: '100%',
    display: 'flex',

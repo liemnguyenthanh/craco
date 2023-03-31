@@ -4,7 +4,7 @@ import HeaderLayout from './header'
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <Box>
+    <Box sx={{ overflow: 'scroll' }}>
       <HeaderLayout />
       {children}
     </Box>

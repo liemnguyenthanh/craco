@@ -1,4 +1,3 @@
-import { colors } from '@/constants/theme';
 import { generalAvatar, getTimeMessage } from '@/utils/helpers';
 import { IRoom } from '@/utils/types/rooms';
 import Avatar from '@mui/material/Avatar';
@@ -19,9 +18,12 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
    return (
       <ListItem
          sx={{
-            backgroundColor: roomActive === room._id ? "background.secondary" : "background.default",
+            backgroundColor: roomActive === room._id ? "background.active" : "background.default",
+            borderRadius: 3,
             cursor: 'pointer',
-            borderBottom: `1px solid ${colors.whiteDark}`
+            '&:hover': {
+               backgroundColor: roomActive === room._id ? "background.active" : "auto",
+            }
          }}
          alignItems="flex-start"
          button={true}
@@ -31,7 +33,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
          </ListItemAvatar>
          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
             <ListItemText
-               primary={room.chatroom_name}
+               primary={<StyledMessage>{room.chatroom_name}</StyledMessage>}
                secondary={
                   <StyledMessage color="text.primary">
                      {room.last_message?.message_id?.message_text}

@@ -10,6 +10,7 @@ export const colors = {
    blackLight: "#372f31",
    whiteDark: "#82828250",
    green: '#35cb73',
+   grayLight: '#3f3d44e0',
 }
 
 const common = {

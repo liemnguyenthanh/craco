@@ -73,7 +73,6 @@ export const debounce = <F extends (...args: any[]) => void>(
    timeout = 300
 ) => {
    let timer: ReturnType<typeof setTimeout>;
-   console.log(timeout);
    return (...args: Parameters<F>): void => {
       clearTimeout(timer);
       timer = setTimeout(() => {
