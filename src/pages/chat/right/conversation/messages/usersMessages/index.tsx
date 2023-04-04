@@ -5,19 +5,21 @@ import { Avatar } from '@mui/material';
 import { Box } from '@mui/system';
 import { useMemo } from 'react';
 import ItemMessageUser from './itemMessageUser';
-import { StyledList, StyledWrap, styles } from './styles';
+import { StyledList, StyledName, StyledWrap, styles } from './styles';
 interface Props {
    usersMessages: IGroupMessageByUser;
    messageListRef: React.MutableRefObject<Array<React.RefObject<HTMLLIElement>>>;
 }
 
 const UsersMessages = ({ usersMessages, messageListRef }: Props) => {
-   const isMe = useMemo(() => !!usersMessages.isMe, [])
+   const isMe = useMemo(() => !!usersMessages.isMe, // eslint-disable-next-line 
+      [])
 
    return (
-      <StyledWrap justifyContent={isMe ? 'flex-end': 'flex-start'}>
+      <StyledWrap justifyContent={isMe ? 'flex-end' : 'flex-start'}>
          {!isMe && <Avatar alt={usersMessages.sender?._id} src={usersMessages.sender?.avatar} />}
          <StyledList alignItems={isMe ? 'end' : 'start'}>
+            {!isMe && <StyledName>{usersMessages.sender?.nickname || usersMessages.sender?.username }</StyledName>}
             {usersMessages.messages.map(item => <ItemMessageUser
                key={item._id}
                messageListRef={messageListRef}

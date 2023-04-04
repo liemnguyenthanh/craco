@@ -15,7 +15,6 @@ export const StyledSecondWrap = styled(Box)({
    width: '200%',
    flexWrap: 'wrap',
    transition: 'transform 0.5s',
-   // transform: 'translateX(50%)',
    '> div': {
       width: '50%',
       overflowX: 'hidden'
@@ -25,7 +24,6 @@ export const StyledSecondWrap = styled(Box)({
 export const StyledMain = styled(Box)({
    height: '100%',
    display: 'flex',
-   justifyContent: 'space-between',
    flexDirection: 'column',
 })
 

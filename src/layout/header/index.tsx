@@ -1,9 +1,9 @@
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
 import { colors } from "@/constants/theme"
-import { generalAvatar, getMyAccount } from "@/utils/helpers"
+import { generalAvatar, getMyAccount, handleLogout } from "@/utils/helpers"
 import SearchUsers from "./searchUsers"
-import { Avatar } from "@mui/material"
+import { Avatar, Button } from "@mui/material"
 
 const HeaderLayout = () => {
    const user = getMyAccount()
@@ -13,6 +13,8 @@ const HeaderLayout = () => {
          {
             user &&
             <StyledInfo>
+               <Button onClick={handleLogout}>Out</Button>
+
                <Avatar src={generalAvatar(user._id)} />
                {user.username}
             </StyledInfo>

@@ -1,14 +1,14 @@
 import { LIMIT_MESSAGE, TYPE_MESSAGE } from '@/constants/chats';
+import { IMessagesInRoom } from '@/utils/types/chats';
 import { v4 as generalId } from 'uuid';
 import { generalAvatar, getMyAccount, last } from '../helpers';
-import { IGroupMessageByType, IGroupMessageByUser, IMessage, TMessageType } from '../types/messages';
-import { IMessagesInRoom } from '@/utils/types/chats'
-import { UserAccount } from '../types/accounts';
+import { IGroupMessageByType, IGroupMessageByUser, IMessage, ISenderInRoom, TMessageType } from '../types/messages';
+import { IRoom } from '../types/rooms';
 
 const userInfo = getMyAccount()
 
 export const createRequestMessage = (room_id: string, message_text: string, message_type: TMessageType): IMessage => {
-   
+
    return {
       sender_id: userInfo._id,
       room_id,
@@ -18,7 +18,16 @@ export const createRequestMessage = (room_id: string, message_text: string, mess
    }
 }
 
-const createSender = (_id: string, username: string, avatar?: string): UserAccount => ({ _id, username, avatar })
+const createSender = (_id: string, roomInfo: IRoom): ISenderInRoom => {
+   const username = roomInfo && roomInfo.chatroom_participants.find(user => user._id === _id)?.username
+   const nickname = roomInfo?.nickname && roomInfo.nickname[_id]
+   return {
+      _id,
+      username: username ?? '',
+      nickname: nickname ?? '',
+      avatar: generalAvatar(_id),
+   }
+}
 
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => (
    currentItem.message_type === TYPE_MESSAGE.ADMIN ||
@@ -27,7 +36,7 @@ const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boole
    currentItem.sender_id !== nextItem.sender_id
 )
 
-export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessageByType[] => {
+export const groupMessagesByTypeAndUser = (messageList: IMessage[], roomInfo: IRoom): IGroupMessageByType[] => {
    const list = [...messageList]
    list.reverse()
    const infoUser = getMyAccount()
@@ -42,7 +51,8 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
 
       if (item.message_type === TYPE_MESSAGE.CLIENT) {
          if (!groupByUser.key) groupByUser.key = generalId();
-         groupByUser.sender = createSender(item.sender_id, '', generalAvatar(item.sender_id))
+
+         groupByUser.sender = createSender(item.sender_id, roomInfo)
          groupByUser.messages.push(item)
       }
 
@@ -63,7 +73,7 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
    return groupList
 }
 
-export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
+export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[], roomInfo: IRoom): IGroupMessageByType[] => {
    const lastItem: IGroupMessageByType = last(list)
    const infoUser = getMyAccount()
 
@@ -77,7 +87,7 @@ export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]):
       const groupByUser: IGroupMessageByUser = {
          key: generalId(),
          isMe: !!(infoUser && infoUser._id === message.sender_id),
-         sender: createSender(message.sender_id, '', generalAvatar(message.sender_id)),
+         sender: createSender(message.sender_id, roomInfo),
          messages: [message]
       }
       groupByType.messages_user = groupByUser
@@ -89,12 +99,12 @@ export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]):
    return list
 }
 
-export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom): IMessagesInRoom => {
+export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom, roomInfo: IRoom): IMessagesInRoom => {
    if (messages.length < LIMIT_MESSAGE) room.shouldLoadMore = false
    if (messages.length === 0) return room;
 
    room.firstMessage = last(messages)
-   const newGroupByTypeAndUser: IGroupMessageByType[] = groupMessagesByTypeAndUser(messages)
+   const newGroupByTypeAndUser: IGroupMessageByType[] = groupMessagesByTypeAndUser(messages, roomInfo)
    const lastNewItem = last(newGroupByTypeAndUser)
    const firstOldItem = room.list[0]
 
@@ -114,14 +124,14 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
          } else break
       }
       copyMessage.reverse()
-      room.list = groupMessagesByTypeAndUser(copyMessage).concat(room.list)
+      room.list = groupMessagesByTypeAndUser(copyMessage, roomInfo).concat(room.list)
    }
 
    return room
 }
 
-export const createMessageInRoom = (messages: IMessage[]): IMessagesInRoom => ({
+export const createMessageInRoom = (messages: IMessage[], roomInfo: IRoom): IMessagesInRoom => ({
    shouldLoadMore: messages.length <= LIMIT_MESSAGE,
-   list: groupMessagesByTypeAndUser(messages),
+   list: groupMessagesByTypeAndUser(messages, roomInfo),
    firstMessage: last(messages)
 })

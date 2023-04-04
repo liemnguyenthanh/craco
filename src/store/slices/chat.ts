@@ -40,7 +40,8 @@ export const chatSlice = createSlice({
 
          // merge message in room list
          if (roomId in state.messagesInRooms) {
-            mergeNewMessage(message, state.messagesInRooms[roomId].list);
+            const room = state.roomInfoList[roomId]
+            mergeNewMessage(message, state.messagesInRooms[roomId].list, room);
          }
 
          //add last message in room list
@@ -85,10 +86,6 @@ export const chatSlice = createSlice({
       });
       //createRoom
       builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
-         if (action.payload) {
-            // action.payload.unread_count = 1;
-            // state.roomList = [action.payload].concat(state.roomList);
-         }
       });
       //fetchRoomInfo
       builder.addCase(fetchRoomInfo.pending, (state) => {
@@ -98,9 +95,9 @@ export const chatSlice = createSlice({
          state.roomInfo = action.payload;
          state.isLoadingRoom = false;
          state.notFoundRoom = false;
-         const newRoomId = action.payload._id;
-         if (!(newRoomId in state.roomInfoList)) {
-            state.roomInfoList[newRoomId] = action.payload;
+         const roomId = action.payload._id;
+         if (!(roomId in state.roomInfoList)) {
+            state.roomInfoList[roomId] = action.payload;
          }
       });
       builder.addCase(fetchRoomInfo.rejected, (state) => {
@@ -126,8 +123,9 @@ export const chatSlice = createSlice({
       builder.addCase(fetchMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadingMessageRoom = false;
          if (!action.payload || !state.roomIdActive) return;
-         const newRoom = createMessageInRoom(action.payload);
-         state.messagesInRooms[state.roomIdActive] = newRoom;
+         const room = state.roomInfoList[state.roomIdActive]
+         const newMessages = createMessageInRoom(action.payload, room);
+         state.messagesInRooms[state.roomIdActive] = newMessages;
       });
       //fetchLoadMoreMessageList
       builder.addCase(fetchLoadMoreMessageList.pending, (state) => {
@@ -138,8 +136,9 @@ export const chatSlice = createSlice({
          if (!action.payload || !state.roomIdActive) return;
          const roomId: string = state.roomIdActive;
          if (roomId in state.messagesInRooms) {
+            const roomInfo = state.roomInfoList[roomId]
             // merge message zo room list
-            mergeLoadMoreMessage(action.payload, state.messagesInRooms[roomId]);
+            mergeLoadMoreMessage(action.payload, state.messagesInRooms[roomId], roomInfo);
          }
       });
       //fetchRoomNotExist

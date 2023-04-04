@@ -1,9 +1,7 @@
-import { Box } from '@mui/system'
-import { convertTime } from '@/utils/helpers'
-import { IMessage } from '@/utils/types/messages'
-import AlarmIcon from '@mui/icons-material/Alarm';
-import styled from '@emotion/styled';
 import { colors } from '@/constants/theme';
+import { IMessage } from '@/utils/types/messages';
+import styled from '@emotion/styled';
+import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
 
 interface Props {
@@ -12,17 +10,17 @@ interface Props {
 }
 
 const AdminMessages = ({ messageListRef, message }: Props) => {
-   const date = convertTime(message.timestamp)
    const itemRef = useRef<HTMLLIElement>(null);
 
    useEffect(() => {
       messageListRef.current.push(itemRef);
+      // eslint-disable-next-line
    }, []);
 
    return (
       <Wrap ref={itemRef}>
          <Content>
-            {message.message_text} at {date && `${date.getTimeMessage()} ${date.getDayMonthYear()}`}<AlarmIcon />
+            {message.message_text}
          </Content>
       </Wrap>
    )

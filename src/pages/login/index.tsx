@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ThemeMode from '@/components/themeMode';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { useAppDispatch } from '@/store';
 import { loginUser } from '@/store/slices/account';
@@ -94,7 +93,7 @@ export default function LoginPage() {
           </Button>
         </Box>
       </Box>
-      <ThemeMode />
+      {/* <ThemeMode /> */}
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );

@@ -14,6 +14,11 @@ export const StyledList = styled(Box)`
    max-width: 'calc(100% - 100px)';
 `
 
+export const StyledName = styled(Box)({
+   fontSize: 14,
+   color: colors.green,
+})
+
 export const styles = {
    message: (isMySelf: boolean) => ({
       whiteSpace: 'pre-line',

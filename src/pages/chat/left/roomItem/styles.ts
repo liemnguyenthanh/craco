@@ -29,7 +29,7 @@ export const StyledMessage = styled('span')({
 })
 
 export const StyledRight = styled(Box)({
-   width: '50px',
+   width: '75px',
    display: 'flex',
    flexDirection: "column",
    alignItems: 'end',

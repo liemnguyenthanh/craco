@@ -28,7 +28,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
          alignItems="flex-start"
          button={true}
          onClick={() => handleChangeRoom(room)}>
-         <ListItemAvatar>
+         <ListItemAvatar sx={{ minWidth: 50 }}>
             <Avatar alt={room.chatroom_name} src={generalAvatar(room._id)} />
          </ListItemAvatar>
          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
@@ -41,7 +41,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
                }
             />
             <StyledRight>
-               <Typography sx={{ fontSize: '10px' }}>{getTimeMessage(room.last_message?.timestamp)}</Typography>
+               <Typography sx={{ fontSize: '8px' }}>{getTimeMessage(room.last_message?.timestamp)}</Typography>
                {room.unread_count === 0 ?
                   <StyledUnReadMessage /> :
                   <StyledReadMessage>{room.unread_count}</StyledReadMessage>}

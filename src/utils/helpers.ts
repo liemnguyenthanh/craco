@@ -23,10 +23,11 @@ export const convertTimeToDate = (timestamp: number) => {
    const year = date.getFullYear();
    const hours = date.getHours();
    const minutes = String(date.getMinutes()).padStart(2, '0');
+   const second = String(date.getSeconds())
    const amPm = hours >= 12 ? 'PM' : 'AM';
    const formattedHours = hours % 12 || 12;
 
-   return { date, hours, minutes, day, month, year, amPm, formattedHours }
+   return { date, hours, minutes, second, day, month, year, amPm, formattedHours }
 }
 
 export const convertTime = (timestamp: number | undefined) => {
@@ -34,12 +35,9 @@ export const convertTime = (timestamp: number | undefined) => {
    const { minutes, day, month, year, amPm, formattedHours } = convertTimeToDate(timestamp)
 
    return {
-      getTimeMessage: () => {
-         return `${formattedHours}:${minutes} ${amPm}`
-      },
-      getDayMonthYear: (fortmat?: string) => {
-         return `${day}-${month}-${year}`
-      }
+      getHourMin: () => `${formattedHours}:${minutes} ${amPm}`,
+      getDayMonthYear: () => `${day}/${month}/${year}`,
+      getDayMonth: () => `${day}/${month}`,
    }
 }
 
@@ -55,8 +53,10 @@ export const moveItemToFront = <T>(arr: T[], item: T) => {
 
 export const getTimeMessage = (timestamp: number | undefined): string => {
    const date = convertTime(timestamp)
-   if (!date) return ''
-   return date?.getTimeMessage()
+   const now = convertTime(new Date().getTime())
+   if (!date || !now) return ''
+   if (now.getDayMonthYear() === date.getDayMonthYear()) return date.getHourMin()
+   return date.getDayMonth()
 }
 
 export const generalAvatar = (name: string) => {
