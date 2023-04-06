@@ -1,4 +1,4 @@
-import { TYPE_MESSAGE } from '@/constants/chats';
+import { MESSAGE_USER } from '@/constants/chats';
 import { RootState, useAppDispatch } from '@/store';
 import { EVENTS_SOCKET } from '@/store/middleware/events';
 import { createRequestMessage } from '@/utils/logics/messages';
@@ -19,7 +19,7 @@ const InputConversation = () => {
       if (!value) return showNotification("Please input!!");
       if (!roomIdActive) return;
 
-      const requestMessage = createRequestMessage(roomIdActive, value, TYPE_MESSAGE.CLIENT)
+      const requestMessage = createRequestMessage(roomIdActive, value, MESSAGE_USER.MESSAGE_TEXT)
       dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
       if (inputRef.current) inputRef.current.value = ''
    }

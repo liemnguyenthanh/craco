@@ -1,15 +1,18 @@
 import { colors } from '@/constants/theme';
+import { convertMessageRoomToText } from '@/utils/logics/messages';
 import { IMessage } from '@/utils/types/messages';
+import { IRoom } from '@/utils/types/rooms';
 import styled from '@emotion/styled';
 import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
 
 interface Props {
-   message: IMessage,
+   message: IMessage;
    messageListRef: React.MutableRefObject<Array<React.RefObject<HTMLLIElement>>>;
+   roomInfo: IRoom
 }
 
-const AdminMessages = ({ messageListRef, message }: Props) => {
+const AdminMessages = ({ messageListRef, message, roomInfo }: Props) => {
    const itemRef = useRef<HTMLLIElement>(null);
 
    useEffect(() => {
@@ -20,7 +23,7 @@ const AdminMessages = ({ messageListRef, message }: Props) => {
    return (
       <Wrap ref={itemRef}>
          <Content>
-            {message.message_text}
+            {convertMessageRoomToText(message, roomInfo)}
          </Content>
       </Wrap>
    )

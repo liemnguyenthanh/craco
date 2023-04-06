@@ -1,15 +1,15 @@
-import { TYPE_MESSAGE } from '@/constants/chats';
+import { MESSAGE_ROOM_INFO } from '@/constants/chats';
 import { axiosRequest } from '@/services';
 import { getMyAccount, moveItemToFront } from '@/utils/helpers';
 import { createMessageInRoom, createRequestMessage, mergeLoadMoreMessage, mergeNewMessage } from '@/utils/logics/messages';
-import { convertCommonRoom } from '@/utils/logics/rooms';
+import { convertCommonRoom, getDataChangedRoom } from '@/utils/logics/rooms';
 import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
 import { IMessage } from '@/utils/types/messages';
 import { ICreateRoom, IRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { EVENTS_SOCKET, getSpecialMessage, SPECIAL_MESSAGE } from '../middleware/events';
+import { EVENTS_SOCKET } from '../middleware/events';
 
 const initialState: IChatInitial = {
    roomInfo: null,
@@ -35,39 +35,45 @@ export const chatSlice = createSlice({
    reducers: {
       receiveNewMessage(state, action: PayloadAction<IMessage>) {
          const roomId: string = action.payload.room_id;
-         const room = state.roomList.find(item => item._id === roomId);
-         const message = action.payload;
+         const roomLeft = state.roomList.find(item => item._id === roomId);
+         const roomRight = state.roomInfoList[roomId]
+         const messagesList = state.messagesInRooms[roomId]
+         const newMessage = action.payload;
 
-         // merge message in room list
-         if (roomId in state.messagesInRooms) {
-            const room = state.roomInfoList[roomId]
-            mergeNewMessage(message, state.messagesInRooms[roomId].list, room);
-         }
+         // merge message in room - right screen
+         if (messagesList) mergeNewMessage(newMessage, messagesList.list)
 
-         //add last message in room list
-         if (room) {
-            room.last_message.message_id = message;
-            if (room._id !== state.roomIdActive) {
-               room.unread_count++;
-               //update room in roomInfoList
-               if (roomId in state.roomInfoList) {
-                  state.roomInfoList[roomId].unread_count++;
-               }
+         //add last message in room list - left screen
+         if (roomLeft) {
+            if (roomLeft._id !== state.roomIdActive) {
+               roomLeft.unread_count++;
+               if (roomRight) roomRight.unread_count++;
             }
-            moveItemToFront(state.roomList, room);
+
+            roomLeft.last_message.message_id = newMessage;
+            moveItemToFront(state.roomList, roomLeft);
          } else {
             // please handle add room when new message from user does not inside room list
             // join vào room list
-            state.newMessageNoRoom = message;
+            state.newMessageNoRoom = newMessage;
          }
 
-         //check type = admin and exist in special action 
-         if (message.message_type === TYPE_MESSAGE.ADMIN) {
-            const { event, content } = getSpecialMessage(message.message_text);
-            if (event in SPECIAL_MESSAGE) {
-               if (event === SPECIAL_MESSAGE.CHANGED_NAME_ROOM) {
-                  if (state.roomInfoList[message.room_id]) state.roomInfoList[message.room_id].chatroom_name = content;
-                  if (room) room.chatroom_name = content;
+         //check type = admin and exist in special action -- all screen
+         if (newMessage.message_type === MESSAGE_ROOM_INFO.CHANGE_ROOM_NAME) {
+            const { chatroom_name } = getDataChangedRoom(newMessage)
+            if (chatroom_name) {
+               if (roomRight) roomRight.chatroom_name = chatroom_name;
+               if (roomLeft) roomLeft.chatroom_name = chatroom_name;
+            }
+         }
+
+         if (newMessage.message_type === MESSAGE_ROOM_INFO.CHANGE_NICK_NAME) {
+            if (roomRight) {
+               const data = getDataChangedRoom(newMessage)
+
+               for (const [user_id, name] of Object.entries(data)) {
+                  roomRight.nickname[user_id] = name
+                  if (roomLeft) roomLeft.nickname[user_id] = name
                }
             }
          }
@@ -83,9 +89,6 @@ export const chatSlice = createSlice({
       //fetchRoomList
       builder.addCase(fetchRoomList.fulfilled, (state, action: PayloadAction<IRoom[]>) => {
          state.roomList = action.payload.map(room => convertCommonRoom(room));
-      });
-      //createRoom
-      builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
       });
       //fetchRoomInfo
       builder.addCase(fetchRoomInfo.pending, (state) => {
@@ -143,7 +146,6 @@ export const chatSlice = createSlice({
       //fetchRoomNotExist
       builder.addCase(fetchRoomNotExist.fulfilled, (state, action: PayloadAction<IRoom>) => {
          const room = convertCommonRoom(action.payload);
-
          if (room) state.roomList.splice(0, 0, room)
       });
    },
@@ -212,21 +214,21 @@ export const updateRoomInfo = createAsyncThunk(
          const state = getState() as RootState
          const { roomIdActive } = state.chat
          const response = await axiosRequest(`/rooms/update/${roomIdActive}`, update);
+         let typeMessage = MESSAGE_ROOM_INFO.CHANGE_ROOM_NAME
          if (response) {
-            console.log(response);
-            // username + set username nickname to response 
-            let message = `${userInfo.username} set nickname: `
+            let message = ''
 
             if (update.nickname) {
-               //    const room = roomInfoList[roomIdActive]
-               //    const userNickname = room.chatroom_participants.find(item => item._id === response.nickname)
-               Object.keys(update.nickname).forEach((key) => {
-                  if (update.nickname && key in update.nickname) {
-                     message += update.nickname[key]
-                  }
-               })
+               message = JSON.stringify(update.nickname)
+               typeMessage = MESSAGE_ROOM_INFO.CHANGE_NICK_NAME
             }
-            const requestMessage = createRequestMessage(response.room_id, message, TYPE_MESSAGE.ADMIN)
+
+            if (update.chatroom_name) {
+               message = JSON.stringify(update)
+            }
+
+            const requestMessage = createRequestMessage(response.room_id, message, typeMessage)
+
             dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
          }
 
@@ -258,7 +260,7 @@ export const createRoom = createAsyncThunk(
          const response = await axiosRequest('/rooms', room);
          if (!response.is_room_exist) {
             showNotification('Tạo phòng rồi ra nhắn tin đê!!')
-            const requestMessage = createRequestMessage(response.room._id, 'CREATE_ROOM', TYPE_MESSAGE.ADMIN)
+            const requestMessage = createRequestMessage(response.room._id, 'CREATE_ROOM', MESSAGE_ROOM_INFO.CREATE_ROOM)
             dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
          }
          return response;

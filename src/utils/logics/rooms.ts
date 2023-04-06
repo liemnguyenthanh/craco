@@ -1,5 +1,6 @@
 import { IUserNickname } from "@/pages/chat/roomInfo/customRoom/nickname";
 import { getMyAccount } from "../helpers"
+import { IMessage } from "../types/messages";
 import { ICreateRoom, IRoom } from "../types/rooms"
 
 const userInfo = getMyAccount()
@@ -12,6 +13,11 @@ export const createNewRoom = (chatroom_name: string, chatroom_participants: stri
    return {
       chatroom_name, chatroom_participants, created_by_user_id: userInfo._id, is_group
    }
+}
+
+export const getDataChangedRoom = (message: IMessage) => {
+   const data: { [key: string]: string } = JSON.parse(message.message_text)
+   return data
 }
 
 export const convertCommonRoom = (room: IRoom) => {

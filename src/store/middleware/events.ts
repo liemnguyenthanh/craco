@@ -21,17 +21,3 @@ export const EVENTS_SOCKET = {
   NOTIFICATION_USER_OFFLINE: 'NOTIFICATION_USER_OFFLINE',
   USERS_ONLINE: 'USERS_ONLINE',
 };
-
-export const SPECIAL_MESSAGE = {
-  CHANGED_NAME_ROOM: 'CHANGED_NAME_ROOM',
-}
-
-export const getSpecialMessage = (text: string) => {
-  const arrStr = text.split(" ")
-  const event = arrStr[0]
-  let content = ''
-
-  if (arrStr.length > 1) arrStr.splice(0, 1)
-  content = arrStr.join(" ")
-  return { event, content }
-}

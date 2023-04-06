@@ -1,6 +1,6 @@
 
 import LoadMoreComponent from '@/components/loadmore'
-import { TYPE_MESSAGE } from '@/constants/chats'
+import { MESSAGE_ROOM_INFO, MESSAGE_USER } from '@/constants/chats'
 import { RootState, useAppDispatch } from '@/store'
 import { fetchLoadMoreMessageList, updateReadMessageInRoom } from '@/store/slices/chat'
 import { IMessagesInRoom } from '@/utils/types/chats'
@@ -104,13 +104,13 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
             <Box ref={wrapSecondRef} className="wrap-list-message">
                {messagesInRoom.list.length > 0 && messagesInRoom.list.map(item => (
                   <Fragment key={item.key}>
-                     {item.type === TYPE_MESSAGE.CLIENT &&
+                     {item.type in MESSAGE_USER &&
                         item.messages_user &&
                         item.messages_user.messages.length > 0 &&
                         <UsersMessages messageListRef={messageListRef} roomInfo={roomInfo} usersMessages={item.messages_user} />}
 
-                     {item.type === TYPE_MESSAGE.ADMIN && item.action &&
-                        <AdminMessages messageListRef={messageListRef} message={item.action} />}
+                     {item.type in MESSAGE_ROOM_INFO && item.action &&
+                        <AdminMessages messageListRef={messageListRef} roomInfo={roomInfo} message={item.action} />}
                   </Fragment>))}
             </Box>
          </StyledWrap>

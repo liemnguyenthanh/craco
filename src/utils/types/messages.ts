@@ -1,13 +1,11 @@
+import { TYPE_MESSAGE } from "@/constants/chats";
 import { UserAccount } from "./accounts";
-
-export type TMessageType = 1 | 2 | 3
-
 export interface IMessage {
   _id?: string;
   sender_id: string;
   room_id: string;
   message_text: string;
-  message_type: TMessageType;
+  message_type: TYPE_MESSAGE;
   timestamp: number;
 }
 
@@ -24,7 +22,7 @@ export interface IGroupMessageByUser {
 
 export interface IGroupMessageByType {
   key: string | null,
-  type: TMessageType,
+  type: TYPE_MESSAGE,
   action?: IMessage,
   messages_user?: IGroupMessageByUser,
 }
