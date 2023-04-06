@@ -3,4 +3,10 @@ export enum TYPE_MESSAGE {
    ADMIN = 2,
 }
 
+// export enum TYPE_MESSAGEe {
+//    MESSAGE_USER = 'MESSAGE_USER',
+//    CHANGE_ROOM_NAME = 'CHANGE_ROOM_NAME',
+//    CHANGE_NICK_NAME = 'CHANGE_NICK_NAME',
+//    CREATE_ROOM = 'CREATE_ROOM',
+// }
 export const LIMIT_MESSAGE = 30

@@ -24,8 +24,6 @@ export const chatSlice = createSlice({
    },
 })
 
-export const { } = chatSlice.actions
-
 export const fetchUsersByName = createAsyncThunk(
    'users/list',
    async (name: string, { rejectWithValue }) => {

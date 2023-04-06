@@ -1,12 +1,11 @@
-import { Grid } from "@mui/material"
-import React, { Fragment, Suspense, useEffect, useLayoutEffect, useMemo, useState } from "react"
-import { ToastContainer } from "react-toastify"
-import { useAppDispatch } from "@/store"
-import LeftChat from "./left"
-import RightChat from "./right"
-import HelperChat from "./HelperChat"
 import LoadingComponent from "@/components/loading"
 import { SELECTOR } from "@/constants/selectors"
+import { useAppDispatch } from "@/store"
+import { Grid } from "@mui/material"
+import React, { Fragment, Suspense, useEffect, useMemo } from "react"
+import { ToastContainer } from "react-toastify"
+import HelperChat from "./HelperChat"
+import RightChat from "./right"
 const Events = React.lazy(() => import('./left'));
 
 const ChatPage = () => {

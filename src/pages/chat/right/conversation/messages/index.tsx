@@ -107,7 +107,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
                      {item.type === TYPE_MESSAGE.CLIENT &&
                         item.messages_user &&
                         item.messages_user.messages.length > 0 &&
-                        <UsersMessages messageListRef={messageListRef} usersMessages={item.messages_user} />}
+                        <UsersMessages messageListRef={messageListRef} roomInfo={roomInfo} usersMessages={item.messages_user} />}
 
                      {item.type === TYPE_MESSAGE.ADMIN && item.action &&
                         <AdminMessages messageListRef={messageListRef} message={item.action} />}

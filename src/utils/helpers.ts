@@ -59,9 +59,7 @@ export const getTimeMessage = (timestamp: number | undefined): string => {
    return date.getDayMonth()
 }
 
-export const generalAvatar = (name: string) => {
-   return `https://api.multiavatar.com/${name}.png`
-}
+export const generalAvatar = (name: string) => `https://api.multiavatar.com/${name}.png`
 
 export const handleLogout = () => {
    window.localStorage.removeItem("user");
@@ -84,25 +82,23 @@ export const debounce = <F extends (...args: any[]) => void>(
 export const throttle = <F extends (...args: any[]) => void>(
    func: F,
    delay = 300
- ) => {
+) => {
    let timeout: ReturnType<typeof setTimeout> | undefined;
    let previousTime = 0;
- 
-   
+
    return (...args: Parameters<F>): void => {
-     const currentTime = new Date().getTime();
-     const elapsedTime = currentTime - previousTime;
- 
-     if (!timeout || elapsedTime > delay) {
-       func.apply(this, args);
-       previousTime = currentTime;
-     } else {
-       clearTimeout(timeout);
-       timeout = setTimeout(() => {
+      const currentTime = new Date().getTime();
+      const elapsedTime = currentTime - previousTime;
+
+      if (!timeout || elapsedTime > delay) {
          func.apply(this, args);
-         previousTime = new Date().getTime();
-       }, delay - elapsedTime);
-     }
+         previousTime = currentTime;
+      } else {
+         clearTimeout(timeout);
+         timeout = setTimeout(() => {
+            func.apply(this, args);
+            previousTime = new Date().getTime();
+         }, delay - elapsedTime);
+      }
    };
- };
- 
+};

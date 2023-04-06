@@ -1,7 +1,7 @@
 import { colors } from "@/constants/theme"
 import { useAppDispatch } from "@/store"
 import { fetchUsersByName } from "@/store/slices/user"
-import { debounce, generalAvatar, throttle } from "@/utils/helpers"
+import { generalAvatar } from "@/utils/helpers"
 import styled from "@emotion/styled"
 import { Avatar } from "@mui/material"
 import { Box } from "@mui/system"

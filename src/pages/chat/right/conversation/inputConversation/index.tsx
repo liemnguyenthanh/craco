@@ -28,6 +28,18 @@ const InputConversation = () => {
       if (event.key === 'Enter') handleSendMessage()
    }
 
+   // const handleSendMessageInterval = () => {
+   //    const requestMessage = createRequestMessage(roomIdActive, generateRandomSentence(), TYPE_MESSAGE.CLIENT)
+   //    dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
+   // }
+
+   // useEffect(() => {
+   //    setInterval(() => {
+   //       handleSendMessageInterval()
+   //    }, 2000)
+   // }, [])
+   
+
    return (
       <StyledWrap>
          <StyledSecondWrap>

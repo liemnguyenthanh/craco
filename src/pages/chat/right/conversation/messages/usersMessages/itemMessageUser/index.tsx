@@ -13,6 +13,7 @@ const ItemMessageUser = ({ message, isMe, messageListRef }: Props) => {
 
    useEffect(() => {
       messageListRef.current.push(itemRef);
+      // eslint-disable-next-line
    }, []);
 
    return (

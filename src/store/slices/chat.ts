@@ -123,8 +123,7 @@ export const chatSlice = createSlice({
       builder.addCase(fetchMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadingMessageRoom = false;
          if (!action.payload || !state.roomIdActive) return;
-         const room = state.roomInfoList[state.roomIdActive]
-         const newMessages = createMessageInRoom(action.payload, room);
+         const newMessages = createMessageInRoom(action.payload);
          state.messagesInRooms[state.roomIdActive] = newMessages;
       });
       //fetchLoadMoreMessageList

@@ -11,13 +11,13 @@ export interface IMessage {
   timestamp: number;
 }
 
-
 export interface ISenderInRoom extends UserAccount {
    nickname?: string
 }
+
 export interface IGroupMessageByUser {
   key: string | null,
-  sender: ISenderInRoom | null,
+  sender_id: string,
   isMe: boolean,
   messages: IMessage[]
 }

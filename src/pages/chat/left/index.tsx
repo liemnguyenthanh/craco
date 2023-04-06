@@ -1,8 +1,6 @@
-import LogoutButton from '@/components/themeMode/buttons/logout';
 import { useAppDispatch } from '@/store';
 import { fetchRoomList } from '@/store/slices/chat';
 import { getItemLocalStorage } from '@/utils/helpers';
-import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
 import HeadLeft from './headLeft';
 import FormCreateRoom from './headLeft/createRoom';

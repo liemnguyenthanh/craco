@@ -1,6 +1,7 @@
 
-import { getTimeMessage, last } from '@/utils/helpers';
+import { generalAvatar, getTimeMessage, last } from '@/utils/helpers';
 import { IGroupMessageByUser } from '@/utils/types/messages';
+import { IRoom } from '@/utils/types/rooms';
 import { Avatar } from '@mui/material';
 import { Box } from '@mui/system';
 import { useMemo } from 'react';
@@ -9,17 +10,25 @@ import { StyledList, StyledName, StyledWrap, styles } from './styles';
 interface Props {
    usersMessages: IGroupMessageByUser;
    messageListRef: React.MutableRefObject<Array<React.RefObject<HTMLLIElement>>>;
+   roomInfo: IRoom
 }
 
-const UsersMessages = ({ usersMessages, messageListRef }: Props) => {
+const UsersMessages = ({ usersMessages, messageListRef, roomInfo }: Props) => {
    const isMe = useMemo(() => !!usersMessages.isMe, // eslint-disable-next-line 
       [])
 
+   const getNameUser = (): string => {
+      if (roomInfo.nickname && usersMessages.sender_id in roomInfo.nickname) {
+         return roomInfo.nickname[usersMessages.sender_id]
+      }
+      return ''
+   }
+
    return (
       <StyledWrap justifyContent={isMe ? 'flex-end' : 'flex-start'}>
-         {!isMe && <Avatar alt={usersMessages.sender?._id} src={usersMessages.sender?.avatar} />}
+         {!isMe && <Avatar alt={usersMessages.sender_id} src={generalAvatar(usersMessages.sender_id)} />}
          <StyledList alignItems={isMe ? 'end' : 'start'}>
-            {!isMe && <StyledName>{usersMessages.sender?.nickname || usersMessages.sender?.username }</StyledName>}
+            {!usersMessages.isMe && <StyledName>{getNameUser()}</StyledName>}
             {usersMessages.messages.map(item => <ItemMessageUser
                key={item._id}
                messageListRef={messageListRef}
