@@ -8,49 +8,52 @@ import { getDataChangedRoom } from './rooms';
 
 const userInfo = getMyAccount()
 
-export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE): IMessage => {
-
-   return {
-      sender_id: userInfo._id,
-      room_id,
-      message_text,
-      message_type,
-      timestamp: new Date().getTime()
-   }
-}
-
-// const createSender = (_id: string, roomInfo: IRoom): ISenderInRoom => {
-//    const username = roomInfo && roomInfo.chatroom_participants.find(user => user._id === _id)?.username
-//    const nickname = roomInfo?.nickname && roomInfo.nickname[_id]
-//    return {
-//       _id,
-//       username: username ?? '',
-//       nickname: nickname ?? '',
-//       avatar: generalAvatar(_id),
-//    }
-// }
+export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE): IMessage => ({
+   sender_id: userInfo._id,
+   room_id,
+   message_text,
+   message_type,
+   timestamp: new Date().getTime()
+})
 export const convertMessageRoomToText = (message: IMessage, roomInfo: IRoom): string => {
-   const data = getDataChangedRoom(message)
-   const user = roomInfo.chatroom_participants.find(item => item._id === message.sender_id)
-   let sender_name: string = message.sender_id === userInfo._id ? 'You' : (user?.username ?? '...')
-   let sender_action: string = ''
-   let sender_result: string = ''
+   const messageType = message.message_type;
 
-   if (message.message_type === MESSAGE_ROOM_INFO.CHANGE_ROOM_NAME) {
-      sender_action = 'changed room name'
-      sender_result = data.chatroom_name
+   if (messageType in MESSAGE_USER) {
+      return message.message_text;
    }
 
-   if (message.message_type === MESSAGE_ROOM_INFO.CHANGE_NICK_NAME) {
-      for (const [user_id, name] of Object.entries(data)) {
-         const user_set = roomInfo.chatroom_participants.find(item => item._id === user_id)
-         sender_action = `set ${user_set?.username}:`
-         sender_result = name
-      }
+   if (messageType === MESSAGE_ROOM_INFO.CREATE_ROOM) {
+      return 'Create Room';
    }
- 
-   let text = `${sender_name} ${sender_action}: ${sender_result}`
-   return text;
+
+   const data = getDataChangedRoom(message);
+   const sender = roomInfo.chatroom_participants.find((participant) => participant._id === message.sender_id);
+   const senderName = message.sender_id === userInfo._id ? 'You' : sender?.username ?? '...';
+   let senderAction = '';
+   let senderResult = '';
+
+   switch (messageType) {
+      case MESSAGE_ROOM_INFO.CHANGE_ROOM_NAME:
+         senderAction = 'changed room name';
+         senderResult = data?.chatroom_name;
+         break;
+
+      case MESSAGE_ROOM_INFO.CHANGE_NICK_NAME:
+         if (data) {
+            for (const [userId, name] of Object.entries(data)) {
+               const user = roomInfo.chatroom_participants.find((participant) => participant._id === userId);
+               const userName = user?.username ?? '...';
+               senderAction = `set nickname for ${userName}:`;
+               senderResult = name;
+            }
+         }
+         break;
+
+      default:
+         break;
+   }
+
+   return `${senderName} ${senderAction} ${senderResult}`;
 }
 
 const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boolean => (
@@ -127,7 +130,6 @@ export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom
    if (messages.length < LIMIT_MESSAGE) room.shouldLoadMore = false
    if (messages.length === 0) return room;
 
-   
    room.firstMessage = last(messages)
    const newGroupByTypeAndUser: IGroupMessageByType[] = groupMessagesByTypeAndUser(messages)
    const lastNewItem = last(newGroupByTypeAndUser)

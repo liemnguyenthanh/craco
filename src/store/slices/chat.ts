@@ -61,6 +61,7 @@ export const chatSlice = createSlice({
          //check type = admin and exist in special action -- all screen
          if (newMessage.message_type === MESSAGE_ROOM_INFO.CHANGE_ROOM_NAME) {
             const { chatroom_name } = getDataChangedRoom(newMessage)
+
             if (chatroom_name) {
                if (roomRight) roomRight.chatroom_name = chatroom_name;
                if (roomLeft) roomLeft.chatroom_name = chatroom_name;
@@ -73,6 +74,7 @@ export const chatSlice = createSlice({
 
                for (const [user_id, name] of Object.entries(data)) {
                   roomRight.nickname[user_id] = name
+
                   if (roomLeft) roomLeft.nickname[user_id] = name
                }
             }
@@ -99,8 +101,9 @@ export const chatSlice = createSlice({
          state.isLoadingRoom = false;
          state.notFoundRoom = false;
          const roomId = action.payload._id;
+
          if (!(roomId in state.roomInfoList)) {
-            state.roomInfoList[roomId] = action.payload;
+            state.roomInfoList[roomId] = convertCommonRoom(action.payload);
          }
       });
       builder.addCase(fetchRoomInfo.rejected, (state) => {
@@ -115,6 +118,7 @@ export const chatSlice = createSlice({
          if (roomIndex > -1) {
             state.roomList[roomIndex].unread_count = 0;
          }
+
          if (room_id in state.roomInfoList) {
             state.roomInfoList[room_id].unread_count = 0;
          }
@@ -126,6 +130,7 @@ export const chatSlice = createSlice({
       builder.addCase(fetchMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadingMessageRoom = false;
          if (!action.payload || !state.roomIdActive) return;
+
          const newMessages = createMessageInRoom(action.payload);
          state.messagesInRooms[state.roomIdActive] = newMessages;
       });
@@ -136,7 +141,9 @@ export const chatSlice = createSlice({
       builder.addCase(fetchLoadMoreMessageList.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
          state.isLoadMoreMessageRoom = false;
          if (!action.payload || !state.roomIdActive) return;
+
          const roomId: string = state.roomIdActive;
+
          if (roomId in state.messagesInRooms) {
             const roomInfo = state.roomInfoList[roomId]
             // merge message zo room list

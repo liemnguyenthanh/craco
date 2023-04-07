@@ -1,5 +1,6 @@
 import { IUserNickname } from "@/pages/chat/roomInfo/customRoom/nickname";
 import { getMyAccount } from "../helpers"
+import { IKeyObject } from "../types/common";
 import { IMessage } from "../types/messages";
 import { ICreateRoom, IRoom } from "../types/rooms"
 
@@ -15,16 +16,15 @@ export const createNewRoom = (chatroom_name: string, chatroom_participants: stri
    }
 }
 
-export const getDataChangedRoom = (message: IMessage) => {
-   const data: { [key: string]: string } = JSON.parse(message.message_text)
-   return data
-}
+export const getDataChangedRoom = (message: IMessage):IKeyObject<string> => (JSON.parse(message.message_text))
 
 export const convertCommonRoom = (room: IRoom) => {
    if (!room.is_group && room.chatroom_participants.length === 2) {
       const receiver = room.chatroom_participants.find(user => user._id !== userInfo._id)
       room.chatroom_name = receiver?.username ?? ''
    }
+
+   if (!room.nickname) room.nickname = {}
    return room
 }
 
@@ -32,7 +32,7 @@ export const convertNicknameUser = (room: IRoom): IUserNickname[] => {
    return room.chatroom_participants.map((user) => {
       let nickname = ''
 
-      if (room.nickname && user._id in room.nickname) {
+      if (user._id in room.nickname) {
          nickname = room.nickname[user._id]
       }
 

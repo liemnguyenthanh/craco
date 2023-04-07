@@ -1,4 +1,5 @@
 import { generalAvatar, getTimeMessage } from '@/utils/helpers';
+import { convertMessageRoomToText } from '@/utils/logics/messages';
 import { IRoom } from '@/utils/types/rooms';
 import Avatar from '@mui/material/Avatar';
 import ListItem from '@mui/material/ListItem';
@@ -36,7 +37,7 @@ const RoomItem = ({ room, roomActive, handleChangeRoom }: Props) => {
                primary={<StyledMessage>{room.chatroom_name}</StyledMessage>}
                secondary={
                   <StyledMessage color="text.primary">
-                     {room.last_message?.message_id?.message_text}
+                     {room.last_message?.message_id && convertMessageRoomToText(room.last_message.message_id, room)}
                   </StyledMessage>
                }
             />
