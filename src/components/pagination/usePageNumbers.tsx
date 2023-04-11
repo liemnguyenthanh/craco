@@ -6,6 +6,7 @@ interface IPageItem {
 }
 
 const DEFAULT_PAGE_RANGE_DISPLAYED = 5;
+const createPageItem = (title: string | number, value: number): IPageItem => ({ title, value })
 
 const usePageNumbers = (currentPage: number, totalPages: number) => {
    const pageRangeDisplayed = Math.min(
@@ -13,7 +14,6 @@ const usePageNumbers = (currentPage: number, totalPages: number) => {
       totalPages
    );
 
-   const createPageItem = (title: string | number, value: number): IPageItem => ({ title, value })
 
    const renderPageNumbers = useMemo(() => {
       const pageNumbers: IPageItem[] = [];
