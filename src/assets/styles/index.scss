@@ -5,4 +5,40 @@
 
 body {
    overflow: hidden;
+   background-color: #fff !important;
 }
+
+
+.pagination {
+   display: flex;
+   list-style: none;
+   padding: 0;
+   justify-content: center;
+ }
+ 
+ .pagination-item {
+   border: 1px solid #d9d9d9;
+   color: #333;
+   cursor: pointer;
+   font-size: 14px;
+   padding: 8px 16px;
+   margin: 0 4px;
+   transition: all 0.3s ease-in-out;
+   user-select: none;
+ }
+ 
+ .pagination-item:hover:not(.active) {
+   background-color: #f5f5f5;
+ }
+ 
+ .pagination-item.active {
+   background-color: #1890ff;
+   border-color: #1890ff;
+   color: #fff;
+ }
+ 
+ .pagination-item.disabled {
+   border-color: #d9d9d9;
+   color: #bfbfbf;
+   cursor: not-allowed;
+ }

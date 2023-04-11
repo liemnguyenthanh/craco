@@ -5,14 +5,14 @@ import { URL } from '../constants/api'
 
 export type Method = 'get' | 'post'
 
+const userInfo = getMyAccount()
+
 export interface BodyRequest {
    method: Method
    url?: string
    data?: any,
    headers: any
 }
-
-const userInfo = getMyAccount()
 
 export const axiosRequest = (urlPath?: string, data?: any) => {
 

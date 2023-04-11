@@ -4,6 +4,7 @@ import ChatPage from '@/pages/chat';
 import LoginPage from '@/pages/login';
 import { getItemLocalStorage } from '@/utils/helpers';
 import PrivateRoute from '../private';
+import ComponentPage from '@/pages/component';
 
 export interface Route {
   path: string;
@@ -20,6 +21,7 @@ const routes: Route[] = [
   { path: '/*', element: <PrivateRoute element={<ErrorPage />} isAuthenticated={isAuthenticated()} /> },
   { path: '/', element: <Navigate to="/chat" /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/components', element: <ComponentPage /> },
 ];
 
 const RouterApp = () => {
