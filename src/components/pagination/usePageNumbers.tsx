@@ -29,8 +29,8 @@ const usePageNumbers = (currentPage: number, totalPages: number) => {
          push(createPageItem(index, index))
       }
 
-      if (rightGap < totalPages) push(createPageItem('...', currentPage + pageRangeDisplayed))
-      push(createPageItem(totalPages, totalPages))
+      if (rightGap < totalPages - 1) push(createPageItem('...', currentPage + pageRangeDisplayed))
+      if (rightGap < totalPages) push(createPageItem(totalPages, totalPages))
       return pageNumbers
       // eslint-disable-next-line
    }, [currentPage]);
