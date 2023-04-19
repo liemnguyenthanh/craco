@@ -11,7 +11,7 @@ export const StyledList = styled(Box)`
    display: flex;
    gap: 4px;
    flex-direction: column;
-   max-width: 'calc(100% - 100px)';
+   width: 75%;
 `
 
 export const StyledName = styled(Box)({
@@ -40,3 +40,7 @@ export const styles = {
       mb: 0.5,
    }
 }
+
+export const StyledAvatarList = styled(Box)({
+   
+})

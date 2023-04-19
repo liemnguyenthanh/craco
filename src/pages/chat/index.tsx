@@ -1,8 +1,7 @@
 import LoadingComponent from "@/components/loading"
-import { SELECTOR } from "@/constants/selectors"
 import { useAppDispatch } from "@/store"
 import { Grid } from "@mui/material"
-import React, { Fragment, Suspense, useEffect, useMemo } from "react"
+import React, { Fragment, Suspense, useEffect } from "react"
 import { ToastContainer } from "react-toastify"
 import HelperChat from "./HelperChat"
 import RightChat from "./right"
@@ -10,12 +9,6 @@ const Events = React.lazy(() => import('./left'));
 
 const ChatPage = () => {
    const dispatch = useAppDispatch()
-
-   const heightHeaderLayout = useMemo((): string => {
-      const headerLayout = document.querySelector(SELECTOR.HEADER)
-      if (!headerLayout) return 'calc(100vh - 60px)'
-      return `calc(100vh - ${headerLayout.clientHeight}px)`
-   }, [])
 
    useEffect(() => {
       dispatch({ type: 'connect' })
@@ -25,7 +18,7 @@ const ChatPage = () => {
 
    return (
       <Fragment>
-         <Grid container sx={{ height: heightHeaderLayout, }}>
+         <Grid container sx={{ height: 'calc(100vh - 60px)' }}>
             <Grid item xs={12} sm={12} md={3}>
                <Suspense fallback={<LoadingComponent />}>
                   <Events />

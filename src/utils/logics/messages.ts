@@ -1,20 +1,30 @@
 import { LIMIT_MESSAGE, MESSAGE_ROOM_INFO, MESSAGE_USER, TYPE_MESSAGE } from '@/constants/chats';
 import { IMessagesInRoom } from '@/utils/types/chats';
 import { v4 as generalId } from 'uuid';
-import { getMyAccount, last } from '../helpers';
-import { IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
-import { IRoom } from '../types/rooms';
+import { getCurrentUser, last } from '../helpers';
+import { ICreateMessage, IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
+import { IRoom, IRoomMessageStatus } from '../types/rooms';
 import { getDataChangedRoom } from './rooms';
 
-const userInfo = getMyAccount()
+const userInfo = getCurrentUser()
 
-export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE): IMessage => ({
+export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE): ICreateMessage => ({
    sender_id: userInfo._id,
    room_id,
    message_text,
    message_type,
    timestamp: new Date().getTime()
 })
+
+export const createRequestReadMessage = (room_id: string, last_message_read_id?: string, unread_count?: number ) => {
+   const payload: IRoomMessageStatus = { room_id, user_id: userInfo._id }
+   
+   if (last_message_read_id) payload.last_message_read_id = last_message_read_id
+   if (unread_count && unread_count > -1) payload.unread_count = unread_count
+   
+   return payload
+}
+
 export const convertMessageRoomToText = (message: IMessage, roomInfo: IRoom): string => {
    const messageType = message.message_type;
 
@@ -66,7 +76,7 @@ const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boole
 export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessageByType[] => {
    const list = [...messageList]
    list.reverse()
-   const infoUser = getMyAccount()
+   const infoUser = getCurrentUser()
    const groupList: IGroupMessageByType[] = []
    let groupByType: IGroupMessageByType = { key: null, type: MESSAGE_USER.MESSAGE_TEXT }
    let groupByUser: IGroupMessageByUser = { key: null, sender_id: '', isMe: false, messages: [] }
@@ -102,7 +112,7 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
 
 export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
    const lastItem: IGroupMessageByType = last(list)
-   const infoUser = getMyAccount()
+   const infoUser = getCurrentUser()
 
    if (message.message_type === MESSAGE_USER.MESSAGE_TEXT && lastItem.messages_user?.sender_id === message.sender_id) {
       lastItem.messages_user.messages.push(message)

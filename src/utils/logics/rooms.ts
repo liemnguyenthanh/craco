@@ -1,10 +1,10 @@
 import { IUserNickname } from "@/pages/chat/roomInfo/customRoom/nickname";
-import { getMyAccount } from "../helpers"
+import { getCurrentUser } from "../helpers";
 import { IKeyObject } from "../types/common";
 import { IMessage } from "../types/messages";
-import { ICreateRoom, IRoom } from "../types/rooms"
+import { ICreateRoom, IRoom } from "../types/rooms";
 
-const userInfo = getMyAccount()
+const userInfo = getCurrentUser()
 
 export const createNewRoom = (chatroom_name: string, chatroom_participants: string[], is_group: boolean): ICreateRoom | null => {
    //FIXME: check duplicate users in backend
@@ -16,7 +16,12 @@ export const createNewRoom = (chatroom_name: string, chatroom_participants: stri
    }
 }
 
-export const getDataChangedRoom = (message: IMessage):IKeyObject<string> => (JSON.parse(message.message_text))
+export const getDataChangedRoom = (message: IMessage): IKeyObject<string> => (JSON.parse(message.message_text))
+
+export const getShowNameUserInRoom = (room: IRoom, user_id: string) => {
+   if (room.nickname[user_id]) return room.nickname[user_id]
+   return room.chatroom_participants.find(user => user._id === user_id)?.username ?? ''
+}
 
 export const convertCommonRoom = (room: IRoom) => {
    if (!room.is_group && room.chatroom_participants.length === 2) {
@@ -25,6 +30,22 @@ export const convertCommonRoom = (room: IRoom) => {
    }
 
    if (!room.nickname) room.nickname = {}
+
+   if (Array.isArray(room.last_messages_seen_by)) {
+      room.last_messages_seen_by =
+         room.last_messages_seen_by.reduce((new_item: IKeyObject<string[]>, item) => {
+
+            if (item.last_message_read_id && item.user_id !== userInfo._id) {
+
+               if (item.last_message_read_id in new_item) {
+                  new_item[item.last_message_read_id].push(item.user_id)
+               } else new_item[item.last_message_read_id] = [item.user_id]
+            }
+
+            return new_item
+         }, {})
+   }
+
    return room
 }
 
@@ -42,4 +63,29 @@ export const convertNicknameUser = (room: IRoom): IUserNickname[] => {
          nickname
       }
    })
+}
+
+export const handleReadMessage = (user_id: string, message_id: string, last_messages_seen_by: IKeyObject<string[]> | undefined) => {
+   if (!last_messages_seen_by) last_messages_seen_by = {}
+   for (const [key, value] of Object.entries(last_messages_seen_by)) {
+      if (value.includes(user_id)) {
+         last_messages_seen_by[key] = value.filter(id => id !== user_id);
+
+         if (message_id in last_messages_seen_by) {
+            last_messages_seen_by[message_id].push(user_id);
+         } else {
+            last_messages_seen_by[message_id] = [user_id];
+         }
+
+         return last_messages_seen_by;
+      }
+   }
+
+   if (message_id in last_messages_seen_by) {
+      last_messages_seen_by[message_id].push(user_id);
+   } else {
+      last_messages_seen_by[message_id] = [user_id];
+   }
+
+   return last_messages_seen_by
 }

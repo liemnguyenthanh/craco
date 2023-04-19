@@ -21,25 +21,14 @@ const InputConversation = () => {
 
       const requestMessage = createRequestMessage(roomIdActive, value, MESSAGE_USER.MESSAGE_TEXT)
       dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
+
       if (inputRef.current) inputRef.current.value = ''
    }
 
    const onPressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') handleSendMessage()
    }
-
-   // const handleSendMessageInterval = () => {
-   //    const requestMessage = createRequestMessage(roomIdActive, generateRandomSentence(), TYPE_MESSAGE.CLIENT)
-   //    dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
-   // }
-
-   // useEffect(() => {
-   //    setInterval(() => {
-   //       handleSendMessageInterval()
-   //    }, 2000)
-   // }, [])
    
-
    return (
       <StyledWrap>
          <StyledSecondWrap>

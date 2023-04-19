@@ -1,5 +1,4 @@
 import CustomModal from "@/components/modal"
-import { RootState } from "@/store"
 import { convertNicknameUser } from "@/utils/logics/rooms"
 import styled from "@emotion/styled"
 import { Collapse } from "@mui/material"
@@ -8,9 +7,10 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import TitleAndAction from "../titleAndAction"
 import Nickname from "./nickname"
+import { getRoomInfoActive } from "@/store/slices/chat"
 
 const CustomRoom = () => {
-   const { roomIdActive, roomInfoList } = useSelector((state: RootState) => state.chat)
+   const roomInfo = useSelector(getRoomInfoActive)
    const [isCollapse, setIsCollapse] = useState(false)
    const [isOpenModal, setIsOpenModal] = useState(false)
 
@@ -19,18 +19,20 @@ const CustomRoom = () => {
    const handleCloseModal = () => setIsOpenModal(false)
 
    return (
-      <div>
+      <Box>
          <TitleAndAction title="Custom" titleAction="Show All" action={() => setIsCollapse(pre => !pre)} />
 
          <Collapse in={isCollapse} >
             <StyledList>
                <StyledItem onClick={handleOpenModal}>Nickname</StyledItem>
+               <StyledItem onClick={handleOpenModal}>Members</StyledItem>
             </StyledList>
          </Collapse>
+
          <CustomModal title={'Nickname'} isOpen={isOpenModal} handleOpen={handleOpenModal} handleClose={handleCloseModal}>
-            <Nickname list={convertNicknameUser(roomInfoList[roomIdActive])}/>
+            <Nickname list={convertNicknameUser(roomInfo)} />
          </CustomModal>
-      </div>
+      </Box>
    )
 }
 

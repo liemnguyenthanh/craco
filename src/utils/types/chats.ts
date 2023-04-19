@@ -14,6 +14,7 @@ export interface IChatInitial {
    isLoadMoreMessageRoom: boolean,
    messagesInRooms: IKeyObject<IMessagesInRoom>,
    newMessageNoRoom: IMessage | null,
+   newMessage: IMessage | null
 }
 
 export interface IMessagesInRoom {

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getMyAccount, handleLogout } from '@/utils/helpers'
+import { getCurrentUser, handleLogout } from '@/utils/helpers'
 import axios from 'axios'
 import { URL } from '../constants/api'
 
 export type Method = 'get' | 'post'
 
-const userInfo = getMyAccount()
+const userInfo = getCurrentUser()
 
 export interface BodyRequest {
    method: Method

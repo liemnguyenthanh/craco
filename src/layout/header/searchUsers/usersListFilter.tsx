@@ -4,7 +4,7 @@ import { RootState } from "@/store/rootReducers"
 import { Typography } from "@mui/material";
 import { UserAccount } from "@/utils/types/accounts";
 import { useAppDispatch } from "@/store";
-import { getMyAccount } from "@/utils/helpers";
+import { getCurrentUser } from "@/utils/helpers";
 import { createRoom } from "@/store/slices/chat";
 import { colors } from "@/constants/theme";
 import styled from "@emotion/styled";
@@ -16,7 +16,7 @@ export const UsersListFilter = () => {
    const dispatch = useAppDispatch()
 
    const handleCreateRoom = (user: UserAccount) => {
-      const myAccount = getMyAccount()
+      const myAccount = getCurrentUser()
       if (!myAccount) return;
       const room = createNewRoom('__', [user._id], false)
       if (room) dispatch(createRoom(room))

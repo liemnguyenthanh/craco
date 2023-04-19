@@ -1,8 +1,7 @@
-import { useRef } from 'react'
-import ImagesList from './imagesList'
-import { StyledBtnExpand, StyledContainerRoom, StyledRoom, StyledRoomWrap } from './styles'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useRef } from 'react';
 import CustomRoom from './customRoom';
+import { StyledBtnExpand, StyledContainerRoom, StyledRoom, StyledRoomWrap } from './styles';
 
 const RoomInfo = () => {
    const roomRef = useRef<HTMLDivElement>(null)
@@ -21,7 +20,7 @@ const RoomInfo = () => {
       <StyledRoomWrap>
          <StyledRoom ref={roomRef}>
             <StyledContainerRoom>
-               <ImagesList />
+               {/* <ImagesList /> */}
                <CustomRoom/>
             </StyledContainerRoom>
          </StyledRoom>

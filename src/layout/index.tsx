@@ -1,10 +1,10 @@
 import { Box } from '@mui/system'
-import React, { PropsWithChildren } from 'react'
+import { PropsWithChildren } from 'react'
 import HeaderLayout from './header'
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <Box sx={{ overflow: 'scroll' }}>
+    <Box sx={{ overflowX: 'hidden' }}>
       <HeaderLayout />
       {children}
     </Box>

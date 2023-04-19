@@ -1,7 +1,3 @@
-// export enum TYPE_MESSAGE {
-//    CLIENT = 1,
-//    ADMIN = 2,
-// }
 export enum MESSAGE_ROOM_INFO {
    CHANGE_ROOM_NAME = 'CHANGE_ROOM_NAME',
    CHANGE_NICK_NAME = 'CHANGE_NICK_NAME',

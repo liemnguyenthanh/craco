@@ -1,7 +1,7 @@
 import LoadingComponent from '@/components/loading';
 import { RootState, useAppDispatch } from '@/store';
 import { fetchMessageList, fetchRoomInfo, setRoomIdActive } from '@/store/slices/chat';
-import { getMyAccount } from '@/utils/helpers';
+import { getCurrentUser } from '@/utils/helpers';
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 import { Fragment, useEffect, useMemo } from 'react';
@@ -18,7 +18,7 @@ interface Props {
 const Conversation = ({ roomId }: Props) => {
    const { roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
    const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId, roomInfoList])
-   const user = getMyAccount()
+   const user = getCurrentUser()
    const dispatch = useAppDispatch()
 
    useEffect(() => {

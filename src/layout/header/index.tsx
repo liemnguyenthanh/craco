@@ -1,12 +1,12 @@
 import styled from "@emotion/styled"
 import { Box } from "@mui/system"
 import { colors } from "@/constants/theme"
-import { generalAvatar, getMyAccount, handleLogout } from "@/utils/helpers"
+import { generalAvatar, getCurrentUser, handleLogout } from "@/utils/helpers"
 import SearchUsers from "./searchUsers"
 import { Avatar, Button } from "@mui/material"
 
 const HeaderLayout = () => {
-   const user = getMyAccount()
+   const user = getCurrentUser()
    return (
       <StyledWrap className="js-header-layout">
          <SearchUsers hasPopover={true}/>

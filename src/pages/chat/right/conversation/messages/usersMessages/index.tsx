@@ -21,7 +21,7 @@ const UsersMessages = ({ usersMessages, messageListRef, roomInfo }: Props) => {
       if (roomInfo.nickname && usersMessages.sender_id in roomInfo.nickname) {
          return roomInfo.nickname[usersMessages.sender_id]
       }
-      
+
       return roomInfo.chatroom_participants.find(user => user._id === usersMessages.sender_id)?.username ?? ''
    }
 
@@ -34,6 +34,7 @@ const UsersMessages = ({ usersMessages, messageListRef, roomInfo }: Props) => {
                key={item._id}
                messageListRef={messageListRef}
                isMe={isMe}
+               roomInfo={roomInfo}
                message={item}
             />)}
             <Box sx={styles.time}>
