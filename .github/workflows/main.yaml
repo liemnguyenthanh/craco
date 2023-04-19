@@ -6,17 +6,26 @@ on:
     - main
 
 jobs:
-  deploy-2:
+  # To build the project
+  build-chat:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
-    - uses: liemnguyenthanh/craco/@main
-      with:
-        args: --acl public-read --follow-symlinks --delete
-      env:
-        NODE_ENV: development # optional: defaults to production
-        AWS_S3_BUCKET: react-chat-app
-        AWS_ACCESS_KEY_ID: AKIAZPDRLJ7MQXAI75ME
-        AWS_SECRET_ACCESS_KEY: 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
-        AWS_REGION: us-east-1 # optional: defaults to us-east-1
-        SOURCE_DIR: bundle # optional: defaults to public
+      - name: Checking out code
+        uses: actions/checkout@v3
+      - name: Installing Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Installing dependencies
+        run: npm install
+      - name: Building project
+        run: npm run build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3 bucket
+        run: aws s3 sync ./dist/ s3://react-chat-app --delete
