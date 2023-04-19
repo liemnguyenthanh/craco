@@ -28,7 +28,7 @@ const InputConversation = () => {
    const onPressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') handleSendMessage()
    }
-   
+
    return (
       <StyledWrap>
          <StyledSecondWrap>
