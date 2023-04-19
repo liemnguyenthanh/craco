@@ -28,4 +28,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy to S3 bucket
-        run: aws s3 sync ./dist/ s3://react-chat-app --delete
+        run: aws s3 sync ./build/ s3://react-chat-app --delete
