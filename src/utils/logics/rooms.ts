@@ -9,7 +9,9 @@ const userInfo = getCurrentUser()
 export const createNewRoom = (chatroom_name: string, chatroom_participants: string[], is_group: boolean): ICreateRoom | null => {
    //FIXME: check duplicate users in backend
    if (chatroom_participants.length === 0) return null;
+
    chatroom_participants.push(userInfo._id)
+
    if (is_group) chatroom_name += `, ${userInfo.username}`
    return {
       chatroom_name, chatroom_participants, created_by_user_id: userInfo._id, is_group
@@ -24,7 +26,7 @@ export const getShowNameUserInRoom = (room: IRoom, user_id: string) => {
 }
 
 export const convertCommonRoom = (room: IRoom) => {
-   if (!room.is_group && room.chatroom_participants.length === 2) {
+   if (!room.is_group) {
       const receiver = room.chatroom_participants.find(user => user._id !== userInfo._id)
       room.chatroom_name = receiver?.username ?? ''
    }
@@ -36,7 +38,6 @@ export const convertCommonRoom = (room: IRoom) => {
          room.last_messages_seen_by.reduce((new_item: IKeyObject<string[]>, item) => {
 
             if (item.last_message_read_id && item.user_id !== userInfo._id) {
-
                if (item.last_message_read_id in new_item) {
                   new_item[item.last_message_read_id].push(item.user_id)
                } else new_item[item.last_message_read_id] = [item.user_id]
@@ -47,6 +48,21 @@ export const convertCommonRoom = (room: IRoom) => {
    }
 
    return room
+}
+
+export const pushRoomToCommon = (room: IRoom, roomsCommon: IKeyObject<IRoom>) => {
+   const currentRoom = roomsCommon[room._id]
+
+   if (!currentRoom) {
+      roomsCommon[room._id] = convertCommonRoom(room)
+   }
+}
+
+export const convertRoomLeftList = (list: IRoom[], roomsCommon: IKeyObject<IRoom>, roomLeft: string[]) => {
+   list.forEach(room => {
+      roomLeft.push(room._id)
+      pushRoomToCommon(room, roomsCommon)
+   });
 }
 
 export const convertNicknameUser = (room: IRoom): IUserNickname[] => {

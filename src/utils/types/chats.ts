@@ -3,12 +3,12 @@ import { IMessage, IGroupMessageByType } from "./messages";
 import { IRoom } from "./rooms";
 
 export interface IChatInitial {
-   roomList: IRoom[],
+   roomList: string[],
    roomInfo: IRoom | null,
    roomIdActive: string,
+   roomsCommon: IKeyObject<IRoom>,
    notFoundRoom: boolean,
    isLoadingRoom: boolean,
-   roomInfoList: IKeyObject<IRoom>,
    messagesList: IMessage[],
    isLoadingMessageRoom: boolean,
    isLoadMoreMessageRoom: boolean,

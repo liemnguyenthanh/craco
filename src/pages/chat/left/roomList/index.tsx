@@ -8,7 +8,7 @@ import RoomItem from '../roomItem';
 import { StyledWrap, StyledWrapList } from './styles';
 
 const RoomList = () => {
-   const roomList = useSelector((state: RootState) => state.chat.roomList)
+   const { roomList, roomsCommon } = useSelector((state: RootState) => state.chat)
    const [searchParams, setSearchParams] = useSearchParams()
    const roomActive = searchParams.get('room_id')?.toString()
 
@@ -20,12 +20,16 @@ const RoomList = () => {
    return (
       <StyledWrap>
          <StyledWrapList>
-            <TransitionGroup style={{ padding: '0 10px'}}>
+            <TransitionGroup style={{ padding: '0 10px' }}>
                {roomList.length > 0 &&
-                  roomList.map((room: IRoom) =>
-                     <Collapse key={room._id}>
-                        <RoomItem room={room} roomActive={roomActive} handleChangeRoom={handleChangeRoom} />
-                     </Collapse>)}
+                  roomList.map((roomId: string) => {
+                     if (roomsCommon[roomId]) {
+                        return <Collapse key={roomId}>
+                           <RoomItem room={roomsCommon[roomId]} roomActive={roomActive} handleChangeRoom={handleChangeRoom} />
+                        </Collapse>
+                     }
+                     return <></>
+                  })}
             </TransitionGroup>
          </StyledWrapList>
       </StyledWrap>

@@ -16,8 +16,9 @@ interface Props {
 }
 
 const Conversation = ({ roomId }: Props) => {
-   const { roomInfoList, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
-   const isExistRoom = useMemo(() => roomId in roomInfoList, [roomId, roomInfoList])
+   const { roomsCommon, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
+   const isExistRoom = useMemo(() => roomId in roomsCommon, // eslint-disable-next-line
+      [roomId])
    const user = getCurrentUser()
    const dispatch = useAppDispatch()
 
@@ -35,13 +36,13 @@ const Conversation = ({ roomId }: Props) => {
          {isLoadingRoom ?
             <LoadingComponent /> :
             <Fragment>
-               {roomInfoList[roomId] && !notFoundRoom &&
+               {roomsCommon[roomId] && !notFoundRoom &&
                   <StyledMessageAndRoom>
                      <StyledMessages>
                         <HeadConversation />
                         {isLoadingMessageRoom ?
                            <LoadingComponent /> :
-                           <MessagesAllRooms roomId={roomId} room={roomInfoList[roomId]} />}
+                           <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}
                         <InputConversation />
                      </StyledMessages>
                      <RoomInfo />

@@ -7,8 +7,8 @@ import { RoomName } from './roomName'
 import { generalAvatar } from '@/utils/helpers'
 
 const HeadConversation = () => {
-  const { roomInfoList, roomIdActive} = useSelector((state: RootState) => state.chat)
-  const roomInfo = roomInfoList[roomIdActive] 
+  const { roomsCommon, roomIdActive} = useSelector((state: RootState) => state.chat)
+  const roomInfo = roomsCommon[roomIdActive] 
 
   return (
     <StyledWrap>
