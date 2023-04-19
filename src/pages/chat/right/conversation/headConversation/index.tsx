@@ -5,10 +5,13 @@ import { colors } from '@/constants/theme'
 import { RootState } from '@/store'
 import { RoomName } from './roomName'
 import { generalAvatar } from '@/utils/helpers'
+import { Fragment } from 'react'
 
 const HeadConversation = () => {
   const { roomsCommon, roomIdActive} = useSelector((state: RootState) => state.chat)
   const roomInfo = roomsCommon[roomIdActive] 
+
+  if (!roomInfo) return <Fragment/>
 
   return (
     <StyledWrap>

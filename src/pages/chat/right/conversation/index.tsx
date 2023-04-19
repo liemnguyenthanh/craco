@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Conversation = ({ roomId }: Props) => {
-   const { roomsCommon, notFoundRoom, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
+   const { roomsCommon, notFoundRoom, messagesInRooms, isLoadingRoom, isLoadingMessageRoom, roomIdActive } = useSelector((state: RootState) => state.chat)
    const isExistRoom = useMemo(() => roomId in roomsCommon, // eslint-disable-next-line
       [roomId])
    const user = getCurrentUser()
@@ -25,8 +25,12 @@ const Conversation = ({ roomId }: Props) => {
    useEffect(() => {
       if (!isExistRoom) {
          dispatch(fetchRoomInfo({ room_id: roomId, user_id: user._id }))
-            .then(() => dispatch(fetchMessageList({ room_id: roomId })))
       }
+
+      if (!(roomId in messagesInRooms)) {
+         dispatch(fetchMessageList({ room_id: roomId }))
+      }
+
       if (roomIdActive !== roomId) dispatch(setRoomIdActive(roomId))
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [roomId])
@@ -40,9 +44,11 @@ const Conversation = ({ roomId }: Props) => {
                   <StyledMessageAndRoom>
                      <StyledMessages>
                         <HeadConversation />
-                        {isLoadingMessageRoom ?
-                           <LoadingComponent /> :
-                           <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}
+                        <Box sx={{ height: 'calc(100vh - 230px)' }}>
+                           {isLoadingMessageRoom ?
+                              <LoadingComponent /> :
+                              <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}
+                        </Box>
                         <InputConversation />
                      </StyledMessages>
                      <RoomInfo />

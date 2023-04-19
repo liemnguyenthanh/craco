@@ -3,7 +3,7 @@ import { convertNicknameUser } from "@/utils/logics/rooms"
 import styled from "@emotion/styled"
 import { Collapse } from "@mui/material"
 import { Box } from "@mui/system"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { useSelector } from "react-redux"
 import TitleAndAction from "../titleAndAction"
 import Nickname from "./nickname"
@@ -18,6 +18,8 @@ const CustomRoom = () => {
 
    const handleCloseModal = () => setIsOpenModal(false)
 
+   if (!roomInfo) return <Fragment/>
+   
    return (
       <Box>
          <TitleAndAction title="Custom" titleAction="Show All" action={() => setIsCollapse(pre => !pre)} />
