@@ -144,14 +144,6 @@ export const chatSlice = createSlice({
          if (!(room._id in state.roomsCommon)) state.roomsCommon[room._id] = convertCommonRoom(room)
          if (!isRoomExist) state.roomList.splice(0, 0, room._id)
       });
-      //  //createRoom
-      //  builder.addCase(createRoom.fulfilled, (state, action: PayloadAction<IRoom>) => {
-      //    const room = convertCommonRoom(action.payload)
-
-      //    if (!(room._id in state.roomsCommon)) {
-      //       state.roomsCommon[room._id] = room
-      //    }
-      // });
    },
 });
 

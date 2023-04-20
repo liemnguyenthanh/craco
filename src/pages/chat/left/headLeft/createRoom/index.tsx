@@ -55,6 +55,7 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
       const room_name = usersSelected.map(item => item.username).join(', ')
       const room = createNewRoom(room_name, usersSelected.map(item => item._id), true)
       if (room) {
+         //FIX ME: when create room failed
          dispatch(createRoom(room))
             .catch(error => console.log(error))
       }
