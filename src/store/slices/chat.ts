@@ -16,7 +16,6 @@ const initialState: IChatInitial = {
    roomInfo: null,
    roomsCommon: {},
    roomList: [],
-   notFoundRoom: false,
    isLoadingRoom: false,
    roomIdActive: '',
    messagesList: [],
@@ -86,8 +85,6 @@ export const chatSlice = createSlice({
       });
       builder.addCase(fetchRoomInfo.fulfilled, (state, action: PayloadAction<IFetchRoom>) => {
          state.isLoadingRoom = false;
-         state.notFoundRoom = false;
-
          const roomId = action.payload._id
          const room = state.roomsCommon[roomId];
 
@@ -97,7 +94,6 @@ export const chatSlice = createSlice({
       });
       builder.addCase(fetchRoomInfo.rejected, (state) => {
          state.isLoadingRoom = false;
-         state.notFoundRoom = true;
       });
       //updateUnReadMessageInRoom
       builder.addCase(updateUnReadMessageInRoom.fulfilled, (state, action: PayloadAction<IRoomMessageStatus>) => {
