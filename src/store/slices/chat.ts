@@ -7,7 +7,7 @@ import { convertCommonRoom, convertRoomLeftList, handleReadMessage } from '@/uti
 import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
 import { IMessage } from '@/utils/types/messages';
-import { ICreateRoom, IRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
+import { ICreateRoom, IFetchRoom, IRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { EVENTS_SOCKET } from '../middleware/events';
@@ -77,15 +77,14 @@ export const chatSlice = createSlice({
    },
    extraReducers: (builder) => {
       //fetchRoomList
-      builder.addCase(fetchRoomList.fulfilled, (state, action: PayloadAction<IRoom[]>) => {
+      builder.addCase(fetchRoomList.fulfilled, (state, action: PayloadAction<IFetchRoom[]>) => {
          convertRoomLeftList(action.payload, state.roomsCommon, state.roomList)
       });
       //fetchRoomInfo
       builder.addCase(fetchRoomInfo.pending, (state) => {
          state.isLoadingRoom = true;
       });
-      builder.addCase(fetchRoomInfo.fulfilled, (state, action: PayloadAction<IRoom>) => {
-         state.roomInfo = action.payload;
+      builder.addCase(fetchRoomInfo.fulfilled, (state, action: PayloadAction<IFetchRoom>) => {
          state.isLoadingRoom = false;
          state.notFoundRoom = false;
 
@@ -137,7 +136,7 @@ export const chatSlice = createSlice({
          }
       });
       //fetchRoomNotExist
-      builder.addCase(fetchRoomNotExist.fulfilled, (state, action: PayloadAction<IRoom>) => {
+      builder.addCase(fetchRoomNotExist.fulfilled, (state, action: PayloadAction<IFetchRoom>) => {
          const room = action.payload
          const isRoomExist = state.roomList.includes(room._id)
 
@@ -148,7 +147,6 @@ export const chatSlice = createSlice({
 });
 
 export const { receiveNewMessage, setRoomIdActive, clearNewMessageNoRoom, clearNewMessage, readMessage, updateRoomHasNewMessage, setIdRoomCreated } = chatSlice.actions;
-
 
 export const getRoomInfoActive = (state: RootState) => state.chat.roomsCommon[state.chat.roomIdActive]
 

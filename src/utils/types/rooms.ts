@@ -16,7 +16,11 @@ export interface IRoom extends Omit<ICreateRoom, 'chatroom_participants'> {
    chatroom_participants: UserAccount[]
    unread_count: number
    nickname: IKeyObject<string>
-   last_messages_seen_by?: IKeyObject<string[]> // key should be message_id
+   last_messages_seen_by: IKeyObject<string[]> // key should be message_id
+}
+
+export interface IFetchRoom extends Omit<IRoom, 'last_messages_seen_by'>{
+   last_messages_seen_by: any[]
 }
 
 export interface ILastMessage {

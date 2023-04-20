@@ -1,5 +1,5 @@
 import { MESSAGE_ROOM_INFO } from "@/constants/chats";
-import { getCurrentUser, moveItemToFront } from "../helpers";
+import { getCurrentUser, logInfo, moveItemToFront } from "../helpers";
 import { IChatInitial, IMessagesInRoom } from "../types/chats";
 import { IMessage } from "../types/messages";
 import { mergeNewMessage } from "./messages";
@@ -31,14 +31,13 @@ export function updateUnReadMessage(newMessage: IMessage, state: IChatInitial) {
    const roomId = newMessage.room_id;
    const room = state.roomsCommon[roomId]
 
-   if (!state.roomIdActive) return;
-
-   if (state.roomIdActive !== roomId && room) {
+   if (room && state.roomIdActive !== roomId) {
       room.unread_count++;
       return;
    }
 
    if (newMessage.sender_id === userInfo._id) return;
+
    state.newMessage = newMessage
 }
 
