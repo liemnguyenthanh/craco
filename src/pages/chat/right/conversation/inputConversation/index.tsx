@@ -14,8 +14,10 @@ const InputConversation = () => {
    const roomIdActive = useSelector((state: RootState) => state.chat.roomIdActive)
    const dispatch = useAppDispatch()
 
-   const handleSendMessage = () => {
+   const handleSendMessage = (event: React.FormEvent<HTMLDivElement>) => {
+      event.preventDefault()
       const value = inputRef?.current?.value.trim();
+      
       if (!value) return showNotification("Please input!!");
       if (!roomIdActive) return;
 
@@ -25,19 +27,15 @@ const InputConversation = () => {
       if (inputRef.current) inputRef.current.value = ''
    }
 
-   const onPressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') handleSendMessage()
-   }
-
    return (
       <StyledWrap>
-         <StyledSecondWrap>
+         <StyledSecondWrap component='form' onSubmit={handleSendMessage}>
             <StyledInput
                inputRef={inputRef}
                placeholder='Write a message ...'
-               onKeyDown={onPressEnter}
+               autoComplete='off'
             />
-            <Button onClick={handleSendMessage}>
+            <Button type="submit">
                <TelegramIcon sx={{ color: "text.primary" }} />
             </Button>
          </StyledSecondWrap>

@@ -4,14 +4,14 @@ import { UserAccount } from "@/utils/types/accounts"
 import styled from "@emotion/styled"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Box, Button, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import SearchUser from "./searchUsers"
 import UsersList from "./searchUsers/list"
 import DoneIcon from '@mui/icons-material/Done';
 import { colors } from "@/constants/theme"
 import { createNewRoom } from "@/utils/logics/rooms"
-import { createRoom } from "@/store/slices/chat"
+import { createRoom, setIdRoomCreated } from "@/store/slices/chat"
 import { useNavigate } from "react-router-dom"
 
 interface Props {
@@ -21,8 +21,17 @@ interface Props {
 const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
    const [usersSelected, setUsersSelected] = useState<UserAccount[]>([])
    const { usersByName, isFetchingUsers } = useSelector((state: RootState) => state.user)
+   const { idRoomCreated } = useSelector((state: RootState) => state.chat)
    const dispatch = useAppDispatch()
    const navigate = useNavigate()
+
+   useEffect(() => {
+      if (idRoomCreated) {
+         handleCreatedRoomSuccess(idRoomCreated)
+         dispatch(setIdRoomCreated(null))
+      }
+   }, [idRoomCreated])
+
 
    const handleUnSelected = (index: number) => {
       const copyArr = [...usersSelected]
@@ -46,14 +55,14 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
       const room_name = usersSelected.map(item => item.username).join(', ')
       const room = createNewRoom(room_name, usersSelected.map(item => item._id), true)
       if (room) {
+         //FIX ME: when create room failed
          dispatch(createRoom(room))
-            .then((response: any) => handleCreatedRoomSuccess(response.payload?.room._id))
+            .catch(error => console.log(error))
       }
-         
    }
 
-   const handleCreatedRoomSuccess = (roomId: string | null) => {
-      if (roomId) navigate(`/chat?room_id=${roomId}`)
+   const handleCreatedRoomSuccess = (roomId: string) => {
+      navigate(`/chat?room_id=${roomId}`)
       setUsersSelected([])
       handleToggleCreateRoom()
    }

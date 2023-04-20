@@ -26,6 +26,8 @@ const initialState: IChatInitial = {
 
    newMessageNoRoom: null,
    newMessage: null,
+
+   idRoomCreated: null,
 };
 
 const userInfo = getCurrentUser();
@@ -61,12 +63,16 @@ export const chatSlice = createSlice({
          const { last_message_read_id, user_id, room_id } = action.payload
          const room = state.roomsCommon[room_id]
 
+         if (!last_message_read_id || !room) return;
+
          if (user_id === userInfo._id) {
             room.unread_count = 0
          }
 
-         if (!last_message_read_id || !room) return;
          handleReadMessage(user_id, last_message_read_id, room.last_messages_seen_by)
+      },
+      setIdRoomCreated(state, action: PayloadAction<string | null>){
+         state.idRoomCreated = action.payload
       }
    },
    extraReducers: (builder) => {
@@ -132,13 +138,16 @@ export const chatSlice = createSlice({
       });
       //fetchRoomNotExist
       builder.addCase(fetchRoomNotExist.fulfilled, (state, action: PayloadAction<IRoom>) => {
-         const room = convertCommonRoom(action.payload);
-         if (room) state.roomList.splice(0, 0, room._id)
+         const room = action.payload
+         const isRoomExist = state.roomList.includes(room._id)
+
+         if (!(room._id in state.roomsCommon)) state.roomsCommon[room._id] = convertCommonRoom(room)
+         if (!isRoomExist) state.roomList.splice(0, 0, room._id)
       });
    },
 });
 
-export const { receiveNewMessage, setRoomIdActive, clearNewMessageNoRoom, clearNewMessage, readMessage, updateRoomHasNewMessage } = chatSlice.actions;
+export const { receiveNewMessage, setRoomIdActive, clearNewMessageNoRoom, clearNewMessage, readMessage, updateRoomHasNewMessage, setIdRoomCreated } = chatSlice.actions;
 
 
 export const getRoomInfoActive = (state: RootState) => state.chat.roomsCommon[state.chat.roomIdActive]
@@ -252,7 +261,9 @@ export const createRoom = createAsyncThunk(
             showNotification('Tạo phòng rồi ra nhắn tin đê!!')
             const requestMessage = createRequestMessage(response.room._id, 'CREATE_ROOM', MESSAGE_ROOM_INFO.CREATE_ROOM)
             dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
-         }
+            
+         } else showNotification('Phòng này có rồi pa!!')
+
          return response;
       } catch (error) {
          console.log({ error });

@@ -36,7 +36,7 @@ export const RoomName = ({ roomName }: Props) => {
    }
 
    return (
-      <Wrap>
+      <StyledWrap>
          {isEdit ?
             <TextField
                size='small'
@@ -45,25 +45,32 @@ export const RoomName = ({ roomName }: Props) => {
                defaultValue={roomName}
                onKeyDown={pressEnter}
             /> :
-            <Typography variant='h5'>{roomName}</Typography>}
-         <ButtonEdit size='small' onClick={handleClick}>
-            <IconButtonEdit />
-         </ButtonEdit>
-      </Wrap>
+            <StyledRoomName variant='h5'>{roomName}</StyledRoomName>}
+         <StyledButtonEdit size='small' onClick={handleClick}>
+            <StyledIconButtonEdit />
+         </StyledButtonEdit>
+      </StyledWrap>
    )
 }
 
-const Wrap = styled(Box)({
+const StyledWrap = styled(Box)({
    display: 'flex',
    alignItems: 'center',
    gap: 10
 })
 
-const ButtonEdit = styled(Button)({
+const StyledRoomName = styled(Typography)({
+   maxWidth: 240,
+   textOverflow: 'ellipsis',
+   overflow: 'hidden',
+   whiteSpace: 'nowrap'
+})
+
+const StyledButtonEdit = styled(Button)({
    minWidth: 30,
 })
 
-const IconButtonEdit = styled(ModeEditOutlineIcon)({
+const StyledIconButtonEdit = styled(ModeEditOutlineIcon)({
    fontSize: 16
 })
 
