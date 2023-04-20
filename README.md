@@ -17,8 +17,8 @@ http://localhost:5000
 - room_list_common (use for both left and right)
 
 
-task list: REVIEW CODE
-  - seen message
+*** Task list: REVIEW CODE ***
+1. Seen message
    + sender -> message save in db -> this message is read by sender
    + receive new message -> user in room & scroll in the bottom` -> message is read 
 
@@ -26,3 +26,12 @@ task list: REVIEW CODE
    -> receive new message 
       - if :(user in room & scroll in the bottom) -> unread_count = 0 && update last_message_seen_by
       - else: update unread_count++, when user scroll to bottom  -> unread_count = 0 && update last_message_seen_by
+
+2. Create room
+--- must have to work: roomsCommon, 
+
+-> create room:
+   + creator: create success -> waiting dispatch new_message: create room -> action NewMessageNoRoom -> navigate(room_id) -> handle create room success
+   + participants: receive new message create room -> action NewMessageNoRoom
+
+3. Api rule

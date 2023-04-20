@@ -33,7 +33,7 @@ export const convertCommonRoom = (room: IRoom) => {
 
    if (!room.nickname) room.nickname = {}
 
-   if (Array.isArray(room.last_messages_seen_by)) {
+   if (room.last_messages_seen_by && Array.isArray(room.last_messages_seen_by)) {
       room.last_messages_seen_by =
          room.last_messages_seen_by.reduce((new_item: IKeyObject<string[]>, item) => {
 

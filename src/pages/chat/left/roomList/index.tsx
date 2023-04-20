@@ -17,6 +17,8 @@ const RoomList = () => {
       setSearchParams({ room_id: room._id })
    }
 
+   console.log({ roomList });
+
    return (
       <StyledWrap>
          <StyledWrapList>
