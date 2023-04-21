@@ -2,7 +2,7 @@ import { IUserNickname } from "@/pages/chat/roomInfo/customRoom/nickname";
 import { getCurrentUser } from "../helpers";
 import { IKeyObject } from "../types/common";
 import { IMessage } from "../types/messages";
-import { ICreateRoom, IRoom } from "../types/rooms";
+import { ICreateRoom, IFetchRoom, IRoom } from "../types/rooms";
 
 const userInfo = getCurrentUser()
 
@@ -25,19 +25,21 @@ export const getShowNameUserInRoom = (room: IRoom, user_id: string) => {
    return room.chatroom_participants.find(user => user._id === user_id)?.username ?? ''
 }
 
-export const convertCommonRoom = (room: IRoom) => {
-   if (!room.is_group) {
-      const receiver = room.chatroom_participants.find(user => user._id !== userInfo._id)
-      room.chatroom_name = receiver?.username ?? ''
+export const convertCommonRoom = (room: IFetchRoom): IRoom => {
+   const newRoom: IRoom = { ...room, last_messages_seen_by: {} }
+
+   if (!newRoom.is_group) {
+      const receiver = newRoom.chatroom_participants.find(user => user._id !== userInfo._id)
+      newRoom.chatroom_name = receiver?.username ?? ''
    }
 
-   if (!room.nickname) room.nickname = {}
+   if (!newRoom.nickname) newRoom.nickname = {}
 
-   if (room.last_messages_seen_by && Array.isArray(room.last_messages_seen_by)) {
-      room.last_messages_seen_by =
+   if (room.last_messages_seen_by) {
+      newRoom.last_messages_seen_by =
          room.last_messages_seen_by.reduce((new_item: IKeyObject<string[]>, item) => {
 
-            if (item.last_message_read_id && item.user_id !== userInfo._id) {
+            if (item.last_message_read_id) {
                if (item.last_message_read_id in new_item) {
                   new_item[item.last_message_read_id].push(item.user_id)
                } else new_item[item.last_message_read_id] = [item.user_id]
@@ -47,10 +49,10 @@ export const convertCommonRoom = (room: IRoom) => {
          }, {})
    }
 
-   return room
+   return newRoom
 }
 
-export const pushRoomToCommon = (room: IRoom, roomsCommon: IKeyObject<IRoom>) => {
+export const pushRoomToCommon = (room: IFetchRoom, roomsCommon: IKeyObject<IRoom>) => {
    const currentRoom = roomsCommon[room._id]
 
    if (!currentRoom) {
@@ -58,7 +60,7 @@ export const pushRoomToCommon = (room: IRoom, roomsCommon: IKeyObject<IRoom>) =>
    }
 }
 
-export const convertRoomLeftList = (list: IRoom[], roomsCommon: IKeyObject<IRoom>, roomLeft: string[]) => {
+export const convertRoomLeftList = (list: IFetchRoom[], roomsCommon: IKeyObject<IRoom>, roomLeft: string[]) => {
    list.forEach(room => {
       roomLeft.push(room._id)
       pushRoomToCommon(room, roomsCommon)

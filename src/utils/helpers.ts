@@ -103,3 +103,8 @@ export const throttle = <F extends (...args: any[]) => void>(
     }
   };
 };
+
+export const logInfo = (varr: any) => {
+   const string = JSON.stringify(varr)
+   return JSON.parse(string)
+} 

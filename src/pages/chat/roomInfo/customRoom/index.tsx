@@ -11,7 +11,7 @@ import { getRoomInfoActive } from "@/store/slices/chat"
 
 const CustomRoom = () => {
    const roomInfo = useSelector(getRoomInfoActive)
-   const [isCollapse, setIsCollapse] = useState(false)
+   const [isCollapse, setIsCollapse] = useState(true)
    const [isOpenModal, setIsOpenModal] = useState(false)
 
    const handleOpenModal = () => setIsOpenModal(true)

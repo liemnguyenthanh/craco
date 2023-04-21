@@ -31,14 +31,13 @@ export function updateUnReadMessage(newMessage: IMessage, state: IChatInitial) {
    const roomId = newMessage.room_id;
    const room = state.roomsCommon[roomId]
 
-   if (!state.roomIdActive) return;
-
-   if (state.roomIdActive !== roomId && room) {
+   if (room && state.roomIdActive !== roomId) {
       room.unread_count++;
       return;
    }
 
    if (newMessage.sender_id === userInfo._id) return;
+
    state.newMessage = newMessage
 }
 

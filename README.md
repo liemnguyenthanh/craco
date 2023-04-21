@@ -35,3 +35,6 @@ http://localhost:5000
    + participants: receive new message create room -> action NewMessageNoRoom
 
 3. Api rule
+
+
+4. Fix create room not found

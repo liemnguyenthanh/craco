@@ -7,7 +7,6 @@ export interface IChatInitial {
    roomInfo: IRoom | null,
    roomIdActive: string,
    roomsCommon: IKeyObject<IRoom>,
-   notFoundRoom: boolean,
    isLoadingRoom: boolean,
    messagesList: IMessage[],
    isLoadingMessageRoom: boolean,
