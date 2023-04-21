@@ -9,11 +9,11 @@ import { IRoom } from '@/utils/types/rooms'
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import AdminMessages from './adminMessages'
 import { StyledScrollToBottom, StyledWrap } from './styles'
-import UsersMessages from './usersMessages'
 import { createRequestReadMessage } from '@/utils/logics/messages'
 import { debounce } from '@/utils/helpers'
+import AdminMessages from './adminMessages'
+import UsersMessages from './usersMessages'
 
 interface Props {
    messagesInRoom: IMessagesInRoom,
@@ -33,7 +33,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
    useEffect(() => {
       handlePositionScroll()
       // eslint-disable-next-line
-   }, [messagesInRoom])
+   }, [messagesInRoom, roomInfo])
 
    useEffect(() => {
       if (newMessage) {
@@ -72,7 +72,6 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
       if (wrapSecondRef.current && wrapFirstRef.current) {
          const hasScroll = wrapFirstRef.current.clientHeight - wrapSecondRef.current.clientHeight < 0
 
-         //  FIXME: did not update unread_count when receive new message
          if (!hasScroll) {
             if (roomInfo.unread_count > 0) handleReadMessage()
             return;
@@ -128,9 +127,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
             <Box ref={wrapSecondRef} className="wrap-list-message">
                {messagesInRoom.list.length > 0 && messagesInRoom.list.map(item => (
                   <Fragment key={item.key}>
-                     {item.type in MESSAGE_USER &&
-                        item.messages_user &&
-                        item.messages_user.messages.length > 0 &&
+                     {item.type in MESSAGE_USER && item.messages_user && item.messages_user.messages.length > 0 &&
                         <UsersMessages messageListRef={messageListRef} roomInfo={roomInfo} usersMessages={item.messages_user} />}
 
                      {item.type in MESSAGE_ROOM_INFO && item.action &&
