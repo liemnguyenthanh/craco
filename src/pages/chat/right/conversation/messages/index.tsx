@@ -33,7 +33,7 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
    useEffect(() => {
       handlePositionScroll()
       // eslint-disable-next-line
-   }, [messagesInRoom])
+   }, [messagesInRoom, roomInfo])
 
    useEffect(() => {
       if (newMessage) {
@@ -72,7 +72,6 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
       if (wrapSecondRef.current && wrapFirstRef.current) {
          const hasScroll = wrapFirstRef.current.clientHeight - wrapSecondRef.current.clientHeight < 0
 
-         //  FIXME: did not update unread_count when receive new message
          if (!hasScroll) {
             if (roomInfo.unread_count > 0) handleReadMessage()
             return;
