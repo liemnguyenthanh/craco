@@ -1,5 +1,5 @@
 import { MESSAGE_ROOM_INFO } from "@/constants/chats";
-import { getCurrentUser, logInfo, moveItemToFront } from "../helpers";
+import { getCurrentUser, moveItemToFront } from "../helpers";
 import { IChatInitial, IMessagesInRoom } from "../types/chats";
 import { IMessage } from "../types/messages";
 import { mergeNewMessage } from "./messages";

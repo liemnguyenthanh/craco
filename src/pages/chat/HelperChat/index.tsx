@@ -23,7 +23,8 @@ const HelperChat = () => {
             })
          dispatch(clearNewMessageNoRoom())
       }
-   }, [dispatch, newMessageNoRoom, userInfo])
+      // eslint-disable-next-line
+   }, [newMessageNoRoom])
 
    return <Fragment />   
 }

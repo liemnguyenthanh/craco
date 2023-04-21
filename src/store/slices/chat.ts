@@ -7,7 +7,7 @@ import { convertCommonRoom, convertRoomLeftList, handleReadMessage } from '@/uti
 import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
 import { IMessage } from '@/utils/types/messages';
-import { ICreateRoom, IFetchRoom, IRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
+import { ICreateRoom, IFetchRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { EVENTS_SOCKET } from '../middleware/events';

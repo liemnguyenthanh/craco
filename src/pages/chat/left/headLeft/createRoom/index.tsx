@@ -30,6 +30,7 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
          handleCreatedRoomSuccess(idRoomCreated)
          dispatch(setIdRoomCreated(null))
       }
+      // eslint-disable-next-line
    }, [idRoomCreated])
 
 
