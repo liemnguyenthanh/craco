@@ -27,8 +27,8 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
    const wrapSecondRef = useRef<HTMLDivElement>(null)
    const messageListRef = useRef<Array<React.RefObject<HTMLLIElement>>>([])
    let isBottomScroll = useRef<boolean>(false)
-   let preHeightWrapList = useRef<number>(0)
    let isFirstRender = useRef<boolean>(true)
+   let preHeightWrapList = useRef<number>(0)
 
    useEffect(() => {
       handlePositionScroll()
@@ -113,7 +113,11 @@ function MessagesList({ messagesInRoom, roomInfo }: Props) {
    const handleScrollBottom = () => {
       if (wrapSecondRef.current) {
          wrapSecondRef.current.scrollIntoView({ block: 'end', behavior: 'smooth' })
-         if (roomInfo.unread_count > 0) handleReadMessage()
+         if (roomInfo.unread_count > 0) {
+            setTimeout(() => {
+               handleReadMessage()
+            }, 50);
+         }
       }
    }
 
