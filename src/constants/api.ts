@@ -1,6 +1,12 @@
-// export const URL_SOCKET = 'ws://54.206.156.177:8080/'
-// export const URL = 'http://54.206.156.177:8080'
+const API_URL = {
+   'local': {
+      URL_SOCKET: 'ws://localhost:8080/',
+      URL: 'http://localhost:8080'
+   },
+   'production': {
+      URL_SOCKET: 'ws://chat-app-ya2e.onrender.com/',
+      URL: 'https://chat-app-ya2e.onrender.com'
+   },
+}
 
-
-export const URL_SOCKET = 'ws://localhost:8080/'
-export const URL = 'http://localhost:8080'
+export const { URL, URL_SOCKET } = API_URL.production
