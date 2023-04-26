@@ -23,6 +23,7 @@ const ItemNickname = ({ selectUser, onSelectUser, user, handleChangeNickname }: 
          if (value) handleChangeNickname(user.user_id, value)
       }
    }
+   
    return (
       <StyledItem
          sx={{ backgroundColor: isSelect ? colors.blackLight : 'initial' }}

@@ -1,27 +1,18 @@
-import { Box } from "@mui/system"
 import { colors } from "@/constants/theme"
-import { generalAvatar, getCurrentUser, handleLogout } from "@/utils/helpers"
-import { SELECTOR } from "@/constants/selectors"
-import { Avatar, Button } from "@mui/material"
-import SearchUsers from "./searchUsers"
+import { generalAvatar, getCurrentUser, handleLogout, toggleRoomList } from "@/utils/helpers"
 import styled from "@emotion/styled"
-import ListIcon from '@mui/icons-material/List';
+import ListIcon from '@mui/icons-material/List'
+import { Avatar, Button } from "@mui/material"
+import { Box } from "@mui/system"
+import SearchUsers from "./searchUsers"
 
 const HeaderLayout = () => {
    const user = getCurrentUser()
 
-   const handleToggleList = () => {
-      const roomListSelector: HTMLDivElement | null = document.querySelector(SELECTOR.ROOM_LIST)
-      if (!roomListSelector) return;
-
-      roomListSelector.style.transition = 'all 0.3s'
-      roomListSelector.classList.toggle('active')
-   }
-
    return (
       <StyledWrap className="js-header-layout">
          <StyleLeft>
-            <StyledButtonShow onClick={handleToggleList}><ListIcon /></StyledButtonShow>
+            <StyledButtonShow onClick={toggleRoomList}><ListIcon /></StyledButtonShow>
             <SearchUsers hasPopover={true} />
          </StyleLeft>
          {
