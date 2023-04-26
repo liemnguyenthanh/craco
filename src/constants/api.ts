@@ -4,7 +4,7 @@ const API_URL = {
       URL: 'http://localhost:8080'
    },
    'production': {
-      URL_SOCKET: 'ws://chat-app-ya2e.onrender.com/',
+      URL_SOCKET: 'wss://chat-app-ya2e.onrender.com/',
       URL: 'https://chat-app-ya2e.onrender.com'
    },
 }
