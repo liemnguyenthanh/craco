@@ -27,7 +27,7 @@ const CustomRoom = () => {
          <Collapse in={isCollapse} >
             <StyledList>
                <StyledItem onClick={handleOpenModal}>Nickname</StyledItem>
-               <StyledItem onClick={handleOpenModal}>Members</StyledItem>
+               {/* <StyledItem onClick={handleOpenModal}>Members</StyledItem> */}
             </StyledList>
          </Collapse>
 

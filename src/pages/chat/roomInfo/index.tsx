@@ -1,33 +1,35 @@
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import CustomRoom from './customRoom';
-import { StyledBtnExpand, StyledContainerRoom, StyledRoom, StyledRoomWrap } from './styles';
+import { StyledContainerRoom, StyledRoom, StyledRoomWrap, StyledTitleWrap } from './styles';
+import { Button, SwipeableDrawer } from '@mui/material';
+import { RootState, useAppDispatch } from '@/store';
+import { setIsOpenSwipeRoomInfo } from '@/store/slices/app';
 
 const RoomInfo = () => {
-   const roomRef = useRef<HTMLDivElement>(null)
-   const btnRef = useRef<HTMLButtonElement>(null)
-
-   const handleToggleRoom = () => {
-      if (!roomRef.current || !btnRef.current) return;
-      const width = roomRef.current.clientWidth
-      const isToggle = width !== 0
-      roomRef.current.style.transform = isToggle ? `translateX(${width}px)` : ''
-      roomRef.current.style.width = isToggle ? `0` : ''
-      btnRef.current.style.rotate = isToggle ? `180deg` : ''
-   }
+   const { isOpenSwipeRoomInfo } = useSelector((state: RootState) => state.app)
+   const dispatch = useAppDispatch()
+   const toggleDrawer = () => dispatch(setIsOpenSwipeRoomInfo())
 
    return (
-      <StyledRoomWrap>
-         <StyledRoom ref={roomRef}>
-            <StyledContainerRoom>
-               {/* <ImagesList /> */}
-               <CustomRoom/>
-            </StyledContainerRoom>
-         </StyledRoom>
-         <StyledBtnExpand ref={btnRef} onClick={handleToggleRoom}>
-            <ChevronRightIcon />
-         </StyledBtnExpand>
-      </StyledRoomWrap>
+      <SwipeableDrawer
+         anchor='right'
+         open={isOpenSwipeRoomInfo}
+         onClose={toggleDrawer}
+         onOpen={toggleDrawer}
+      >
+         <StyledRoomWrap>
+            <StyledTitleWrap>
+               <Button onClick={toggleDrawer}>Collapse</Button>
+            </StyledTitleWrap>
+            
+            <StyledRoom>
+               <StyledContainerRoom>
+                  {/* <ImagesList /> */}
+                  <CustomRoom />
+               </StyledContainerRoom>
+            </StyledRoom>
+         </StyledRoomWrap>
+      </SwipeableDrawer>
    )
 }
 

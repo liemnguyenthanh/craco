@@ -14,6 +14,7 @@ export const StyledChooseRoom = styled(Box)({
   display: 'flex',
   justifyContent: "center",
   alignItems: 'center',
+  textAlign: 'center',
   height: '100%',
   fontSize: 40
 })
