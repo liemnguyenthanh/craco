@@ -27,7 +27,7 @@ const ChatPage = () => {
 
    return (
       <Fragment>
-         <StyledWrap sx={{ height: 'calc(100vh - 60px)' }}>
+         <StyledWrap sx={{ height: 'calc(100dvh - 60px)' }}>
             <StyledLeft className='js-room-list' onTransitionEnd={handleTransitionEnd}>
                <Suspense fallback={<LoadingComponent />}>
                   <Events />

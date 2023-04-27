@@ -18,7 +18,7 @@ export const StyledScrollToBottom = styled(Box)({
 
 export const StyledWrap = styled(Box)({
    position: 'relative',
-   height: 'calc(100vh - 230px)',
+   height: 'calc(100dvh - 230px)',
    padding: "16px 16px 0 16px",
    overflowY: "scroll",
    '&::-webkit-scrollbar': {

@@ -10,7 +10,7 @@ export const StyledWrapList = styled(List)({
    width: '100%',
    padding: 0,
    '> div': {
-      height: 'calc(100vh - 120px)',
+      height: 'calc(100dvh - 120px)',
       overflowY: 'scroll',
    }
 })

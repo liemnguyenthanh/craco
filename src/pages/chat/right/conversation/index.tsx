@@ -44,7 +44,7 @@ const Conversation = ({ roomId }: Props) => {
                   <StyledMessageAndRoom>
                      <StyledMessages>
                         <HeadConversation />
-                        <Box sx={{ height: 'calc(100vh - 230px)' }}>
+                        <Box sx={{ height: 'calc(100dvh - 230px)' }}>
                            {isLoadingMessageRoom ?
                               <LoadingComponent /> :
                               <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}
