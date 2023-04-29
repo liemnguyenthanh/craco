@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { colors } from '@/constants/theme'
 import { RootState, useAppDispatch } from '@/store'
@@ -7,6 +7,7 @@ import { RoomName } from './roomName'
 import { generalAvatar } from '@/utils/helpers'
 import { Fragment } from 'react'
 import { setIsOpenSwipeRoomInfo } from '@/store/slices/app'
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const HeadConversation = () => {
    const { roomsCommon, roomIdActive } = useSelector((state: RootState) => state.chat)
@@ -28,6 +29,9 @@ const HeadConversation = () => {
                <Typography variant='inherit' sx={{ fontSize: '12px', color: "#76ff03" }}>online</Typography>
             </Box>
          </StyledInfoRoom>
+         <Button onClick={toggleDrawerRoomInfo}>
+            <MoreVertIcon/>
+         </Button>
          {/* <ActionRoom /> */}
       </StyledWrap>
    )
@@ -41,7 +45,8 @@ const StyledWrap = styled(Box)({
    display: 'flex',
    alignItems: "center",
    justifyContent: 'space-between',
-   padding: '0 16px'
+   padding: '0 16px',
+   backgroundColor: colors.black,
 })
 
 const StyledInfoRoom = styled(Box)({

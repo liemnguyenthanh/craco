@@ -4,6 +4,7 @@ import { StyledContainerRoom, StyledRoom, StyledRoomWrap, StyledTitleWrap } from
 import { Button, SwipeableDrawer } from '@mui/material';
 import { RootState, useAppDispatch } from '@/store';
 import { setIsOpenSwipeRoomInfo } from '@/store/slices/app';
+import CloseIcon from '@mui/icons-material/Close';
 
 const RoomInfo = () => {
    const { isOpenSwipeRoomInfo } = useSelector((state: RootState) => state.app)
@@ -19,7 +20,7 @@ const RoomInfo = () => {
       >
          <StyledRoomWrap>
             <StyledTitleWrap>
-               <Button onClick={toggleDrawer}>Collapse</Button>
+               <Button onClick={toggleDrawer}><CloseIcon/></Button>
             </StyledTitleWrap>
             
             <StyledRoom>

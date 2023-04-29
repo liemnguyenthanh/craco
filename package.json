@@ -62,8 +62,10 @@
     ]
   },
   "devDependencies": {
+    "@svgr/webpack": "^7.0.0",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "craco": "^0.0.3",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",

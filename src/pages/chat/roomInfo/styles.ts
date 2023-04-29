@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Box } from '@mui/system'
 
 export const StyledTitleWrap = styled(Box)({
-   display: 'flex'
+   display: 'flex',
 })
 
 export const StyledRoomWrap = styled(Box)(({ theme }: any) => ({

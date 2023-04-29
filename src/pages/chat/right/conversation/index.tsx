@@ -11,6 +11,7 @@ import HeadConversation from './headConversation';
 import InputConversation from './inputConversation';
 import MessagesAllRooms from './messagesAllRoom';
 import { StyledNotFound } from './styles';
+import { HEIGHT_CHAT } from '@/constants/chats';
 interface Props {
    roomId: string
 }
@@ -44,7 +45,7 @@ const Conversation = ({ roomId }: Props) => {
                   <StyledMessageAndRoom>
                      <StyledMessages>
                         <HeadConversation />
-                        <Box sx={{ height: 'calc(100dvh - 230px)' }}>
+                        <Box sx={{ height: HEIGHT_CHAT }}>
                            {isLoadingMessageRoom ?
                               <LoadingComponent /> :
                               <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}

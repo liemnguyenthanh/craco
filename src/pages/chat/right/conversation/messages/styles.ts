@@ -1,3 +1,4 @@
+import { HEIGHT_CHAT } from "@/constants/chats";
 import { colors } from "@/constants/theme";
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
@@ -18,8 +19,8 @@ export const StyledScrollToBottom = styled(Box)({
 
 export const StyledWrap = styled(Box)({
    position: 'relative',
-   height: 'calc(100dvh - 230px)',
-   padding: "16px 16px 0 16px",
+   height: HEIGHT_CHAT,
+   padding: "16px 40px 0 40px",
    overflowY: "scroll",
    '&::-webkit-scrollbar': {
       width: '0.4em'

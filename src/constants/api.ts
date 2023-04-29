@@ -9,4 +9,4 @@ const API_URL = {
    },
 }
 
-export const { URL, URL_SOCKET } = API_URL.production
+export const { URL, URL_SOCKET } = API_URL.local
