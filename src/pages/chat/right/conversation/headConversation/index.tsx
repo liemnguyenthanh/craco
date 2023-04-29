@@ -41,7 +41,6 @@ export default HeadConversation
 
 const StyledWrap = styled(Box)({
    height: '100px',
-   borderBottom: `1px solid ${colors.whiteDark}`,
    display: 'flex',
    alignItems: "center",
    justifyContent: 'space-between',
