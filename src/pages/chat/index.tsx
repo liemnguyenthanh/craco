@@ -100,7 +100,8 @@ const StyledRight = styled(Box)({
 
 const StyledChat = styled(Box)({
    position: 'relative',
-   zIndex: 2
+   zIndex: 2,
+   height: '100%',
 })
 
 const StyledBackground = styled(Box)({
@@ -111,5 +112,6 @@ const StyledBackground = styled(Box)({
    zIndex: 1,
    '> img': {
       height: '100%',
+      width: '100%'
    }
 })

@@ -17,11 +17,16 @@ export const StyledScrollToBottom = styled(Box)({
    cursor: 'pointer'
 })
 
-export const StyledWrap = styled(Box)({
+export const StyledWrap = styled(Box)(({ theme }: any) => ({
    position: 'relative',
    height: HEIGHT_CHAT,
    padding: "16px 40px 0 40px",
    overflowY: "scroll",
+
+   [theme.breakpoints.down('md')]: {
+      padding: "16px 16px 0 16px",
+   },
+
    '&::-webkit-scrollbar': {
       width: '0.4em'
    },
@@ -30,5 +35,6 @@ export const StyledWrap = styled(Box)({
    },
    '&::-webkit-scrollbar-thumb': {
       backgroundColor: colors.purple,
-   }
-})
+   },
+
+}))
