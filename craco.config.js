@@ -6,13 +6,13 @@ module.exports = {
          "@": path.resolve(__dirname, "src"),
       },
    },
-   // eslint: {
-   //    configure: {
-   //       rules: {
-   //          "react-hooks/exhaustive-deps": "off",
-   //       },
-   //    },
-   // },
+   eslint: {
+      configure: {
+         rules: {
+            "react-hooks/exhaustive-deps": "off",
+         },
+      },
+   },
    devServer: {
       port: 5000,
    },

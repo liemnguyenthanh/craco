@@ -56,7 +56,7 @@ export const RoomName = ({ roomName }: Props) => {
 const StyledWrap = styled(Box)({
    display: 'flex',
    alignItems: 'center',
-   gap: 10
+   gap: 10,
 })
 
 const StyledRoomName = styled(Typography)({

@@ -7,9 +7,10 @@ import React, { Fragment, Suspense, useEffect } from "react"
 import { ToastContainer } from "react-toastify"
 import HelperChat from "./HelperChat"
 import RightChat from "./right"
+import { HEIGHT_MAIN } from "@/constants/chats"
+import ChatBackground from '@/assets/images/background_chat.png';
 
-
-const Events = React.lazy(() => import('./left'));
+const LeftChat = React.lazy(() => import('./left'));
 
 const ChatPage = () => {
    const dispatch = useAppDispatch()
@@ -27,14 +28,19 @@ const ChatPage = () => {
 
    return (
       <Fragment>
-         <StyledWrap sx={{ height: 'calc(100vh - 60px)' }}>
+         <StyledWrap>
             <StyledLeft className='js-room-list' onTransitionEnd={handleTransitionEnd}>
                <Suspense fallback={<LoadingComponent />}>
-                  <Events />
+                  <LeftChat />
                </Suspense>
             </StyledLeft>
             <StyledRight>
-               <RightChat />
+               <StyledChat>
+                  <RightChat />
+               </StyledChat>
+               <StyledBackground>
+                  <img src={ChatBackground} alt=""/>
+               </StyledBackground>
             </StyledRight>
          </StyledWrap>
          <ToastContainer
@@ -57,11 +63,14 @@ const ChatPage = () => {
 
 export default ChatPage
 
-const StyledWrap = styled(Box)({
+const StyledWrap = styled(Box)(({ theme }: any) => ({
    display: 'flex',
    position: 'relative',
-
-})
+   height: HEIGHT_MAIN,
+   [theme.breakpoints.up('md')]: {
+      overflow: 'hidden',
+   }
+}))
 
 const StyledLeft = styled(Box)(({ theme }: any) => ({
    minWidth: '350px',
@@ -84,6 +93,25 @@ const StyledLeft = styled(Box)(({ theme }: any) => ({
 }))
 
 const StyledRight = styled(Box)({
+   position: 'relative',
+   height: '100%',
    flex: 1
 })
 
+const StyledChat = styled(Box)({
+   position: 'relative',
+   zIndex: 2,
+   height: '100%',
+})
+
+const StyledBackground = styled(Box)({
+   width: '100%',
+   height: '100%',
+   position:'absolute',
+   top: 0,
+   zIndex: 1,
+   '> img': {
+      height: '100%',
+      width: '100%'
+   }
+})

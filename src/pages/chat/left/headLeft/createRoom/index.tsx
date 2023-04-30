@@ -13,7 +13,8 @@ import { colors } from "@/constants/theme"
 import { createNewRoom } from "@/utils/logics/rooms"
 import { createRoom, setIdRoomCreated } from "@/store/slices/chat"
 import { useNavigate } from "react-router-dom"
-
+import { showNotification } from '@/utils/notification'
+import { toggleRoomList } from "@/utils/helpers"
 interface Props {
    handleToggleCreateRoom: () => void
 }
@@ -58,12 +59,16 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
       if (room) {
          //FIX ME: when create room failed
          dispatch(createRoom(room))
-            .catch(error => console.log(error))
+            .catch(error => {
+               console.log({ error });
+               showNotification('Created room Failed!!')
+            })
       }
    }
 
    const handleCreatedRoomSuccess = (roomId: string) => {
       navigate(`/chat?room_id=${roomId}`)
+      toggleRoomList()
       setUsersSelected([])
       handleToggleCreateRoom()
    }

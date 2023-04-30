@@ -11,3 +11,7 @@ export enum MESSAGE_USER {
 export type TYPE_MESSAGE = keyof typeof MESSAGE_ROOM_INFO | keyof typeof MESSAGE_USER
 
 export const LIMIT_MESSAGE = 30
+
+export const HEIGHT_CHAT = 'calc(100dvh - 230px)'
+
+export const HEIGHT_MAIN = 'calc(100dvh - 60px)'
