@@ -10,17 +10,15 @@ export const StyledWrap = styled(Box)({
 export const StyledWrapList = styled(List)({
    width: '100%',
    padding: 0,
-   '> div': {
-      height: 'calc(100dvh - 120px)',
-      overflowY: 'scroll',
-      '&::-webkit-scrollbar': {
-         width: '0.4em'
-      },
-      '&::-webkit-scrollbar-track': {
-         'WebkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-      },
-      '&::-webkit-scrollbar-thumb': {
-         backgroundColor: colors.purple,
-      }
+   height: 'calc(100dvh - 120px)',
+   overflowY: 'scroll',
+   '&::-webkit-scrollbar': {
+      width: '0.4em'
+   },
+   '&::-webkit-scrollbar-track': {
+      'WebkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+   },
+   '&::-webkit-scrollbar-thumb': {
+      backgroundColor: colors.purple,
    }
 })

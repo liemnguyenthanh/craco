@@ -1,20 +1,22 @@
+import LoadingComponent from '@/components/loading';
 import { useAppDispatch } from '@/store';
 import { fetchRoomList } from '@/store/slices/chat';
-import { getItemLocalStorage } from '@/utils/helpers';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import HeadLeft from './headLeft';
 import FormCreateRoom from './headLeft/createRoom';
 import RoomList from './roomList';
 import { StyledCreateRoom, StyledMain, StyledSecondWrap, StyledWrap } from './styles';
 
 const LeftChat = () => {
-   const user = getItemLocalStorage("user")
    const dispatch = useAppDispatch()
    const divRoomRef = useRef<HTMLDivElement>(null)
+   const [isLoading, setIsLoading] = useState(false)
 
    useEffect(() => {
-      dispatch(fetchRoomList(user._id))
-   }, [dispatch, user])
+      setIsLoading(true)
+      dispatch(fetchRoomList())
+         .then(() => setIsLoading(false))
+   }, [dispatch])
 
    const handleToggleCreateRoom = () => {
       if (divRoomRef.current) {
@@ -26,13 +28,13 @@ const LeftChat = () => {
 
    return (
       <StyledWrap>
-         <StyledSecondWrap ref={divRoomRef} sx={{ width: '200%'}}>
+         <StyledSecondWrap ref={divRoomRef} sx={{ width: '200%' }}>
             <StyledMain>
                <HeadLeft handleToggleCreateRoom={handleToggleCreateRoom} />
-               <RoomList />
+               {isLoading ? <LoadingComponent /> : <RoomList />}
             </StyledMain>
             <StyledCreateRoom>
-               <FormCreateRoom handleToggleCreateRoom={handleToggleCreateRoom}/>
+               <FormCreateRoom handleToggleCreateRoom={handleToggleCreateRoom} />
             </StyledCreateRoom>
          </StyledSecondWrap>
       </StyledWrap>
