@@ -1,16 +1,14 @@
-import LoadingComponent from "@/components/loading"
+import ChatBackground from '@/assets/images/background_chat.png'
+import { HEIGHT_MAIN } from "@/constants/chats"
 import { colors } from "@/constants/theme"
 import { useAppDispatch } from "@/store"
 import styled from "@emotion/styled"
 import { Box } from "@mui/material"
-import React, { Fragment, Suspense, useEffect } from "react"
+import React, { Fragment, useEffect } from "react"
 import { ToastContainer } from "react-toastify"
 import HelperChat from "./HelperChat"
+import LeftChat from "./left"
 import RightChat from "./right"
-import { HEIGHT_MAIN } from "@/constants/chats"
-import ChatBackground from '@/assets/images/background_chat.png';
-
-const LeftChat = React.lazy(() => import('./left'));
 
 const ChatPage = () => {
    const dispatch = useAppDispatch()
@@ -30,16 +28,14 @@ const ChatPage = () => {
       <Fragment>
          <StyledWrap>
             <StyledLeft className='js-room-list' onTransitionEnd={handleTransitionEnd}>
-               <Suspense fallback={<LoadingComponent />}>
-                  <LeftChat />
-               </Suspense>
+               <LeftChat />
             </StyledLeft>
             <StyledRight>
                <StyledChat>
                   <RightChat />
                </StyledChat>
                <StyledBackground>
-                  <img src={ChatBackground} alt=""/>
+                  <img src={ChatBackground} alt="" />
                </StyledBackground>
             </StyledRight>
          </StyledWrap>
@@ -107,7 +103,7 @@ const StyledChat = styled(Box)({
 const StyledBackground = styled(Box)({
    width: '100%',
    height: '100%',
-   position:'absolute',
+   position: 'absolute',
    top: 0,
    zIndex: 1,
    '> img': {

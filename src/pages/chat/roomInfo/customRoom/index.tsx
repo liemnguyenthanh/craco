@@ -31,7 +31,7 @@ const CustomRoom = () => {
             </StyledList>
          </Collapse>
 
-         <CustomModal title={'Nickname'} isOpen={isOpenModal} handleOpen={handleOpenModal} handleClose={handleCloseModal}>
+         <CustomModal title={'Nickname'} isOpen={isOpenModal} handleClose={handleCloseModal}>
             <Nickname list={convertNicknameUser(roomInfo)} />
          </CustomModal>
       </Box>

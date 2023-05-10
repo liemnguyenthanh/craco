@@ -49,12 +49,11 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(props, re
 
 interface Props extends React.PropsWithChildren {
    isOpen: boolean,
-   handleOpen: () => void,
-   handleClose: () => void,
+   handleClose?: () => void,
    title?: React.ReactNode,
 }
 
-const CustomModal = ({ isOpen, handleOpen, handleClose, title, children }: Props) => {
+const CustomModal = ({ isOpen, handleClose, title, children }: Props) => {
 
    return (
       <StyledModal>

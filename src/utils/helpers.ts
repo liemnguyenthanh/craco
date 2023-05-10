@@ -113,6 +113,7 @@ export const logInfo = (item: any) => {
 
 export const toggleRoomList = () => {
    const roomListSelector: HTMLDivElement | null = document.querySelector(SELECTOR.ROOM_LIST)
+
    if (!roomListSelector) return;
 
    roomListSelector.style.transition = 'all 0.3s'

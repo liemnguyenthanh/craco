@@ -25,7 +25,6 @@ const initialState: IChatInitial = {
 
    newMessageNoRoom: null,
    newMessage: null,
-
    idRoomCreated: null,
 };
 
@@ -70,7 +69,7 @@ export const chatSlice = createSlice({
 
          handleReadMessage(user_id, last_message_read_id, room.last_messages_seen_by)
       },
-      setIdRoomCreated(state, action: PayloadAction<string | null>){
+      setIdRoomCreated(state, action: PayloadAction<string | null>) {
          state.idRoomCreated = action.payload
       }
    },
@@ -176,15 +175,15 @@ export const fetchLoadMoreMessageList = createAsyncThunk(
 
 export const fetchRoomList = createAsyncThunk(
    'rooms/list',
-   async (userId: string, { rejectWithValue }) => {
-      try {
-         const response = await axiosRequest('/rooms?user_id=' + userId);
-         return response;
-      } catch (error) {
-         console.log({ error });
-         return rejectWithValue(error);
-      }
-   },
+   async(_, { rejectWithValue }) => {
+   try {
+      const response = await axiosRequest('/rooms?user_id=' + userInfo._id);
+      return response;
+   } catch (error) {
+      console.log({ error });
+      return rejectWithValue(error);
+   }
+},
 );
 
 export const fetchRoomInfo = createAsyncThunk(
@@ -255,7 +254,7 @@ export const createRoom = createAsyncThunk(
             showNotification('Tạo phòng rồi ra nhắn tin đê!!')
             const requestMessage = createRequestMessage(response.room._id, 'CREATE_ROOM', MESSAGE_ROOM_INFO.CREATE_ROOM)
             dispatch({ type: EVENTS_SOCKET.SEND_MESSAGE, payload: requestMessage })
-            
+
          } else showNotification('Phòng này có rồi pa!!')
 
          return response;

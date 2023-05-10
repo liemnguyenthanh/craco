@@ -1,4 +1,5 @@
 import LoadingComponent from '@/components/loading';
+import { HEIGHT_CHAT } from '@/constants/chats';
 import { RootState, useAppDispatch } from '@/store';
 import { fetchMessageList, fetchRoomInfo, setRoomIdActive } from '@/store/slices/chat';
 import { getCurrentUser } from '@/utils/helpers';
@@ -11,7 +12,6 @@ import HeadConversation from './headConversation';
 import InputConversation from './inputConversation';
 import MessagesAllRooms from './messagesAllRoom';
 import { StyledNotFound } from './styles';
-import { HEIGHT_CHAT } from '@/constants/chats';
 interface Props {
    roomId: string
 }
@@ -48,7 +48,7 @@ const Conversation = ({ roomId }: Props) => {
                         <Box sx={{ height: HEIGHT_CHAT }}>
                            {isLoadingMessageRoom ?
                               <LoadingComponent /> :
-                              <MessagesAllRooms roomId={roomId} room={roomsCommon[roomId]} />}
+                              <MessagesAllRooms room={roomsCommon[roomId]} />}
                         </Box>
                         <InputConversation />
                      </StyledMessages>
