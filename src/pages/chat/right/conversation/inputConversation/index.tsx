@@ -17,7 +17,7 @@ const InputConversation = () => {
    const handleSendMessage = (event: React.FormEvent<HTMLDivElement>) => {
       event.preventDefault()
       const value = inputRef?.current?.value.trim();
-      
+
       if (!value) return showNotification("Please input!!");
       if (!roomIdActive) return;
 

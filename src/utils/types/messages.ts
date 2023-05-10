@@ -1,11 +1,12 @@
 import { TYPE_MESSAGE } from "@/constants/chats";
 import { UserAccount } from "./accounts";
 export interface ICreateMessage {
-   sender_id: string;
-   room_id: string;
-   message_text: string;
-   message_type: TYPE_MESSAGE;
-   timestamp: number;
+   sender_id: string
+   room_id: string
+   message_text: string
+   message_type: TYPE_MESSAGE
+   attachments?: IAttachment[]
+   timestamp: number
 }
 export interface IMessage extends ICreateMessage {
    _id: string;
@@ -27,4 +28,14 @@ export interface IGroupMessageByType {
    type: TYPE_MESSAGE,
    action?: IMessage,
    messages_user?: IGroupMessageByUser,
+}
+
+export interface IAttachmentMessage {
+   client_id: string
+   url: string,
+   file: any
+}
+
+export interface IAttachment {
+   [key: string]: any
 }

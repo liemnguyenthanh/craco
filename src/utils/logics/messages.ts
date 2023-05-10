@@ -2,28 +2,36 @@ import { LIMIT_MESSAGE, MESSAGE_ROOM_INFO, MESSAGE_USER, TYPE_MESSAGE } from '@/
 import { IMessagesInRoom } from '@/utils/types/chats';
 import { v4 as generalId } from 'uuid';
 import { getCurrentUser, last } from '../helpers';
-import { ICreateMessage, IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
+import { IAttachment, ICreateMessage, IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
 import { IRoom, IRoomMessageStatus } from '../types/rooms';
 import { getDataChangedRoom } from './rooms';
+import { v4 as uuidV4 } from 'uuid'
 
 const userInfo = getCurrentUser()
 
-export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE): ICreateMessage => ({
+export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE, attachments?: IAttachment[]): ICreateMessage => ({
    sender_id: userInfo._id,
    room_id,
    message_text,
    message_type,
+   attachments,
    timestamp: new Date().getTime()
 })
 
-export const createRequestReadMessage = (room_id: string, last_message_read_id?: string, unread_count?: number ) => {
+export const createRequestReadMessage = (room_id: string, last_message_read_id?: string, unread_count?: number) => {
    const payload: IRoomMessageStatus = { room_id, user_id: userInfo._id }
-   
+
    if (last_message_read_id) payload.last_message_read_id = last_message_read_id
    if (unread_count && unread_count > -1) payload.unread_count = unread_count
-   
+
    return payload
 }
+
+export const createAttachmentMessage = (url: string, file: any) => ({
+   client_id: uuidV4(),
+   url,
+   file
+})
 
 export const convertMessageRoomToText = (message: IMessage, roomInfo: IRoom): string => {
    const messageType = message.message_type;

@@ -1,5 +1,6 @@
 export const SELECTOR = {
    HEADER: '.js-header-layout',
-   ROOM_LIST: '.js-room-list'
+   ROOM_LIST: '.js-room-list',
+   UPLOAD_FILE: '.js-upload-file',
 }
 
