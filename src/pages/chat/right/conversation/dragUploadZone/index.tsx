@@ -38,7 +38,6 @@ const DragUploadZone = ({ children }: Props) => {
          id='drag-zone'
          onDragOver={onDragOver}
          onDragLeave={onDragOver}
-         sx={{ position: 'relative' }}
       >
          {children}
          {
@@ -49,29 +48,35 @@ const DragUploadZone = ({ children }: Props) => {
                </StyledDropZone>
             </StyledUploadFile>
          }
-         {filesUpload && <ModalUploadFile files={filesUpload} setFiles={setFilesUpload} onDrop={handleDrop}/>}
+         {filesUpload && <ModalUploadFile files={filesUpload} setFiles={setFilesUpload} onDrop={handleDrop} />}
       </Box>
    )
 }
 
 export default DragUploadZone
 
-const StyledUploadFile = styled('div')({
-   position: 'absolute',
-   top: '50%',
-   left: '50%',
-   translate: '-50% -50%',
-   zIndex: 200,
-})
+const StyledUploadFile = styled('div')`
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   translate: -50% -50%;
+   z-index: 200;
+   height: 70%;
+   width: 70%;
+   animation: fade 0.8s;
+   animation-timing-function: ease;
+
+   @keyframes fade {
+      0% { opacity: 0 }   
+      100% { opacity: 1 }   
+   }
+`
 
 const StyledDropZone = styled('div')`
    --border-size: 5px;
    --border-angle: 0turn;
    position: relative;
-
-   height: 16rem;
-   width: 28rem;
-   max-width: 100%;
+   height: inherit;
 
    display: flex;
    align-items: center;

@@ -34,5 +34,10 @@ http://localhost:5000
 
 3. Api rule
 
-
 4. Fix create room not found
+
+5. handle message status:
+   - sending: when current user send message ( message does not contain `_id`)
+   - sent: when user in room receive new message ( message contains `_id`)
+   - receive: when user in room receive new message (no sender) (in group: show receivers list )
+   - error: when server does not response in `2 mins` 

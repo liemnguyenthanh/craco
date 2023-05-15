@@ -2,7 +2,7 @@ import CustomModal from "@/components/modal"
 import { createAttachmentMessage } from "@/utils/logics/messages"
 import { IAttachmentMessage } from "@/utils/types/messages"
 import { Box, ImageList, ImageListItem, TextField } from "@mui/material"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 
 interface Props {
    files: FileList | null
@@ -13,13 +13,17 @@ interface Props {
 const ModalUploadFile = ({ files, setFiles, onDrop }: Props) => {
    const isOpen = !!files
    const [previewImage, setPreviewImage] = useState<IAttachmentMessage[]>([])
-   const handleCloseModal = () => setFiles(null)
-
+   const titleModal = useMemo(() => (
+      files ? files.length === 1 ? 'Send Photo': `Send ${files.length} Photo` : '' 
+      ), [files])
+      
    useEffect(() => {
       if (files) handlePreviewImage(files)
       else setPreviewImage([])
       //eslint-disable-next-line 
    }, [files])
+
+   const handleCloseModal = () => setFiles(null)
 
    const handlePreviewImage = async (files: FileList) => {
       const list: IAttachmentMessage[] = []
@@ -42,7 +46,7 @@ const ModalUploadFile = ({ files, setFiles, onDrop }: Props) => {
 
    return (
       <div onDrop={onDrop}>
-         <CustomModal isOpen={isOpen} handleClose={handleCloseModal} title={`Send ${files.length} Photo${files.length === 1 ? '' : 's'}`}>
+         <CustomModal isOpen={isOpen} handleClose={handleCloseModal} title={titleModal}>
             <ImageList sx={{ width: 500, maxHeight: 450 }} cols={3} rowHeight={164}>
                {previewImage.map((item, index) => (
                   <ImageListItem key={index}>

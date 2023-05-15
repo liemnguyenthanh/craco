@@ -1,13 +1,13 @@
 import { URL_SOCKET } from "@/constants/api";
 import { getCurrentUser } from "@/utils/helpers";
 import { showNotification } from "@/utils/notification";
-import { IMessage } from "@/utils/types/messages";
+import { IReceiverMessage } from "@/utils/types/messages";
 import { IRoomMessageStatus } from "@/utils/types/rooms";
 import { UserOnline } from "@/utils/types/socket";
 import { AnyAction, Middleware } from "@reduxjs/toolkit";
 import { Socket, io } from "socket.io-client";
 import { RootState } from "../rootReducers";
-import { readMessage, receiveNewMessage } from "../slices/chat";
+import { mergeSendingMessage, readMessage, receiveNewMessage } from "../slices/chat";
 import { addUsersOnline, removeUsersOnline, setUsersOnline } from "../slices/socket";
 import { EVENTS_SOCKET } from "./events";
 const userInfo = getCurrentUser()
@@ -45,7 +45,7 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
             store.dispatch(removeUsersOnline({ socketId }));
          });
 
-         socket.on(EVENTS_SOCKET.RECEIVE_MESSAGE, (newMessage: IMessage) => {
+         socket.on(EVENTS_SOCKET.RECEIVE_MESSAGE, (newMessage: IReceiverMessage) => {
             store.dispatch(receiveNewMessage(newMessage));
          });
 
@@ -59,6 +59,7 @@ export const socketMiddleware: Middleware<{}, RootState> = (store) => {
       }
 
       if (type === EVENTS_SOCKET.SEND_MESSAGE) {
+         store.dispatch(mergeSendingMessage(payload))
          socket.emit(type, payload)
       }
 

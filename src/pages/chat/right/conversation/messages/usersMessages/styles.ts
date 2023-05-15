@@ -21,6 +21,7 @@ export const StyledName = styled(Box)({
 
 export const styles = {
    message: (isMySelf: boolean) => ({
+      position: 'relative',
       whiteSpace: 'pre-line',
       wordBreak: "break-all",
       p: "8px 12px",
@@ -42,5 +43,5 @@ export const styles = {
 }
 
 export const StyledAvatarList = styled(Box)({
-   
+
 })

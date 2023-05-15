@@ -2,13 +2,17 @@ import { MESSAGE_ROOM_INFO } from "@/constants/chats";
 import { getCurrentUser, moveItemToFront } from "../helpers";
 import { IChatInitial, IMessagesInRoom } from "../types/chats";
 import { IMessage } from "../types/messages";
-import { mergeNewMessage } from "./messages";
+import { editMessageInGroup, mergeNewMessage } from "./messages";
 import { getDataChangedRoom } from "./rooms";
 
 const userInfo = getCurrentUser()
 
 export function mergeNewMessageInRoom(newMessage: IMessage, messagesList: IMessagesInRoom) {
-   if (messagesList) {
+   if (!messagesList) return;
+   
+   if (newMessage.sender_id === userInfo._id){
+      editMessageInGroup(newMessage, messagesList.list)
+   } else {
       mergeNewMessage(newMessage, messagesList.list);
    }
 }

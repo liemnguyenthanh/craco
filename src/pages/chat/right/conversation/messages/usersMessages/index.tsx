@@ -31,7 +31,7 @@ const UsersMessages = ({ usersMessages, messageListRef, roomInfo }: Props) => {
          <StyledList alignItems={isMe ? 'end' : 'start'}>
             {!usersMessages.isMe && <StyledName>{getNameUser()}</StyledName>}
             {usersMessages.messages.map(item => <ItemMessageUser
-               key={item._id}
+               key={item._id || item.client_id}
                messageListRef={messageListRef}
                isMe={isMe}
                roomInfo={roomInfo}

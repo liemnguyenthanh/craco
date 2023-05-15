@@ -22,6 +22,7 @@ export const StyledWrap = styled(Box)(({ theme }: any) => ({
    height: HEIGHT_CHAT,
    padding: "16px 40px 0 40px",
    overflowY: "scroll",
+   overflowX: "hidden",
 
    [theme.breakpoints.down('md')]: {
       padding: "16px 16px 0 16px",

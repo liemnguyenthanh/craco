@@ -2,11 +2,11 @@ import { MESSAGE_ROOM_INFO } from '@/constants/chats';
 import { axiosRequest } from '@/services';
 import { getCurrentUser } from '@/utils/helpers';
 import { handleSpecialMessage, mergeNewMessageInRoom, updateRoomCommon, updateUnReadMessage } from '@/utils/logics/chats';
-import { createMessageInRoom, createRequestMessage, mergeLoadMoreMessage } from '@/utils/logics/messages';
+import { convertNewMessage, createMessageInRoom, createRequestMessage, handleMergeSendingMessage, mergeLoadMoreMessage } from '@/utils/logics/messages';
 import { convertCommonRoom, convertRoomLeftList, handleReadMessage } from '@/utils/logics/rooms';
 import { showNotification } from '@/utils/notification';
 import { IChatInitial } from '@/utils/types/chats';
-import { IMessage } from '@/utils/types/messages';
+import { ICreateMessage, IMessage, IReceiverMessage } from '@/utils/types/messages';
 import { ICreateRoom, IFetchRoom, IRoomMessageStatus, IUpdateRoom } from '@/utils/types/rooms';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
@@ -34,13 +34,20 @@ export const chatSlice = createSlice({
    name: 'chat',
    initialState,
    reducers: {
-      receiveNewMessage(state, action: PayloadAction<IMessage>) {
-         const newMessage = action.payload;
+      mergeSendingMessage(state, action: PayloadAction<ICreateMessage>) {
+         console.log('sending message: ', action.payload);
+         const sendingMessage = action.payload;
+
+         handleMergeSendingMessage(sendingMessage, state.messagesInRooms[sendingMessage.room_id].list);
+
+      },
+      receiveNewMessage(state, action: PayloadAction<IReceiverMessage>) {
+         const newMessage = action.payload
 
          mergeNewMessageInRoom(newMessage, state.messagesInRooms[newMessage.room_id]);
-         updateRoomCommon(newMessage, state);
-         updateUnReadMessage(newMessage, state);
-         handleSpecialMessage(newMessage, state);
+         // updateRoomCommon(newMessage, state);
+         // updateUnReadMessage(newMessage, state);
+         // handleSpecialMessage(newMessage, state);
 
       },
       updateRoomHasNewMessage(state, action: PayloadAction<{ room_id: string, isBottomScroll: boolean }>) {
@@ -127,7 +134,7 @@ export const chatSlice = createSlice({
          if (roomId in state.messagesInRooms) {
             const roomInfo = state.roomsCommon[roomId]
             // merge message zo room list
-            mergeLoadMoreMessage(action.payload, state.messagesInRooms[roomId], roomInfo);
+            mergeLoadMoreMessage(action.payload, state.messagesInRooms[roomId]);
          }
       });
       //fetchRoomNotExist
@@ -141,7 +148,7 @@ export const chatSlice = createSlice({
    },
 });
 
-export const { receiveNewMessage, setRoomIdActive, clearNewMessageNoRoom, clearNewMessage, readMessage, updateRoomHasNewMessage, setIdRoomCreated } = chatSlice.actions;
+export const { receiveNewMessage, mergeSendingMessage, setRoomIdActive, clearNewMessageNoRoom, clearNewMessage, readMessage, updateRoomHasNewMessage, setIdRoomCreated } = chatSlice.actions;
 
 export const getRoomInfoActive = (state: RootState) => state.chat.roomsCommon[state.chat.roomIdActive]
 
@@ -175,15 +182,15 @@ export const fetchLoadMoreMessageList = createAsyncThunk(
 
 export const fetchRoomList = createAsyncThunk(
    'rooms/list',
-   async(_, { rejectWithValue }) => {
-   try {
-      const response = await axiosRequest('/rooms?user_id=' + userInfo._id);
-      return response;
-   } catch (error) {
-      console.log({ error });
-      return rejectWithValue(error);
-   }
-},
+   async (_, { rejectWithValue }) => {
+      try {
+         const response = await axiosRequest('/rooms?user_id=' + userInfo._id);
+         return response;
+      } catch (error) {
+         console.log({ error });
+         return rejectWithValue(error);
+      }
+   },
 );
 
 export const fetchRoomInfo = createAsyncThunk(

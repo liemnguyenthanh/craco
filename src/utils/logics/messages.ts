@@ -2,21 +2,35 @@ import { LIMIT_MESSAGE, MESSAGE_ROOM_INFO, MESSAGE_USER, TYPE_MESSAGE } from '@/
 import { IMessagesInRoom } from '@/utils/types/chats';
 import { v4 as generalId } from 'uuid';
 import { getCurrentUser, last } from '../helpers';
-import { IAttachment, ICreateMessage, IGroupMessageByType, IGroupMessageByUser, IMessage } from '../types/messages';
+import { EMessageStatus, IAttachment, ICreateMessage, IGroupMessageByType, IGroupMessageByUser, IMessage, IReceiverMessage } from '../types/messages';
 import { IRoom, IRoomMessageStatus } from '../types/rooms';
 import { getDataChangedRoom } from './rooms';
 import { v4 as uuidV4 } from 'uuid'
 
 const userInfo = getCurrentUser()
 
-export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE, attachments?: IAttachment[]): ICreateMessage => ({
-   sender_id: userInfo._id,
-   room_id,
-   message_text,
-   message_type,
-   attachments,
-   timestamp: new Date().getTime()
-})
+export const convertNewMessage = (newMessage: IReceiverMessage): IMessage => {
+   return {
+      ...newMessage,
+      message_status: newMessage._id ? EMessageStatus.SENT : EMessageStatus.SENDING
+   }
+}
+
+export const createRequestMessage = (room_id: string, message_text: string, message_type: TYPE_MESSAGE, attachments?: IAttachment[]): ICreateMessage => {
+   const message: ICreateMessage = {
+      client_id: generalId(),
+      sender_id: userInfo._id,
+      room_id,
+      message_text,
+      message_type,
+      message_status: EMessageStatus.SENDING,
+      timestamp: new Date().getTime()
+   }
+
+   if (attachments) message.attachments = attachments
+
+   return message
+}
 
 export const createRequestReadMessage = (room_id: string, last_message_read_id?: string, unread_count?: number) => {
    const payload: IRoomMessageStatus = { room_id, user_id: userInfo._id }
@@ -81,6 +95,31 @@ const isPushItemToGroupList = (currentItem: IMessage, nextItem: IMessage): boole
    currentItem.sender_id !== nextItem.sender_id
 )
 
+const getMessageInGroup = (message: IMessage, list: IGroupMessageByType[]) => {
+   const query = `"client_id":"${message.client_id}"`
+   const messageGroup = list.find((item) => {
+      if (item.messages_user && item.messages_user.messages) {
+         const messagesStringify = JSON.stringify(item.messages_user.messages)
+         return messagesStringify.indexOf(query) > -1
+      }
+   })
+
+   if (!messageGroup || !messageGroup.messages_user) return;
+
+   return messageGroup.messages_user.messages.find(item => item.client_id === message.client_id)
+}
+
+export const editMessageInGroup = (message: IMessage, list: IGroupMessageByType[]) => {
+   const oldMessage = getMessageInGroup(message, list)
+
+   if (oldMessage) {
+      oldMessage._id = message._id
+      oldMessage.message_status = EMessageStatus.SENT
+   }
+
+   return list
+}
+
 export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessageByType[] => {
    const list = [...messageList]
    list.reverse()
@@ -118,20 +157,33 @@ export const groupMessagesByTypeAndUser = (messageList: IMessage[]): IGroupMessa
    return groupList
 }
 
+export const handleMergeSendingMessage = (message: ICreateMessage, messagesList: IGroupMessageByType[]) => {
+   if (!messagesList) return
+
+   mergeNewMessage(message, messagesList)
+}
+
 export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]): IGroupMessageByType[] => {
+   /*
+   FIX ME:
+   - update message_status, _id : if sender_id === current user
+   - merge message if !current_user
+   */
+
+
    const lastItem: IGroupMessageByType = last(list)
-   const infoUser = getCurrentUser()
 
    if (message.message_type === MESSAGE_USER.MESSAGE_TEXT && lastItem.messages_user?.sender_id === message.sender_id) {
       lastItem.messages_user.messages.push(message)
       return list
    }
+
    const groupByType: IGroupMessageByType = { key: generalId(), type: message.message_type }
 
    if (groupByType.type === MESSAGE_USER.MESSAGE_TEXT) {
       const groupByUser: IGroupMessageByUser = {
          key: generalId(),
-         isMe: !!(infoUser && infoUser._id === message.sender_id),
+         isMe: !!(userInfo && userInfo._id === message.sender_id),
          sender_id: message.sender_id,
          messages: [message]
       }
@@ -139,12 +191,13 @@ export const mergeNewMessage = (message: IMessage, list: IGroupMessageByType[]):
    }
 
    if (groupByType.type in MESSAGE_ROOM_INFO) groupByType.action = message
+
    list.push(groupByType)
 
    return list
 }
 
-export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom, roomInfo: IRoom): IMessagesInRoom => {
+export const mergeLoadMoreMessage = (messages: IMessage[], room: IMessagesInRoom): IMessagesInRoom => {
    if (messages.length < LIMIT_MESSAGE) room.shouldLoadMore = false
    if (messages.length === 0) return room;
 
