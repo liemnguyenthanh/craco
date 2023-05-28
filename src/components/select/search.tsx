@@ -1,8 +1,7 @@
 import SearchUsers from '@/layout/header/searchUsers';
-import { RootState, useAppDispatch } from '@/store';
-import { createNewRoom } from '@/utils/logics/rooms';
+import { RootState } from '@/store';
 import { UserAccount } from '@/utils/types/accounts';
-import { Checkbox, ListItemIcon, ListItemText, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { Checkbox, ListItemIcon, ListItemText, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Box } from '@mui/system';
 import { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';

@@ -25,8 +25,8 @@ const routes: Route[] = [
 ];
 
 const RouterApp = () => {
-
   const routing = useRoutes(routes);
+
   return routing
 }
 

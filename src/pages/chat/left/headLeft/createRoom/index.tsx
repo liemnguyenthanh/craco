@@ -14,7 +14,7 @@ import { createNewRoom } from "@/utils/logics/rooms"
 import { createRoom, setIdRoomCreated } from "@/store/slices/chat"
 import { useNavigate } from "react-router-dom"
 import { showNotification } from '@/utils/notification'
-import { toggleRoomList } from "@/utils/helpers"
+import { setIsOpenRoomList } from "@/store/slices/app"
 interface Props {
    handleToggleCreateRoom: () => void
 }
@@ -54,21 +54,17 @@ const FormCreateRoom = ({ handleToggleCreateRoom }: Props) => {
 
    const handleCreateRoom = () => {
       if (usersSelected.length < 2) return
-      const room_name = usersSelected.map(item => item.username).join(', ')
-      const room = createNewRoom(room_name, usersSelected.map(item => item._id), true)
-      if (room) {
-         //FIX ME: when create room failed
-         dispatch(createRoom(room))
-            .catch(error => {
-               console.log({ error });
-               showNotification('Created room Failed!!')
-            })
-      }
+      const roomName = usersSelected.map(item => item.username).join(', ')
+      const room = createNewRoom(roomName, usersSelected.map(item => item._id), true)
+      if (!room) return 
+      //FIX ME: when create room failed
+      dispatch(createRoom(room))
+         .catch(() => showNotification('Created room Failed!!'))
    }
 
    const handleCreatedRoomSuccess = (roomId: string) => {
       navigate(`/chat?room_id=${roomId}`)
-      toggleRoomList()
+      dispatch(setIsOpenRoomList())
       setUsersSelected([])
       handleToggleCreateRoom()
    }

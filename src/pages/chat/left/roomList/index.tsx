@@ -1,5 +1,5 @@
-import { RootState } from '@/store';
-import { toggleRoomList } from '@/utils/helpers';
+import { RootState, useAppDispatch } from '@/store';
+import { setIsOpenRoomList } from '@/store/slices/app';
 import { IRoom } from '@/utils/types/rooms';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -13,11 +13,12 @@ const RoomList = () => {
    const roomActive = searchParams.get('room_id')?.toString()
    const theme = useTheme();
    const matches = useMediaQuery(theme.breakpoints.down('md'));
+   const dispatch = useAppDispatch()
 
    const handleChangeRoom = (room: IRoom) => {
       if (!room._id || room._id === searchParams.get('room_id')) return;
 
-      if (matches) toggleRoomList()
+      if (matches) dispatch(setIsOpenRoomList())
 
       setSearchParams({ room_id: room._id })
    }

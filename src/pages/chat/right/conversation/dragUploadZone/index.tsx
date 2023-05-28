@@ -1,5 +1,4 @@
 
-import { SELECTOR } from '@/constants/selectors'
 import styled from '@emotion/styled'
 import { Box } from '@mui/material'
 import React, { PropsWithChildren, useRef, useState } from 'react'
@@ -11,20 +10,22 @@ const DragUploadZone = ({ children }: Props) => {
    const [isShowUpload, setIsShowUpload] = useState(false)
    const [filesUpload, setFilesUpload] = useState<FileList | null>(null)
    const preIsShow = useRef(false)
+   const uploadZoneRef = useRef<HTMLDivElement>(null)
 
    const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault()
+      //FIX ME: check bugs again - no time to fix
       const isShow = event.type === 'dragover'
 
       if (preIsShow.current === isShow) return
 
       setIsShowUpload(isShow)
       preIsShow.current = isShow
-      const uploadSelector = document.querySelector(SELECTOR.UPLOAD_FILE)
 
-      if (!uploadSelector) return;
+      if (!uploadZoneRef.current) return;
 
-      uploadSelector.classList.toggle('active', uploadSelector.contains(event.target as Node))
+      const isDropZone = uploadZoneRef.current.contains(event.target as Node)
+      uploadZoneRef.current.classList.toggle('active', isDropZone)
    }
 
    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -43,7 +44,7 @@ const DragUploadZone = ({ children }: Props) => {
          {
             isShowUpload &&
             <StyledUploadFile onDrop={handleDrop}>
-               <StyledDropZone className='js-upload-file'>
+               <StyledDropZone ref={uploadZoneRef}>
                   <p>Kéo thả file zô đây bờ ro!!</p>
                </StyledDropZone>
             </StyledUploadFile>

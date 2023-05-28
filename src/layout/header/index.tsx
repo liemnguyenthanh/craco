@@ -1,13 +1,18 @@
 import { colors } from "@/constants/theme"
-import { generalAvatar, getCurrentUser, handleLogout, toggleRoomList } from "@/utils/helpers"
+import { generalAvatar, getCurrentUser, handleLogout } from "@/utils/helpers"
 import styled from "@emotion/styled"
 import ListIcon from '@mui/icons-material/List'
 import { Avatar, Button } from "@mui/material"
 import { Box } from "@mui/system"
 import SearchUsers from "./searchUsers"
+import { useAppDispatch } from "@/store"
+import { setIsOpenRoomList } from "@/store/slices/app"
 
 const HeaderLayout = () => {
    const user = getCurrentUser()
+   const dispatch = useAppDispatch()
+
+   const toggleRoomList = () => dispatch(setIsOpenRoomList())
 
    return (
       <StyledWrap className="js-header-layout">

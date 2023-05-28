@@ -19,11 +19,10 @@ const LeftChat = () => {
    }, [dispatch])
 
    const handleToggleCreateRoom = () => {
-      if (divRoomRef.current) {
-         const isOpen = divRoomRef.current.classList.contains('open')
-         divRoomRef.current.classList.toggle('open')
-         divRoomRef.current.style.transform = isOpen ? 'translateX(0)' : `translateX(-50%)`
-      }
+      if (!divRoomRef.current) return;
+      
+      const isOpen = !!divRoomRef.current.style.transform
+      divRoomRef.current.style.transform = isOpen ? '' : 'translateX(-50%)'
    }
 
    return (

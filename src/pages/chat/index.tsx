@@ -1,10 +1,12 @@
 import ChatBackground from '@/assets/images/background_chat.png'
 import { HEIGHT_MAIN } from "@/constants/chats"
 import { colors } from "@/constants/theme"
-import { useAppDispatch } from "@/store"
-import styled from "@emotion/styled"
+import { RootState, useAppDispatch } from "@/store"
 import { Box } from "@mui/material"
-import React, { Fragment, useEffect } from "react"
+import { styled } from '@mui/material/styles'
+import clsx from 'clsx'
+import { Fragment, useEffect } from "react"
+import { useSelector } from 'react-redux'
 import { ToastContainer } from "react-toastify"
 import HelperChat from "./HelperChat"
 import LeftChat from "./left"
@@ -12,6 +14,7 @@ import RightChat from "./right"
 
 const ChatPage = () => {
    const dispatch = useAppDispatch()
+   const { isOpenRoomList } = useSelector((state: RootState) => state.app)
 
    useEffect(() => {
       dispatch({ type: 'connect' })
@@ -19,15 +22,10 @@ const ChatPage = () => {
       return () => { dispatch({ type: 'disconnect' }) };
    }, [dispatch])
 
-   const handleTransitionEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
-      if (!event.currentTarget) return;
-      event.currentTarget.removeAttribute('style')
-   }
-
    return (
       <Fragment>
          <StyledWrap>
-            <StyledLeft className='js-room-list' onTransitionEnd={handleTransitionEnd}>
+            <StyledLeft className={clsx({ 'active': isOpenRoomList })} >
                <LeftChat />
             </StyledLeft>
             <StyledRight>
@@ -59,16 +57,17 @@ const ChatPage = () => {
 
 export default ChatPage
 
-const StyledWrap = styled(Box)(({ theme }: any) => ({
+const StyledWrap = styled(Box)(({ theme }) => ({
    display: 'flex',
    position: 'relative',
    height: HEIGHT_MAIN,
+
    [theme.breakpoints.up('md')]: {
       overflow: 'hidden',
    }
 }))
 
-const StyledLeft = styled(Box)(({ theme }: any) => ({
+const StyledLeft = styled(Box)(({ theme }) => ({
    minWidth: '350px',
    width: '350px',
 
@@ -81,6 +80,7 @@ const StyledLeft = styled(Box)(({ theme }: any) => ({
       overflow: 'hidden',
       background: colors.black,
       zIndex: 9,
+      transition: 'all 0.3s',
 
       '&.active': {
          transform: `translateX(0)`,

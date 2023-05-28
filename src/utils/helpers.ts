@@ -1,5 +1,3 @@
-import { SELECTOR } from "@/constants/selectors";
-
 export const getCurrentUser = () => {
    return getItemLocalStorage('user')
 }
@@ -109,13 +107,4 @@ export const throttle = <F extends (...args: any[]) => void>(
 export const logInfo = (item: any) => {
    const string = JSON.stringify(item)
    return JSON.parse(string)
-}
-
-export const toggleRoomList = () => {
-   const roomListSelector: HTMLDivElement | null = document.querySelector(SELECTOR.ROOM_LIST)
-
-   if (!roomListSelector) return;
-
-   roomListSelector.style.transition = 'all 0.3s'
-   roomListSelector.classList.toggle('active')
 }

@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const AppInitial = {
-   isOpenSwipeRoomInfo: false
+   isOpenSwipeRoomInfo: false,
+   isOpenRoomList: false,
 }
 
 export const appSlice = createSlice({
@@ -10,10 +11,13 @@ export const appSlice = createSlice({
    reducers: {
       setIsOpenSwipeRoomInfo(state) {
          state.isOpenSwipeRoomInfo = !state.isOpenSwipeRoomInfo
-      }
+      },
+      setIsOpenRoomList(state) {
+         state.isOpenRoomList = !state.isOpenRoomList
+      },
    },
 })
 
-export const { setIsOpenSwipeRoomInfo } = appSlice.actions
+export const { setIsOpenSwipeRoomInfo, setIsOpenRoomList } = appSlice.actions
 
 export default appSlice.reducer
