@@ -12,8 +12,9 @@ export const StyledWrapList = styled(List)({
    padding: 0,
    height: 'calc(100dvh - 120px)',
    overflowY: 'scroll',
+   paddingInline: 10,
    '&::-webkit-scrollbar': {
-      width: '0.4em'
+      width: 3
    },
    '&::-webkit-scrollbar-track': {
       'WebkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)'

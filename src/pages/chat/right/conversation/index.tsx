@@ -45,11 +45,11 @@ const Conversation = ({ roomId }: Props) => {
                   <StyledMessageAndRoom>
                      <StyledMessages>
                         <HeadConversation />
-                        <Box sx={{ height: HEIGHT_CHAT }}>
+                        <StyledWrapMessage>
                            {isLoadingMessageRoom ?
                               <LoadingComponent /> :
                               <MessagesAllRooms room={roomsCommon[roomId]} />}
-                        </Box>
+                        </StyledWrapMessage>
                         <InputConversation />
                      </StyledMessages>
                      <RoomInfo />
@@ -65,7 +65,13 @@ export default Conversation
 
 const StyledMessageAndRoom = styled(Box)({
    display: 'flex',
-   height: '100%'
+   height: '100%',
+})
+
+const StyledWrapMessage = styled(Box)({
+   maxWidth: '1000px',
+   height: HEIGHT_CHAT,
+   margin: '0 auto'
 })
 
 const StyledMessages = styled(Box)({

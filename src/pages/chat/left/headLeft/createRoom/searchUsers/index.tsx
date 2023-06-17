@@ -2,12 +2,14 @@ import { colors } from "@/constants/theme"
 import { useAppDispatch } from "@/store"
 import { fetchUsersByName } from "@/store/slices/user"
 import { generalAvatar } from "@/utils/helpers"
+import { UserAccount } from "@/utils/types/accounts"
 import styled from "@emotion/styled"
 import { Avatar } from "@mui/material"
 import { Box } from "@mui/system"
+import { debounce } from "throttle-debounce"
 
 interface Props {
-   usersSelected: any[],
+   usersSelected: UserAccount[],
    handleUnSelected: (index: number) => void
 }
 
@@ -22,14 +24,11 @@ const SearchUser = ({ usersSelected, handleUnSelected }: Props) => {
       }, 500);
    }
 
-   const onPressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-         const value = event.currentTarget.value.trim()
-         if (value) dispatch(fetchUsersByName(value))
-         event.currentTarget.value = ''
-         event.currentTarget.blur()
-      }
-   }
+   const handleOnChange = debounce(1000, (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.currentTarget.value.trim()
+
+      if (value) dispatch(fetchUsersByName(value))
+   })
 
    return (
       <StyledWrap>
@@ -42,7 +41,7 @@ const SearchUser = ({ usersSelected, handleUnSelected }: Props) => {
                   <Avatar className="user-selected__img" src={generalAvatar(item._id)} sx={{ width: 35, height: 35 }} alt='info' />
                   <StyledInfoName>{item.username}</StyledInfoName>
                </StyledInfo>)}
-         <StyledInput placeholder="Add people..." onKeyDown={onPressEnter} />
+         <StyledInput placeholder="Add people..." onChange={handleOnChange} />
       </StyledWrap>
    )
 }
