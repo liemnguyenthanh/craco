@@ -12,8 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { useAppDispatch } from '@/store';
 import { loginUser } from '@/store/slices/account';
-import { LoginRequest } from '@/utils/types/accounts';
+import { ILoginForm } from '@/utils/types/accounts';
 import { showNotification } from '@/utils/notification';
+import { CircularProgress } from '@mui/material';
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 function Copyright(props: any) {
    return (
@@ -28,9 +32,21 @@ function Copyright(props: any) {
    );
 }
 
+const maxUsername = 24
+
+const formSchema = yup.object({
+   username: yup.string().required().max(maxUsername)
+   .matches(/^[a-z0-9_]+$/, 'Username can only contain lowercase letters, and numbers')
+   .test('no-spaces', 'Username cannot contain spaces', (value) => !/\s/.test(value)),
+   secret: yup.string()
+}).required();
+
 export default function LoginPage() {
    const dispatch = useAppDispatch()
-   const [user] = useLocalStorage<LoginRequest | null>('user', null)
+   const { register, handleSubmit, formState: { errors } } = useForm({
+      resolver: yupResolver(formSchema)
+   })
+   const [user] = useLocalStorage<ILoginForm | null>('user', null)
    const [isLoading, setIsLoading] = React.useState(false)
    const navigate = useNavigate();
 
@@ -38,15 +54,9 @@ export default function LoginPage() {
       if (user) navigate('/chat');
    }, [navigate, user]);
 
-   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const form = event.currentTarget
-      const request: LoginRequest = {
-         username: form.username.value,
-         secret: form.secret.value,
-      };
+   const handleLogin = async (data: any) => {
       setIsLoading(true)
-      dispatch(loginUser(request))
+      dispatch(loginUser(data))
          .then(() => setIsLoading(false))
          .catch((error) => showNotification(JSON.stringify(error)))
    };
@@ -54,12 +64,10 @@ export default function LoginPage() {
    return (
       <Container component="main" maxWidth="xs">
          <Box
-            sx={{
-               marginTop: 8,
-               display: 'flex',
-               flexDirection: 'column',
-               alignItems: 'center',
-            }}
+            flexDirection='column'
+            display='flex'
+            mt={8}
+            alignItems='center'
          >
             <Avatar sx={{ m: 1, bgcolor: 'primary' }}>
                <LockOutlinedIcon />
@@ -67,24 +75,21 @@ export default function LoginPage() {
             <Typography component="h1" variant="h5">
                Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit(handleLogin)} sx={{ mt: 1 }}>
                <TextField
                   margin="normal"
-                  required
                   fullWidth
-                  id="username"
                   label="username"
-                  name="username"
                   autoFocus
+                  error={!!errors.username}
+                  helperText={!!errors.username && errors.username.message}
+                  {...register('username')}
                />
                <TextField
                   margin="normal"
-                  required
                   fullWidth
-                  name="secret"
                   label="Your secret"
-                  type="password"
-                  id="password"
+                  {...register('secret')}
                />
                <Button
                   type="submit"
@@ -94,13 +99,12 @@ export default function LoginPage() {
                   sx={{ mt: 3, mb: 2 }}
                >
                   {isLoading ?
-                     'loading...' :
+                     <CircularProgress size={30} /> :
                      'Sign In'
                   }
                </Button>
             </Box>
          </Box>
-         {/* <ThemeMode /> */}
          <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
    );

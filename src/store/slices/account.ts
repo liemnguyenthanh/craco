@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { axiosRequest } from '@/services';
-import { AccountSlice, LoginRequest, UserAccount } from '@/utils/types/accounts';
+import { AccountSlice, ILoginForm, UserAccount } from '@/utils/types/accounts';
 
 const initialState: AccountSlice = {
   user: null,
@@ -22,7 +22,7 @@ export const accountSlice = createSlice({
 
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (request: LoginRequest, { rejectWithValue }) => {
+  async (request: ILoginForm, { rejectWithValue }) => {
     try {
       const response = await axiosRequest("/auth/login", request)
       return response
